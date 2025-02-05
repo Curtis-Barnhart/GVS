@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://20ur75p1xydl"]
+
+[ext_resource type="Script" path="res://gvm/shell/gv_shell.gd" id="1_n4rth"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://gvm/shell/JetBrainsMonoNerdFontMono-Regular.ttf" id="2_uhhqy"]
+[ext_resource type="Script" path="res://gvm/shell/prompt.gd" id="3_yiyy1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_f0xxu"]
+font = ExtResource("2_uhhqy")
+font_size = 36
+
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_58jvi"]
+
+[node name="GvShell" type="ScrollContainer"]
+anchors_preset = -1
+anchor_right = 0.111
+anchor_bottom = 0.415
+offset_right = 0.127991
+offset_bottom = 0.0799866
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n4rth")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="History" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+label_settings = SubResource("LabelSettings_f0xxu")
+autowrap_mode = 1
+
+[node name="Prompt" type="TextEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_uhhqy")
+theme_override_font_sizes/font_size = 36
+wrap_mode = 1
+scroll_fit_content_height = true
+caret_type = 1
+caret_blink = true
+syntax_highlighter = SubResource("CodeHighlighter_58jvi")
+script = ExtResource("3_yiyy1")
+
+[connection signal="caret_changed" from="VBoxContainer/Prompt" to="." method="scroll_bottom"]
+[connection signal="user_entered" from="VBoxContainer/Prompt" to="." method="_on_prompt_user_entered"]
