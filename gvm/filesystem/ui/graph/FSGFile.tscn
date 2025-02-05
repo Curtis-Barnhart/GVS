@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cd7dqk70c68t7"]
+
+[ext_resource type="Script" path="res://gvm/filesystem/ui/graph/fsg_file.gd" id="1_jhcv3"]
+[ext_resource type="Texture2D" uid="uid://ble8onr527ifk" path="res://icon.svg" id="2_5cf7u"]
+
+[node name="FsgFile" type="Node2D"]
+script = ExtResource("1_jhcv3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_5cf7u")

@@ -3,6 +3,11 @@ extends TextEdit
 signal user_entered
 
 
+# I don't understand why this is called when something else has been clicked on
+# shouldn't I not have the focus??
+# edit - perhaps its because the other objects you had in mind aren't things
+# that actually take focus like user input? Then _everyone_ receives input,
+# not just them.
 func _input(event: InputEvent) -> void:
     if event is InputEventKey and event.is_pressed():
         if event.keycode == KEY_ENTER:

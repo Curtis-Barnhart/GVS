@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://20ur75p1xydl"]
+[gd_scene load_steps=7 format=3 uid="uid://20ur75p1xydl"]
 
 [ext_resource type="Script" path="res://gvm/shell/gv_shell.gd" id="1_n4rth"]
+[ext_resource type="Texture2D" uid="uid://b7uj3kp3b0l3c" path="res://gvm/shell/grey_box.png" id="1_wdhpu"]
 [ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://gvm/shell/JetBrainsMonoNerdFontMono-Regular.ttf" id="2_uhhqy"]
 [ext_resource type="Script" path="res://gvm/shell/prompt.gd" id="3_yiyy1"]
 
@@ -10,22 +11,33 @@ font_size = 36
 
 [sub_resource type="CodeHighlighter" id="CodeHighlighter_58jvi"]
 
-[node name="GvShell" type="ScrollContainer"]
+[node name="GvShell" type="NinePatchRect"]
 anchors_preset = -1
-anchor_right = 0.111
-anchor_bottom = 0.415
-offset_right = 0.127991
-offset_bottom = 0.0799866
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("1_wdhpu")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
 script = ExtResource("1_n4rth")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="History" type="Label" parent="VBoxContainer"]
+[node name="History" type="Label" parent="ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -34,7 +46,7 @@ text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
 label_settings = SubResource("LabelSettings_f0xxu")
 autowrap_mode = 1
 
-[node name="Prompt" type="TextEdit" parent="VBoxContainer"]
+[node name="Prompt" type="TextEdit" parent="ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_uhhqy")
@@ -46,5 +58,5 @@ caret_blink = true
 syntax_highlighter = SubResource("CodeHighlighter_58jvi")
 script = ExtResource("3_yiyy1")
 
-[connection signal="caret_changed" from="VBoxContainer/Prompt" to="." method="scroll_bottom"]
-[connection signal="user_entered" from="VBoxContainer/Prompt" to="." method="_on_prompt_user_entered"]
+[connection signal="caret_changed" from="ScrollContainer/VBoxContainer/Prompt" to="." method="scroll_bottom"]
+[connection signal="user_entered" from="ScrollContainer/VBoxContainer/Prompt" to="." method="_on_prompt_user_entered"]

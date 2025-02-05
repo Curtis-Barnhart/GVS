@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5js8dalnh4nb"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_ahk52"]
+[ext_resource type="PackedScene" uid="uid://20ur75p1xydl" path="res://gvm/shell/GVShell.tscn" id="1_avs1o"]
+[ext_resource type="PackedScene" uid="uid://dsws7i3ntxerw" path="res://gvm/filesystem/ui/FSViewport.tscn" id="2_fy8vq"]
+
+[node name="Main" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ahk52")
+
+[node name="GvShell" parent="." instance=ExtResource("1_avs1o")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FsViewport" parent="." instance=ExtResource("2_fy8vq")]
+layout_mode = 2
+size_flags_horizontal = 3
