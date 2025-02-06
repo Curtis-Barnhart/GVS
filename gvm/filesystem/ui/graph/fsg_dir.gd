@@ -2,13 +2,20 @@ class_name FSGDir
 extends Node2D
 
 @onready var area: Area2D = $Area2D
+# parent directory (FSGDir) of self
 var parent: FSGDir = self
+# Unused right now - is the dir visually expanded
 var expanded: bool = true
-var data: FSDir = null
+# subdirectories (FSGDir) of self
 var subdirs: Array[FSGDir] = []
+# height - used to calculate how far below me to put subdirs visually
 @onready var height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y + 60
+# width - used to calculate how far apart to print subobjects
 @onready var width: float = $Area2D/CollisionShape2D.shape.get_rect().size.x + 40
+# cumulative width of all my subobjects
 var sub_width: float = 0
+# total width of myself - max of myself (my level) or my subobjects'
+# cumulative total_widths
 @onready var total_width: float = self.width
 
 
@@ -18,8 +25,8 @@ func add_subdir(subdir: FSGDir) -> void:
     self.subdirs.push_back(subdir)
     
     var total_width_delta: float = self.modify_subwidth(subdir.total_width)
-    print("Adding subdir with width = %f" % subdir.total_width)
-    print("New subwidth = %f" % self.sub_width)
+    #print("Adding subdir with width = %f" % subdir.total_width)
+    #print("New subwidth = %f" % self.sub_width)
     if total_width_delta != 0:
         self.total_width_notifier(total_width_delta)
     
@@ -28,10 +35,10 @@ func add_subdir(subdir: FSGDir) -> void:
 
 func arrange_subnodes() -> void:
     var offset: float = -self.total_width/2
-    print("arranging subnodes for node with total width = %f" % self.total_width)
+    #print("arranging subnodes for node with total width = %f" % self.total_width)
     for sd in self.subdirs:
-        print("Setting x = %f and y = %f" % [offset + (sd.total_width/2), height])
-        print("  - node width = %f" % sd.total_width)
+        #print("Setting x = %f and y = %f" % [offset + (sd.total_width/2), height])
+        #print("  - node width = %f" % sd.total_width)
         sd.position.y = height
         sd.position.x = offset + (sd.total_width / 2)
         offset += sd.total_width

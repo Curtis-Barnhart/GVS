@@ -9,10 +9,14 @@ signal user_entered
 # that actually take focus like user input? Then _everyone_ receives input,
 # not just them.
 func _input(event: InputEvent) -> void:
-    if event is InputEventKey and event.is_pressed():
-        if event.keycode == KEY_ENTER:
-            emit_signal("user_entered")
-            get_viewport().set_input_as_handled()
+    if (
+        event is InputEventKey
+        and event.is_pressed()
+        and event.keycode == KEY_ENTER
+        and self.get_viewport().gui_get_focus_owner() == self
+    ):
+        emit_signal("user_entered")
+        get_viewport().set_input_as_handled()
 
 
 # Called when the node enters the scene tree for the first time.

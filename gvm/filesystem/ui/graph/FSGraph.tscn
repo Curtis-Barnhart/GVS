@@ -6,4 +6,4 @@
 [node name="FsGraph" type="Node2D"]
 script = ExtResource("1_rw4f1")
 
-[node name="FsgDir" parent="." instance=ExtResource("4_1lrbe")]
+[node name="Root" parent="." instance=ExtResource("4_1lrbe")]
