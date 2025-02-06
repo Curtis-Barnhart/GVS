@@ -21,9 +21,7 @@ func setup(fs_manager: FSManager) -> void:
     fs_manager.created_dir.connect(self.create_dir)
 
 
-# TODO: Connect
 func create_dir(p: FSPath) -> void:
-    print("Creating dir " + p.as_string())
     var parent: FSGDir = self.all_nodes[self.fs_man.reduce_path(p.base()).as_string()]
     var child: FSGDir = FSGDir_Obj.instantiate()
     parent.add_subdir(child)

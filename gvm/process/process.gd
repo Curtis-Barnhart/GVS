@@ -4,7 +4,7 @@ extends RefCounted
 var fs_man: FSManager = null
 ## Queue to read strings from
 var stdin: IOQueue
-## Queue of outputed strings
+## Queue of output strings
 var stdout: IOQueue
 var vargs: PackedStringArray
 var cwd: FSPath

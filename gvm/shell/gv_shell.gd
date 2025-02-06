@@ -56,17 +56,32 @@ func _on_prompt_user_entered() -> void:
                       + "\n"
     
     # Array[String] I HATE TYPE ERASURE I HATE TYPE ERASURE I HATE TYPE ERA
-    var input: PackedStringArray = self.prompt.text.split(" ")
+    var input: PackedStringArray = self.prompt.text.split(" ", false)
     match Array(input):
         ["cd", var where]:
             var loc: FSPath = self.CWD.compose(FSPath.new(where.split("/")))
             if self.fs_man.contains_dir(loc):
                 self.CWD = self.fs_man.reduce_path(loc)
-        ["mkdir", var name]:
-            var loc: FSPath = self.CWD.compose(FSPath.new(name.split("/")))
-            self.fs_man.create_dir(loc)
+        ["mkdir", ..]:
+            var mkdir_proc: ProcessMkdir = ProcessMkdir.new(
+                self.fs_man,
+                null,
+                self.shell_write,
+                input,
+                self.CWD
+            )
+            mkdir_proc.run()
+        ["rmdir", ..]:
+            var rmdir_proc: ProcessRmdir = ProcessRmdir.new(
+                self.fs_man,
+                null,
+                self.shell_write,
+                input,
+                self.CWD
+            )
+            rmdir_proc.run()
         ["ls", ..]:
-            var ls_proc: ProcessLS = ProcessLS.new(
+            var ls_proc: ProcessLs = ProcessLs.new(
                 self.fs_man,
                 null,
                 self.shell_write,

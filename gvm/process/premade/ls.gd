@@ -1,4 +1,4 @@
-class_name ProcessLS
+class_name ProcessLs
 extends GVProcess
 
 
