@@ -17,12 +17,13 @@ func setup(fs_manager: FSManager) -> void:
     self.fs_man = fs_manager
     self.all_nodes["/"] = FSGDir_Obj.instantiate()
     self.add_child(self.all_nodes["/"])
+    fs_manager.created_dir.connect(self.create_dir)
 
 
 # TODO: Connect
 func create_dir(p: FSPath) -> void:
     print("Creating dir " + p.as_string())
-    var parent: FSGDir = self.all_nodes[p.base().as_string()]
+    var parent: FSGDir = self.all_nodes[self.fs_man.reduce_path(p.base()).as_string()]
     var child: FSGDir = FSGDir_Obj.instantiate()
     parent.add_subdir(child)
     self.all_nodes[p.as_string()] = child
@@ -38,15 +39,15 @@ func _ready() -> void:
     self.all_nodes["/"] = FSGDir_Obj.instantiate()
     self.add_child(self.all_nodes["/"])
     
-    self.create_dir(FSPath.new(["dir0"]))
-    self.create_dir(FSPath.new(["dir1"]))
-    self.create_dir(FSPath.new(["dir2"]))
-    self.create_dir(FSPath.new(["dir0", "subdir00"]))
-    self.create_dir(FSPath.new(["dir2", "subdir20"]))
-    self.create_dir(FSPath.new(["dir2", "subdir21"]))
-    self.create_dir(FSPath.new(["dir2", "subdir22"]))
-    self.create_dir(FSPath.new(["dir2", "subdir21", "subdir220"]))
-    self.create_dir(FSPath.new(["dir2", "subdir21", "subdir221"]))
+    #self.create_dir(FSPath.new(["dir0"]))
+    #self.create_dir(FSPath.new(["dir1"]))
+    #self.create_dir(FSPath.new(["dir2"]))
+    #self.create_dir(FSPath.new(["dir0", "subdir00"]))
+    #self.create_dir(FSPath.new(["dir2", "subdir20"]))
+    #self.create_dir(FSPath.new(["dir2", "subdir21"]))
+    #self.create_dir(FSPath.new(["dir2", "subdir22"]))
+    #self.create_dir(FSPath.new(["dir2", "subdir21", "subdir220"]))
+    #self.create_dir(FSPath.new(["dir2", "subdir21", "subdir221"]))
     
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -126,8 +126,8 @@ func remove_dir(p: FSPath) -> bool:
 ## get a list of files in a directory
 ##
 ## @param p: Non null path to the directory to read.
-## @return: an array of FSPaths to all directories contained in p.
-func read_dirs_in_dir(p: FSPath) -> Array[FSPath]:
+## @return: (Array[FSPath]) an array of FSPaths to all directories contained in p.
+func read_dirs_in_dir(p: FSPath) -> Array:
     var dir: FSDir = self._get_dir(p)
     if dir == null:
         return []

@@ -21,7 +21,7 @@ func get_path() -> FSPath:
     if self.parent == self:
         # I wonder if this will have to be changed eventually
         return FSPath.new([])
-    return self.parent.get_path().join(FSPath.new([self.name]))
+    return self.parent.get_path().compose(FSPath.new([self.name]))
 
 
 func local_dir(name: String) -> FSDir:
@@ -52,7 +52,7 @@ func get_dir(path: FSPath) -> FSDir:
     
     var rest: FSPath = path.tail()
     if rest.degen():
-        subdir
+        return subdir
     
     return subdir.get_dir(rest)
 
