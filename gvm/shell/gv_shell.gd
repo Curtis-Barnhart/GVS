@@ -4,6 +4,7 @@ extends NinePatchRect
 var PATH: Array[String]
 var CWD: FSPath = FSPath.new([])
 var fs_man: FSManager = null
+var shell_write: ShellWriter = ShellWriter.new()
 const sh_prompt: String = "root@localhost$ "
 static var scroll_frames: int = 1
 
@@ -25,6 +26,7 @@ func scroll_bottom() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
     self.scroll_bottom()
+    self.shell_write.history = self.history
     pass # Replace with function body.
 
 
@@ -35,26 +37,43 @@ func _process(delta: float) -> void:
         self.scroll_frames -= 1
 
 
+func write(msg: String) -> void:
+    self.history.text += msg + "\n"
+
+
+class ShellWriter extends IOQueue:
+    var history: Label
+    
+    func write(str: String) -> void:
+        self.history.text += str
+
+
 func _on_prompt_user_entered() -> void:
-    self.history.text += "\n" \
-                      + self.CWD.as_string() \
+    self.history.text += self.CWD.as_string() \
                       + " " \
                       + GVShell.sh_prompt \
-                      + self.prompt.text
+                      + self.prompt.text \
+                      + "\n"
     
     # Array[String] I HATE TYPE ERASURE I HATE TYPE ERASURE I HATE TYPE ERA
-    var input: Array = Array(self.prompt.text.split(" "))
-    match input:
+    var input: PackedStringArray = self.prompt.text.split(" ")
+    match Array(input):
         ["cd", var where]:
             var loc: FSPath = self.CWD.compose(FSPath.new(where.split("/")))
             if self.fs_man.contains_dir(loc):
                 self.CWD = self.fs_man.reduce_path(loc)
         ["mkdir", var name]:
             var loc: FSPath = self.CWD.compose(FSPath.new(name.split("/")))
-            if fs_man.create_dir(loc):
-                self.history.text += "\n%s created!" % fs_man.reduce_path(loc)
-        ["ls"]:
-            self.history.text += "\n" + "\n".join(self.fs_man.read_dirs_in_dir(self.CWD).map(func (path): return path.as_string()))
+            self.fs_man.create_dir(loc)
+        ["ls", ..]:
+            var ls_proc: ProcessLS = ProcessLS.new(
+                self.fs_man,
+                null,
+                self.shell_write,
+                input,
+                self.CWD
+            )
+            ls_proc.run()
         ["clear"]:
             self.history.text = ""
         var huh:
