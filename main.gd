@@ -1,6 +1,7 @@
 extends HBoxContainer
 
 @onready var GVShell = $GvShell
+# This feels like very bad practice
 @onready var prompt = $GvShell/ScrollContainer/VBoxContainer/Prompt
 @onready var ViewpointContainer = $FsViewport/SubViewportContainer
 

@@ -18,9 +18,10 @@ func setup(fs_manager: FSManager) -> void:
 
 
 # We do this because on resize of the prompt, we scroll,
-# but the actual resizing occurs after, so we need a way to scroll for 2 frames
+# but the actual resizing occurs just after that scroll,
+# so we need a way to scroll for 2 frames and not just 1
 func scroll_bottom() -> void:
-    self.scroll_frames = 2
+    self.scroll_frames = 1
 
 
 # Called when the node enters the scene tree for the first time.
@@ -91,6 +92,8 @@ func _on_prompt_user_entered() -> void:
             ls_proc.run()
         ["clear"]:
             self.history.text = ""
+        ["exit"]:
+            self.get_tree().quit(0)
         var huh:
             print("no match (%s)" % " ".join(input))
     

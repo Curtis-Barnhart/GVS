@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dsws7i3ntxerw"]
 
-[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://gvm/shell/JetBrainsMonoNerdFontMono-Regular.ttf" id="1_06ei5"]
-[ext_resource type="Texture2D" uid="uid://b7uj3kp3b0l3c" path="res://gvm/shell/grey_box.png" id="1_bbg0k"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="1_06ei5"]
+[ext_resource type="Texture2D" uid="uid://b7uj3kp3b0l3c" path="res://shared/grey_box.png" id="1_bbg0k"]
 [ext_resource type="Script" path="res://gvm/filesystem/ui/sub_viewport_container.gd" id="2_ly32g"]
 [ext_resource type="PackedScene" uid="uid://b6cxarc58vq0a" path="res://gvm/filesystem/ui/graph/FSGraph.tscn" id="3_sl6xo"]
 

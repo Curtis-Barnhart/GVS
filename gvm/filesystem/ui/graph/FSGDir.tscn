@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://gvm/filesystem/ui/graph/fsg_dir.gd" id="1_kp0kf"]
 [ext_resource type="Texture2D" uid="uid://ble8onr527ifk" path="res://icon.svg" id="2_not1y"]
-[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://gvm/shell/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_0g5nk"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_0g5nk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yfsys"]
 size = Vector2(129, 128.5)
