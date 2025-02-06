@@ -2,12 +2,8 @@ class_name FSGDir
 extends Node2D
 
 @onready var area: Area2D = $Area2D
-# parent directory (FSGDir) of self
-var parent: FSGDir = self
 # Unused right now - is the dir visually expanded
 var expanded: bool = true
-# subdirectories (FSGDir) of self
-var subdirs: Array[FSGDir] = []
 # height - used to calculate how far below me to put subdirs visually
 @onready var height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y + 60
 # width - used to calculate how far apart to print subobjects
@@ -19,10 +15,12 @@ var sub_width: float = 0
 @onready var total_width: float = self.width
 
 
+#func remove_subdir(path:FSPath) -> FSGDir:
+    #if path.
+
+
 func add_subdir(subdir: FSGDir) -> void:
     self.add_child(subdir)
-    subdir.parent = self
-    self.subdirs.push_back(subdir)
     
     var total_width_delta: float = self.modify_subwidth(subdir.total_width)
     #print("Adding subdir with width = %f" % subdir.total_width)
@@ -31,12 +29,14 @@ func add_subdir(subdir: FSGDir) -> void:
         self.total_width_notifier(total_width_delta)
     
     self.arrange_subnodes()
-    
+
 
 func arrange_subnodes() -> void:
     var offset: float = -self.total_width/2
     #print("arranging subnodes for node with total width = %f" % self.total_width)
-    for sd in self.subdirs:
+    # TODO: someday update this to check for files as well
+    for sd in self.get_children() \
+                  .filter(func (c): return is_instance_of(c, FSGDir)):
         #print("Setting x = %f and y = %f" % [offset + (sd.total_width/2), height])
         #print("  - node width = %f" % sd.total_width)
         sd.position.y = height
@@ -44,16 +44,23 @@ func arrange_subnodes() -> void:
         offset += sd.total_width
 
 
-# Notifies my parent, if existing, that my total width has changed
+## Notifies my parent, if existing, that my total width has changed
+##
+## @param total_width_d: the change in my own width
 func total_width_notifier(total_width_d: float) -> void:
-    if self.parent != self:
-        var parent_total_width_d: float = self.parent.modify_subwidth(total_width_d)
+    var parent = self.get_parent()
+    if is_instance_of(parent, FSGDir):
+        var parent_total_width_d: float = parent.modify_subwidth(total_width_d)
         if parent_total_width_d != 0:
-            self.parent.total_width_notifier(parent_total_width_d)
-        self.parent.arrange_subnodes()
+            parent.total_width_notifier(parent_total_width_d)
+        parent.arrange_subnodes()
 
 
-# Just a mathematical calulation - not to be used to notify anyone
+## Just a mathematical calulation - not to be used to notify anyone.
+## Adds delta to sub_width, then recalculates total_width.
+##
+## @param delta: amount to add to the sub_width
+## @return: the amount that the total_width has changed by since modifying sub_width.
 func modify_subwidth(delta: float) -> float:
     var temp: float = self.total_width
     self.sub_width += delta

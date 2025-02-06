@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yfsys"]
 size = Vector2(129, 128.5)
 
-[node name="FsgDir" type="Node2D"]
+[node name="FSGDir" type="Node2D"]
 script = ExtResource("1_kp0kf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

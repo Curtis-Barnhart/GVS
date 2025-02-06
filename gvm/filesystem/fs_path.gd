@@ -41,3 +41,11 @@ func last() -> String:
 
 func compose(other: FSPath) -> FSPath:
     return FSPath.new(self._segments + other._segments)
+
+
+func as_string(abs: bool = true) -> String:
+    if self.degen():
+        return "/"
+    if abs:
+        return "/" + "/".join(self._segments)
+    return "/".join(self._segments)
