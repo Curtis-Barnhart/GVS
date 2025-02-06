@@ -1,6 +1,9 @@
 class_name FSGDir
 extends Node2D
 
+# This will almost certainly be changed in the future to look better
+@onready var label: Label = $Label
+
 @onready var area: Area2D = $Area2D
 # Unused right now - is the dir visually expanded
 var expanded: bool = true

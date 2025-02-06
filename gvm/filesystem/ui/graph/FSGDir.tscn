@@ -1,10 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://dayudvd81fjbp"]
+[gd_scene load_steps=6 format=3 uid="uid://dayudvd81fjbp"]
 
 [ext_resource type="Script" path="res://gvm/filesystem/ui/graph/fsg_dir.gd" id="1_kp0kf"]
 [ext_resource type="Texture2D" uid="uid://ble8onr527ifk" path="res://icon.svg" id="2_not1y"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://gvm/shell/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_0g5nk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yfsys"]
 size = Vector2(129, 128.5)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5ksyd"]
+font = ExtResource("3_0g5nk")
+font_size = 36
 
 [node name="FSGDir" type="Node2D"]
 script = ExtResource("1_kp0kf")
@@ -16,3 +21,11 @@ texture = ExtResource("2_not1y")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_yfsys")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 2.0
+offset_top = 67.0
+offset_right = 240.0
+offset_bottom = 115.0
+text = "sample text"
+label_settings = SubResource("LabelSettings_5ksyd")

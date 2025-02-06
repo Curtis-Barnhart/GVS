@@ -17,6 +17,7 @@ func setup(fs_manager: FSManager) -> void:
     self.fs_man = fs_manager
     self.all_nodes["/"] = FSGDir_Obj.instantiate()
     self.add_child(self.all_nodes["/"])
+    self.all_nodes["/"].label.text = "/"
     fs_manager.created_dir.connect(self.create_dir)
 
 
@@ -26,6 +27,7 @@ func create_dir(p: FSPath) -> void:
     var parent: FSGDir = self.all_nodes[self.fs_man.reduce_path(p.base()).as_string()]
     var child: FSGDir = FSGDir_Obj.instantiate()
     parent.add_subdir(child)
+    child.label.text = p.last()
     self.all_nodes[p.as_string()] = child
 
 
@@ -36,9 +38,7 @@ func remove_dir(p: FSPath) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-    self.all_nodes["/"] = FSGDir_Obj.instantiate()
-    self.add_child(self.all_nodes["/"])
-    
+    pass    
     #self.create_dir(FSPath.new(["dir0"]))
     #self.create_dir(FSPath.new(["dir1"]))
     #self.create_dir(FSPath.new(["dir2"]))
