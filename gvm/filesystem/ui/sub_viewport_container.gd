@@ -17,7 +17,6 @@ func _input(event: InputEvent) -> void:
 
 
 func _on_mouse_exited() -> void:
-    print("mouse exited!")
     if self.drag:
         self.camera_origin = self.cam.position
     self.drag = false

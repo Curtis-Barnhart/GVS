@@ -5,21 +5,32 @@ extends Node2D
 @onready var label: Label = $Label
 
 @onready var area: Area2D = $Area2D
-# Unused right now - is the dir visually expanded
-var expanded: bool = true
-# height - used to calculate how far below me to put subdirs visually
+## height - used to calculate how far below me to put subdirs visually
 @onready var height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y + 60
-# width - used to calculate how far apart to print subobjects
+## width - used to calculate how far apart to print subobjects
 @onready var width: float = $Area2D/CollisionShape2D.shape.get_rect().size.x + 40
-# cumulative width of all my subobjects
+## cumulative width of all my subobjects
 var sub_width: float = 0
-# total width of myself - max of myself (my level) or my subobjects'
-# cumulative total_widths
+## total width of myself - max of myself (my level) or my subobjects'
+## cumulative total_widths
 @onready var total_width: float = self.width
 
+## starting position before interpolating movement.
+var start_pos: Vector2 = Vector2.ZERO
+## destination position while interpolating movement.
+var dest_pos: Vector2 = Vector2.ZERO
+## amount of time left to interpolate. 2 is t=0 and 0 is t=1
+var interp_t: float = 0
 
-#func remove_subdir(path:FSPath) -> FSGDir:
-    #if path.
+
+## interp_movement tells the FSGDir that it is ready to begin interpolating
+## its position over to the location `dest` over the course of 2 seconds.
+##
+## @param dest: location to move to.
+func interp_movement(dest: Vector2) -> void:
+    self.start_pos = self.position
+    self.dest_pos = dest
+    self.interp_t = 2
 
 
 func add_subdir(subdir: FSGDir) -> void:
@@ -42,8 +53,9 @@ func arrange_subnodes() -> void:
                   .filter(func (c): return is_instance_of(c, FSGDir)):
         #print("Setting x = %f and y = %f" % [offset + (sd.total_width/2), height])
         #print("  - node width = %f" % sd.total_width)
-        sd.position.y = height
-        sd.position.x = offset + (sd.total_width / 2)
+        sd.interp_movement(Vector2(offset + (sd.total_width / 2), height))
+        #sd.position.y = height
+        #sd.position.x = offset + (sd.total_width / 2)
         offset += sd.total_width
 
 
@@ -77,5 +89,11 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-    pass
+func _process(delta: float) -> void:
+    if self.interp_t > 0:
+        self.interp_t -= delta
+        self.position = utils_math.log_interp_v(
+            self.start_pos,
+            self.dest_pos,
+            (1 - (self.interp_t/2))
+        )
