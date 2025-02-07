@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://20ur75p1xydl"]
+[gd_scene load_steps=6 format=3 uid="uid://20ur75p1xydl"]
 
 [ext_resource type="Script" path="res://gvm/shell/gv_shell.gd" id="1_n4rth"]
 [ext_resource type="Texture2D" uid="uid://b7uj3kp3b0l3c" path="res://shared/grey_box.png" id="1_wdhpu"]
@@ -8,8 +8,6 @@
 [sub_resource type="LabelSettings" id="LabelSettings_f0xxu"]
 font = ExtResource("2_uhhqy")
 font_size = 36
-
-[sub_resource type="CodeHighlighter" id="CodeHighlighter_58jvi"]
 
 [node name="GvShell" type="NinePatchRect"]
 anchors_preset = 15
@@ -54,7 +52,6 @@ wrap_mode = 1
 scroll_fit_content_height = true
 caret_type = 1
 caret_blink = true
-syntax_highlighter = SubResource("CodeHighlighter_58jvi")
 script = ExtResource("3_yiyy1")
 
 [connection signal="caret_changed" from="ScrollContainer/VBoxContainer/Prompt" to="." method="scroll_bottom"]
