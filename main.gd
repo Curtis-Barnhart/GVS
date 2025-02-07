@@ -12,10 +12,6 @@ extends HBoxContainer
 @onready var prompt = $GvShell/ScrollContainer/VBoxContainer/Prompt
 @onready var ViewpointContainer = $Right/FsViewport/SubViewportContainer
 
-## A reference to the child FSViewport instance - the visual interface
-## for the user.
-@onready var FSViewport = $FsViewport
-
 
 ## It would be helpful to be able to forward user input to the
 ## FSViewport when the GVShell terminal has focus

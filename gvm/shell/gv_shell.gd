@@ -45,9 +45,9 @@ class ShellWriter extends IOQueue:
 
     ## Overrides IOQueue's write method to write immediately to history Label.
     ##
-    ## @param str: message to write to the history Label.
-    func write(str: String) -> void:
-        self.shell.history.text += str
+    ## @param message: message to write to the history Label.
+    func write(message: String) -> void:
+        self.shell.history.text += message
         self.shell.scroll_frames = 1
 
 
@@ -72,7 +72,7 @@ func _ready() -> void:
 ## Every frame we scroll down if scroll_frames has been set.
 ##
 ## @param delta: elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
     if self.scroll_frames > 0:
         self.scroll.scroll_vertical = 999999
         self.scroll_frames -= 1
@@ -93,12 +93,12 @@ func _on_prompt_user_entered() -> void:
         # is actually totally reasonable and could be done eventually.
         ["cd"]:
             self.CWD = FSPath.new([])
-            emit_signal("cwd_changed", self.CWD)
+            self.cwd_changed.emit(self.CWD)
         ["cd", var where]:
             var loc: FSPath = self.CWD.compose(FSPath.new(where.split("/")))
             if self.fs_man.contains_dir(loc):
                 self.CWD = self.fs_man.reduce_path(loc)
-                emit_signal("cwd_changed", self.CWD)
+                self.cwd_changed.emit(self.CWD)
             elif self.fs_man.contains_file(loc):
                 self.history.text += "-gvs: cd: %s: Not a directory\n"
             else:
@@ -141,7 +141,7 @@ func _on_prompt_user_entered() -> void:
             self.get_tree().quit(0)
         ["pwd", ..]:
             self.history.text += self.CWD.as_string() + "\n"
-        var huh:
+        _:
             self.history.text += "gvs: %s: command not found...\n" % " ".join(input)
 
     self.prompt.clear()

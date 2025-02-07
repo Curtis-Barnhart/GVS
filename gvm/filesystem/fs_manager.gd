@@ -86,7 +86,8 @@ func create_dir(p: FSPath) -> bool:
    
     p = contain_dir.get_path().extend(new_dir_name)
     contain_dir.subdirs.push_back(FSDir.new(new_dir_name, contain_dir))
-    emit_signal("created_dir", p)
+    self.created_dir.emit(p)
+    #emit_signal("created_dir", p)
     return true
 
 
@@ -121,7 +122,8 @@ func remove_dir(p: FSPath) -> bool:
     # TODO: I'm sure there's a method to remove it directly?
     var i: int = parent.subdirs.find(dir)
     parent.subdirs.remove_at(i)
-    emit_signal("removed_dir", p)
+    self.removed_dir.emit(p)
+    #emit_signal("removed_dir", p)
     return true
 
 

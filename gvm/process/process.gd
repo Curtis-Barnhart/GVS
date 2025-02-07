@@ -11,17 +11,17 @@ var cwd: FSPath
 
 
 func _init(
-    fs_manager: FSManager,
-    stdin: IOQueue,
-    stdout: IOQueue,
-    vargs: PackedStringArray,
-    cwd: FSPath
+    filesystem_manager: FSManager,
+    standard_in: IOQueue,
+    standard_out: IOQueue,
+    arguments: PackedStringArray,
+    cur_work_dir: FSPath
 ) -> void:
-    self.fs_man = fs_manager
-    self.stdin = stdin
-    self.stdout = stdout
-    self.vargs = vargs
-    self.cwd = cwd
+    self.fs_man = filesystem_manager
+    self.stdin = standard_in
+    self.stdout = standard_out
+    self.vargs = arguments
+    self.cwd = cur_work_dir
 
 
 func run() -> int:

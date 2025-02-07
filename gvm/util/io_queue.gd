@@ -10,13 +10,13 @@ func is_empty() -> bool:
     return false
 
 
-func find(str: String) -> int:
+func find(message: String) -> int:
     var index: int = 0
     
-    for message in self.data:
-        var contain: int = message.find(str)
+    for element in self.data:
+        var contain: int = element.find(message)
         if contain == -1:
-            index += len(message)
+            index += len(element)
             continue
         else:
             return index + contain
@@ -24,44 +24,43 @@ func find(str: String) -> int:
     return -1
 
 
-func write(str: String) -> void:
-    self.data.push_back(str)
+func write(message: String) -> void:
+    self.data.push_back(message)
 
 
-func read_until(str: String) -> String:
-    var found: int = self.find(str)
+func read_until(message: String) -> String:
+    var found: int = self.find(message)
     if found == -1:
         return ""
-    return self.unchecked_read(found + len(str))
+    return self.unchecked_read(found + len(message))
     
 
-func read(ct: int = 1) -> String:
-    assert(ct > 0)
+func read(count: int = 1) -> String:
+    assert(count > 0)
     
-    if self.size() < ct:
+    if self.size() < count:
         return ""
     
-    var str_buf: PackedStringArray = []
-    return self.unchecked_read(ct)
+    return self.unchecked_read(count)
 
 
 func size() -> int:
     var acc: int = 0
-    for str in self.data:
-        acc += len(str)
+    for message in self.data:
+        acc += len(message)
     return acc
 
 
-func unchecked_read(ct: int = 1) -> String:
-    assert(ct > 0)
+func unchecked_read(count: int = 1) -> String:
+    assert(count > 0)
     var str_buf: PackedStringArray = []
-    while ct > 0:
+    while count > 0:
         if self.is_empty():
             break
         
-        if len(self.data[0]) > ct:
-            str_buf.push_back(self.data[0].substr(0, ct))
-            self.data[0] = self.data[0].substr(ct)
+        if len(self.data[0]) > count:
+            str_buf.push_back(self.data[0].substr(0, count))
+            self.data[0] = self.data[0].substr(count)
         else:
             str_buf.push_back(self.data[0])
             self.data.remove_at(0)

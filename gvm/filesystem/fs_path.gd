@@ -50,9 +50,9 @@ func extend(name: String) -> FSPath:
     return FSPath.new(self._segments + PackedStringArray([name]))
 
 
-func as_string(abs: bool = true) -> String:
+func as_string(absolute: bool = true) -> String:
     if self.degen():
         return "/"
-    if abs:
+    if absolute:
         return "/" + "/".join(self._segments)
     return "/".join(self._segments)

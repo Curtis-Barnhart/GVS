@@ -1,7 +1,6 @@
 extends SubViewportContainer
 
 @onready var cam: Camera2D = $SubViewport/Camera2D
-@onready var label: Label = self.get_parent().find_child("Label")
 var camera_origin: Vector2
 var click_down: Vector2 = Vector2.ZERO
 var drag: bool = false
@@ -30,9 +29,6 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
     if self.drag:
-        self.label.text = " : ".join([str(self.camera_origin), str(self.get_global_mouse_position()), str(self.click_down)])
         self.cam.position = self.camera_origin - (self.get_global_mouse_position() - self.click_down)
-    else:
-        self.label.text = "No drag"

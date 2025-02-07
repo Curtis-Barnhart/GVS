@@ -15,7 +15,7 @@ func _input(event: InputEvent) -> void:
         and event.keycode == KEY_ENTER
         and self.get_viewport().gui_get_focus_owner() == self
     ):
-        emit_signal("user_entered")
+        self.user_entered.emit()
         get_viewport().set_input_as_handled()
 
 
@@ -25,5 +25,5 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
     pass

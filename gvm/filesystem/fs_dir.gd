@@ -12,9 +12,9 @@ var subdirs: Array[FSDir] = []
 var files: Array[FSFile] = []
 
 
-func _init(name: String, parent: FSDir) -> void:
-    self.name = name
-    self.parent = parent
+func _init(d_name: String, d_parent: FSDir) -> void:
+    self.name = d_name
+    self.parent = d_parent
 
 
 func get_path() -> FSPath:
@@ -24,20 +24,20 @@ func get_path() -> FSPath:
     return self.parent.get_path().compose(FSPath.new([self.name]))
 
 
-func local_dir(name: String) -> FSDir:
+func local_dir(local_name: String) -> FSDir:
     for d in self.subdirs:
-        if d.name == name:
+        if d.name == local_name:
             return d
-    if name == "..":
+    if local_name == "..":
         return self.parent
-    if name == ".":
+    if local_name == ".":
         return self
     return null
 
 
-func local_file(name: String) -> FSFile:
+func local_file(local_name: String) -> FSFile:
     for f in self.files:
-        if f.name == name:
+        if f.name == local_name:
             return f
     return null
 
