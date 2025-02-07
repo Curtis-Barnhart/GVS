@@ -112,7 +112,9 @@ func remove_dir(p: FSPath) -> bool:
     if dir == self._root or dir == null or (not dir.subdirs.is_empty()):
         return false
     
+    p = self.reduce_path(p)
     var parent: FSDir = dir.parent
+    # TODO: I'm sure there's a method to remove it directly?
     var i: int = parent.subdirs.find(dir)
     parent.subdirs.remove_at(i)
     emit_signal("removed_dir", p)

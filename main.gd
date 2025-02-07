@@ -7,7 +7,7 @@ extends HBoxContainer
 
 ## A reference to the child GVShell instance - the textual interface
 ## for the user.
-@onready var GVShell = $GvShell
+@onready var GvShell = $GvShell
 # This feels like very bad practice
 @onready var prompt = $GvShell/ScrollContainer/VBoxContainer/Prompt
 @onready var ViewpointContainer = $FsViewport/SubViewportContainer
@@ -35,10 +35,13 @@ func _input(event: InputEvent) -> void:
 ## to anyone who might need one (GVShell and FSViewport)
 func _ready() -> void:
     var test: FSManager = FSManager.new()
-    $GvShell.setup(test)
+    self.GvShell.setup(test)
     $FsViewport/SubViewportContainer/SubViewport/FSGraph.setup(test)
     test.create_dir(FSPath.new(["dir0"]))
-
+    
+    # Connect GVShell cwd changed to FSViewport cwd change
+    self.GvShell.cwd_changed.connect($FsViewport/SubViewportContainer/SubViewport/FSGraph.change_cwd)
+    
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # func _process(delta: float) -> void:

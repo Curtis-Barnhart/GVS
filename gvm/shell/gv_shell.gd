@@ -5,6 +5,8 @@
 class_name GVShell
 extends NinePatchRect
 
+signal cwd_changed(path: FSPath)
+
 ## Stores the current working directory of the shell.
 ## Aside from after the GVShell is initialized but before setup() is called,
 ## this must always be a valid path to a directory in the backing filesystem.
@@ -91,10 +93,12 @@ func _on_prompt_user_entered() -> void:
         # is actually totally reasonable and could be done eventually.
         ["cd"]:
             self.CWD = FSPath.new([])
+            emit_signal("cwd_changed", self.CWD)
         ["cd", var where]:
             var loc: FSPath = self.CWD.compose(FSPath.new(where.split("/")))
             if self.fs_man.contains_dir(loc):
                 self.CWD = self.fs_man.reduce_path(loc)
+                emit_signal("cwd_changed", self.CWD)
             elif self.fs_man.contains_file(loc):
                 self.history.text += "-gvs: cd: %s: Not a directory\n"
             else:

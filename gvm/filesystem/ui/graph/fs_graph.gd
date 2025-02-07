@@ -28,7 +28,9 @@ func display_cwd_on() -> void:
 
 # expects p to be the simplest path
 func change_cwd(p: FSPath) -> void:
-    self.cwd_node.position = self.all_nodes[p.as_string()].position
+    print("CWD Change received!")
+    self.cwd_node.position = self.all_nodes[p.as_string()].global_position - \
+                             self.global_position
 
 
 ## Manual initializer.
@@ -43,6 +45,7 @@ func setup(fs_manager: FSManager) -> void:
     self.change_cwd(FSPath.new([]))
     
     fs_manager.created_dir.connect(self.create_dir)
+    fs_manager.removed_dir.connect(self.remove_dir)
 
 
 func create_dir(p: FSPath) -> void:
@@ -53,9 +56,16 @@ func create_dir(p: FSPath) -> void:
     self.all_nodes[p.as_string()] = child
 
 
-# TODO: Connect
 func remove_dir(p: FSPath) -> void:
-    return
+    var dir_node: FSGDir = self.all_nodes[p.as_string()]
+    var removed_width: float = dir_node.width
+    var parent: FSGDir = self.all_nodes[p.base().as_string()]
+    parent.remove_child(dir_node)
+    var parent_width_delta: float = parent.modify_subwidth(-removed_width)
+    parent.total_width_notifier(parent_width_delta)
+    parent.arrange_subnodes()
+    dir_node.queue_free()
+    
 
 
 # Called when the node enters the scene tree for the first time.
