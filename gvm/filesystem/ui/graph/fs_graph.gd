@@ -24,14 +24,24 @@ const cwd_text: Texture2D = preload("res://shared/folder_cwd.svg")
 const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
 
 
-## Changes whatever visual artifact denotes the cwd.
+## Gets the vector from myself to a directory in my tree.
 ##
-## @param p: The path to the cwd. Must be in simplest form.
+## @param dir: the directory to get directions to.
+## @return: the vector pointing from me to `dir`.
+func node_rel_pos(dir: FSGDir) -> Vector2:
+    return dir.global_position - self.global_position
+
+
+## Changes whatever visual artifact denotes the cwd.
+## Also moves the camera to center on the new cwd
+##
+## @param new_p: The path to the new cwd. Must be in simplest form.
+## @param old_p: Path to the former cwd. Must be in simplest form.
 func change_cwd(new_p: FSPath, old_p: FSPath) -> void:
     self.all_nodes[old_p.as_string()].set_texture(dir_text)
     var new_cwd: FSGDir = self.all_nodes[new_p.as_string()]
     new_cwd.set_texture(cwd_text)
-    self.camera.interp_movement(new_cwd.position)
+    self.camera.interp_movement(self.node_rel_pos(new_cwd))
 
 
 ## Manual initializer.
