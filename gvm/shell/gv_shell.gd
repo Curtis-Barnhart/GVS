@@ -136,7 +136,7 @@ func _on_prompt_user_entered() -> void:
         ["exit", ..]:
             self.get_tree().quit(0)
         var huh:
-            print("no match (%s)" % " ".join(input))
+            self.history.text += "gvs: %s: command not found...\n" % " ".join(input)
 
     self.prompt.clear()
     self.history.text += self.CWD.as_string() + " $ "
