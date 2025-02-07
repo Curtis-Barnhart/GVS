@@ -139,6 +139,8 @@ func _on_prompt_user_entered() -> void:
             self.history.text += "Usage: clear\n"
         ["exit", ..]:
             self.get_tree().quit(0)
+        ["pwd", ..]:
+            self.history.text += self.CWD.as_string() + "\n"
         var huh:
             self.history.text += "gvs: %s: command not found...\n" % " ".join(input)
 
