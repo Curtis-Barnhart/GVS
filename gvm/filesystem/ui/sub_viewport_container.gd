@@ -10,6 +10,7 @@ func _input(event: InputEvent) -> void:
     if event is InputEventMouseButton and self.get_global_rect().has_point(self.get_global_mouse_position()):
         if event.is_pressed() && not self.drag:
             self.drag = true
+            self.camera_origin = self.cam.position
             self.click_down = self.get_global_mouse_position()
         elif event.is_released() && self.drag:
             self.camera_origin = self.cam.position
