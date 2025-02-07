@@ -11,8 +11,13 @@ var fs_man: FSManager = null
 var all_nodes: Dictionary = {}
 ## Path to the cwd
 var cwd: FSPath = FSPath.new([])
+## The camera that will end up being a child of this node (will be set in _ready().
+## This seems like pretty sloppy code to me. Figure out who owns the camera better later.
+var camera: Camera2D = null
 
+## Texture for a normal directory
 const dir_text: Texture2D = preload("res://shared/folder.svg")
+## Texture for the current working directory
 const cwd_text: Texture2D = preload("res://shared/folder_cwd.svg")
 
 ## FSGDir Scene object so we can spawn new ones
@@ -24,7 +29,9 @@ const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
 ## @param p: The path to the cwd. Must be in simplest form.
 func change_cwd(new_p: FSPath, old_p: FSPath) -> void:
     self.all_nodes[old_p.as_string()].set_texture(dir_text)
-    self.all_nodes[new_p.as_string()].set_texture(cwd_text)
+    var new_cwd: FSGDir = self.all_nodes[new_p.as_string()]
+    new_cwd.set_texture(cwd_text)
+    self.camera.interp_movement(new_cwd.position)
 
 
 ## Manual initializer.
@@ -79,7 +86,8 @@ func remove_dir(p: FSPath) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-    pass    
+    # Disgusting. Fix this (later).
+    self.camera = self.get_children().filter(func (c): return is_instance_of(c, Camera2D))[0]
     
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

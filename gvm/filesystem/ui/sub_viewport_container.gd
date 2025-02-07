@@ -1,6 +1,6 @@
 extends SubViewportContainer
 
-@onready var cam: Camera2D = $SubViewport/Camera2D
+@onready var cam: Camera2D = $SubViewport/FSGraph/Camera2D
 var camera_origin: Vector2
 var click_down: Vector2 = Vector2.ZERO
 var drag: bool = false
