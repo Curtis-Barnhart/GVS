@@ -1,10 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://dsws7i3ntxerw"]
 
-[ext_resource type="Texture2D" uid="uid://b7uj3kp3b0l3c" path="res://shared/grey_box.png" id="1_bbg0k"]
+[ext_resource type="Texture2D" uid="uid://p2qtk5ccvwp1" path="res://shared/bordered.png" id="2_2bo01"]
 [ext_resource type="Script" path="res://gvm/filesystem/ui/sub_viewport_container.gd" id="2_ly32g"]
 [ext_resource type="PackedScene" uid="uid://b6cxarc58vq0a" path="res://gvm/filesystem/ui/graph/FSGraph.tscn" id="3_sl6xo"]
 
-[node name="FsView" type="NinePatchRect"]
+[node name="FsView" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,11 +13,20 @@ offset_right = -1140.0
 offset_bottom = -636.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_bbg0k")
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_2bo01")
+patch_margin_left = 26
+patch_margin_top = 26
+patch_margin_right = 26
+patch_margin_bottom = 26
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 layout_mode = 1

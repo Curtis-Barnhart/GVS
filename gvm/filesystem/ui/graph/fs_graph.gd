@@ -11,9 +11,9 @@ var fs_man: FSManager = null
 var all_nodes: Dictionary = {}
 ## Path to the cwd
 var cwd: FSPath = FSPath.new([])
-## Node which adds a visual highlight to the cwd.
-## It displays by being on a higher z value than the file/dir objects.
-@onready var cwd_node: Sprite2D = $CWD
+
+const dir_text: Texture2D = preload("res://shared/folder.svg")
+const cwd_text: Texture2D = preload("res://shared/folder_cwd.svg")
 
 ## FSGDir Scene object so we can spawn new ones
 const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
@@ -22,9 +22,9 @@ const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
 ## Changes whatever visual artifact denotes the cwd.
 ##
 ## @param p: The path to the cwd. Must be in simplest form.
-func change_cwd(p: FSPath) -> void:
-    self.cwd_node.get_parent().remove_child(self.cwd_node)
-    self.all_nodes[p.as_string()].add_child(self.cwd_node)
+func change_cwd(new_p: FSPath, old_p: FSPath) -> void:
+    self.all_nodes[old_p.as_string()].set_texture(dir_text)
+    self.all_nodes[new_p.as_string()].set_texture(cwd_text)
 
 
 ## Manual initializer.
@@ -39,7 +39,7 @@ func setup(fs_manager: FSManager) -> void:
     self.all_nodes["/"] = FSGDir_Obj.instantiate()
     self.add_child(self.all_nodes["/"])
     self.all_nodes["/"].label.text = "/"
-    self.change_cwd(FSPath.new([]))
+    self.change_cwd(FSPath.new([]), FSPath.new([]))
     
     fs_manager.created_dir.connect(self.create_dir)
     fs_manager.removed_dir.connect(self.remove_dir)

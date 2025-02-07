@@ -4,11 +4,13 @@ extends Node2D
 # This will almost certainly be changed in the future to look better
 @onready var label: Label = $Label
 
+@onready var sprite: Sprite2D = $Sprite2D
 @onready var area: Area2D = $Area2D
 ## height - used to calculate how far below me to put subdirs visually
-@onready var height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y + 60
+@onready var height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y + 160
 ## width - used to calculate how far apart to print subobjects
 @onready var width: float = $Area2D/CollisionShape2D.shape.get_rect().size.x + 40
+@onready var icon_height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y
 ## cumulative width of all my subobjects
 var sub_width: float = 0
 ## total width of myself - max of myself (my level) or my subobjects'
@@ -21,6 +23,11 @@ var start_pos: Vector2 = Vector2.ZERO
 var dest_pos: Vector2 = Vector2.ZERO
 ## amount of time left to interpolate. 2 is t=0 and 0 is t=1
 var interp_t: float = 0
+
+
+func set_texture(texture: Texture2D) -> void:
+    self.sprite.texture = texture
+    self.queue_redraw()
 
 
 ## interp_movement tells the FSGDir that it is ready to begin interpolating
@@ -53,7 +60,7 @@ func arrange_subnodes() -> void:
                   .filter(func (c): return is_instance_of(c, FSGDir)):
         #print("Setting x = %f and y = %f" % [offset + (sd.total_width/2), height])
         #print("  - node width = %f" % sd.total_width)
-        sd.interp_movement(Vector2(offset + (sd.total_width / 2), height))
+        sd.interp_movement(Vector2(offset + (sd.total_width / 2), self.height))
         #sd.position.y = height
         #sd.position.x = offset + (sd.total_width / 2)
         offset += sd.total_width
@@ -88,6 +95,19 @@ func _ready() -> void:
     pass # Replace with function body.
 
 
+func _draw() -> void:
+    var parent = self.get_parent()
+    if is_instance_of(parent, FSGDir):
+        var diff: Vector2 = parent.global_position - self.global_position
+        var begin: Vector2 = Vector2.ZERO
+        var up: Vector2 = begin + Vector2(0, diff.y / 2)
+        var right: Vector2 = up + Vector2(diff.x, 0)
+        var up_again: Vector2 = right + up + Vector2(0, parent.icon_height / 2)
+        self.draw_line(begin, up, Color.STEEL_BLUE, 7)
+        self.draw_line(up, right, Color.STEEL_BLUE, 7)
+        self.draw_line(right, up_again, Color.STEEL_BLUE, 7)
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
     if self.interp_t > 0:
@@ -97,3 +117,4 @@ func _process(delta: float) -> void:
             self.dest_pos,
             (1 - (self.interp_t/2))
         )
+        self.queue_redraw()

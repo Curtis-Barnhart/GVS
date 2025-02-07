@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dayudvd81fjbp"]
 
 [ext_resource type="Script" path="res://gvm/filesystem/ui/graph/fsg_dir.gd" id="1_kp0kf"]
-[ext_resource type="Texture2D" uid="uid://ble8onr527ifk" path="res://icon.svg" id="2_not1y"]
+[ext_resource type="Texture2D" uid="uid://cq4ntu80ajv0n" path="res://shared/folder.svg" id="2_2n6uc"]
 [ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_0g5nk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yfsys"]
@@ -15,7 +15,7 @@ font_size = 36
 script = ExtResource("1_kp0kf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_not1y")
+texture = ExtResource("2_2n6uc")
 
 [node name="Area2D" type="Area2D" parent="."]
 
