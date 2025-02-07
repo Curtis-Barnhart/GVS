@@ -4,29 +4,24 @@
 
 extends Node2D
 
+## The backing file system which this visual representation tracks.
 var fs_man: FSManager = null
+## We let FSManager handle all file system logic - no need to implement it twice.
+## Instead, all files/dirs are stored flat in this dict by their path.
 var all_nodes: Dictionary = {}
-const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
-
-# Highlight current working directory
-var display_cwd: bool = true
+## Path to the cwd
 var cwd: FSPath = FSPath.new([])
+## Node which adds a visual highlight to the cwd.
+## It displays by being on a higher z value than the file/dir objects.
 @onready var cwd_node: Sprite2D = $CWD
 
-
-func display_cwd_off() -> void:
-    self.cwd_node.visible = false
-    self.display_cwd = false
+## FSGDir Scene object so we can spawn new ones
+const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
 
 
-# TODO: Right now it is displayed by being on a different z layer see if there
-# is a better way to do this
-func display_cwd_on() -> void:
-    self.cwd_node.visible = true
-    self.display_cwd = true
-
-
-# expects p to be the simplest path
+## Changes whatever visual artifact denotes the cwd.
+##
+## @param p: The path to the cwd. Must be in simplest form.
 func change_cwd(p: FSPath) -> void:
     self.cwd_node.get_parent().remove_child(self.cwd_node)
     self.all_nodes[p.as_string()].add_child(self.cwd_node)
