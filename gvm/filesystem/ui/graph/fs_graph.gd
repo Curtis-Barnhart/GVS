@@ -28,12 +28,16 @@ func display_cwd_on() -> void:
 
 # expects p to be the simplest path
 func change_cwd(p: FSPath) -> void:
-    print("CWD Change received!")
-    self.cwd_node.position = self.all_nodes[p.as_string()].global_position - \
-                             self.global_position
+    self.cwd_node.get_parent().remove_child(self.cwd_node)
+    self.all_nodes[p.as_string()].add_child(self.cwd_node)
+    print(self.cwd_node.get_parent())
+    print(self.cwd_node.position)
 
 
 ## Manual initializer.
+## Connects backing FSManager's file structure manipulation signals
+## to the methods here that will perform the corresponding actions
+## on the visual graph of the filesystem.
 ##
 ## @param fs_manager: the FSManager that backs the filesystem this displays.
 ##      fs_manager should be empty.
@@ -48,14 +52,26 @@ func setup(fs_manager: FSManager) -> void:
     fs_manager.removed_dir.connect(self.remove_dir)
 
 
+## create_dir creates a directory in the visual graph
+## and ensures all other elements have their position adjusted accordingly.
+##
+## @param p: Path to the directory to create.
+##      p's parent directory (p.base()) must be a valid path in this graph,
+##      and also must be a simplified absolute path.
 func create_dir(p: FSPath) -> void:
-    var parent: FSGDir = self.all_nodes[self.fs_man.reduce_path(p.base()).as_string()]
+    var parent: FSGDir = self.all_nodes[p.base().as_string()]
     var child: FSGDir = FSGDir_Obj.instantiate()
     parent.add_subdir(child)
     child.label.text = p.last()
     self.all_nodes[p.as_string()] = child
 
 
+## remove_dir removes a directory from the visual graph
+## and ensures all other elements have their position adjusted accordingly.
+##
+## @param p: Path to the directory to remove.
+##      p must be a valid path in the visual graph,
+##      and also must be a simplified absolute path.
 func remove_dir(p: FSPath) -> void:
     var dir_node: FSGDir = self.all_nodes[p.as_string()]
     var removed_width: float = dir_node.width

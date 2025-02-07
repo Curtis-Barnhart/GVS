@@ -3,10 +3,11 @@
 class_name FSPath
 extends RefCounted
     
-var _segments: Array[String]
+var _segments: PackedStringArray
 
 
-func _init(segments: Array[String]) -> void:
+#func _init(segments: Array[String]) -> void:
+func _init(segments: PackedStringArray) -> void:
     # at some point should we filter this for empty strings?
     self._segments = segments
 
@@ -41,6 +42,12 @@ func last() -> String:
 
 func compose(other: FSPath) -> FSPath:
     return FSPath.new(self._segments + other._segments)
+
+
+func extend(name: String) -> FSPath:
+    if name == "":
+        return self
+    return FSPath.new(self._segments + PackedStringArray([name]))
 
 
 func as_string(abs: bool = true) -> String:

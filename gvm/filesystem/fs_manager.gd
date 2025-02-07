@@ -6,7 +6,9 @@
 class_name FSManager
 extends RefCounted
 
+## path is guaranteed to be in simplest form
 signal created_dir(path: FSPath)
+## path is guaranteed to be in simplest form
 signal removed_dir(path: FSPath)
 
 # Guaranteed non null
@@ -74,13 +76,15 @@ func create_dir(p: FSPath) -> bool:
     if new_dir_name == "":
         return false
     
+    # Only create the new directory if the claimed parent is a real directory
+    # and that parent does not already contain a directory with the same name.
     var contain_dir: FSDir = self._get_dir(contain_path)
     if contain_dir == null:
         return false
-    
     if new_dir_name in contain_dir.subdirs.map(func (sd): return sd.name):
         return false
-    
+   
+    p = contain_dir.get_path().extend(new_dir_name)
     contain_dir.subdirs.push_back(FSDir.new(new_dir_name, contain_dir))
     emit_signal("created_dir", p)
     return true
