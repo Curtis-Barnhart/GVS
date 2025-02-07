@@ -1,68 +1,106 @@
+## GVShell is a class that acts as a sort of shell.
+## It allows someone interacting with it to manipulate a backing
+## filesystem (the GVShell contains a FSManager instance).
+
 class_name GVShell
 extends NinePatchRect
 
-var PATH: Array[String]
+## Stores the current working directory of the shell.
+## Aside from after the GVShell is initialized but before setup() is called,
+## this must always be a valid path to a directory in the backing filesystem.
 var CWD: FSPath = FSPath.new([])
+## The filesystem that this GVShell is attached to.
 var fs_man: FSManager = null
+## This the GVShell's "fake" IOQueue - it can give it to a process as the
+## process' stdout, but instead of collecting text,
+## it will immediately print to the GVShell's display
 var shell_write: ShellWriter = ShellWriter.new()
-const sh_prompt: String = "root@localhost$ "
-static var scroll_frames: int = 1
+## Due to the ordering of signals and events, we need to have a way to queue up
+## a scrolling down motion a frame in the future.
+## When scroll_frames > 0, the _process function knows to scroll down
+## and decrement scroll_frames.
+var scroll_frames: int = 1
 
+## history is a label that displays the past history of all commands
+## and command outputs.
 @onready var history: Label = $ScrollContainer/VBoxContainer/History
+## prompt is the prompt to the user to enter text.
 @onready var prompt: TextEdit = $ScrollContainer/VBoxContainer/Prompt
+## scroll is the scroll container that contains all visual elements
+## (the history and prompt).
+## We only need a reference to this so we can scroll down automatically
+## after any user input or text output occurs.
 @onready var scroll: ScrollContainer = $ScrollContainer
 
 
+## ShellWriter is a special IOQueue that prints out any received text
+## to the history Label of the GVShell.
+## Because there should only ever exist one, we don't worry about a c'tor.
+class ShellWriter extends IOQueue:
+    ## GVShell who owns this ShellWriter so we can set their scroll_frames
+    ## after printing to their screen.
+    var shell: GVShell
+
+    ## Overrides IOQueue's write method to write immediately to history Label.
+    ##
+    ## @param str: message to write to the history Label.
+    func write(str: String) -> void:
+        self.shell.history.text += str
+        self.shell.scroll_frames = 1
+
+
+## GVShell needs to be given an FSManager so that it can interact with
+## a filesystem (that it does not own).
+## We throw this into a setup function in case there is anything else
+## that we will want to initialize in the future.
+##
+## @param fs_manager: the file system to attach to this GVShell.
 func setup(fs_manager: FSManager) -> void:
     self.fs_man = fs_manager
+    # Set initial history text to show first prompt so it's not empty
+    self.history.text = "/ $ "
 
 
-# We do this because on resize of the prompt, we scroll,
-# but the actual resizing occurs just after that scroll,
-# so we need a way to scroll for 2 frames and not just 1
-func scroll_bottom() -> void:
-    self.scroll_frames = 1
-
-
-# Called when the node enters the scene tree for the first time.
+## On entering the scene, we set give GVShell's history Label to
+## the sole ShellWriter instance so that it knows where to write.
 func _ready() -> void:
-    self.scroll_bottom()
-    self.shell_write.history = self.history
-    pass # Replace with function body.
+    self.shell_write.shell = self
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+## Every frame we scroll down if scroll_frames has been set.
+##
+## @param delta: elapsed time since the previous frame.
 func _process(delta: float) -> void:
     if self.scroll_frames > 0:
         self.scroll.scroll_vertical = 999999
         self.scroll_frames -= 1
 
 
-func write(msg: String) -> void:
-    self.history.text += msg + "\n"
-
-
-class ShellWriter extends IOQueue:
-    var history: Label
-    
-    func write(str: String) -> void:
-        self.history.text += str
-
-
+## This is called when the prompt detects that the user has hit enter
+## while typing into it.
+## We now have a chance to process what the user has written,
+## which at the moment is done in a huge pattern matching statement.
+## At some point this will probably have to be more sophisticated?
 func _on_prompt_user_entered() -> void:
-    self.history.text += self.CWD.as_string() \
-                      + " " \
-                      + GVShell.sh_prompt \
-                      + self.prompt.text \
-                      + "\n"
-    
-    # Array[String] I HATE TYPE ERASURE I HATE TYPE ERASURE I HATE TYPE ERA
+    self.history.text += self.prompt.text + "\n"
+
     var input: PackedStringArray = self.prompt.text.split(" ", false)
     match Array(input):
+        # A process cannot be made for cd because it would have to
+        # be able to access the GVShell's CWD, which... on second thought,
+        # is actually totally reasonable and could be done eventually.
+        ["cd"]:
+            self.CWD = FSPath.new([])
         ["cd", var where]:
             var loc: FSPath = self.CWD.compose(FSPath.new(where.split("/")))
             if self.fs_man.contains_dir(loc):
                 self.CWD = self.fs_man.reduce_path(loc)
+            elif self.fs_man.contains_file(loc):
+                self.history.text += "-gvs: cd: %s: Not a directory\n"
+            else:
+                self.history.text += "-gvs: cd: %s: No such file or directory\n"
+        ["cd", ..]:
+            self.history.text += "-gvs: cd: too many arguments\n"
         ["mkdir", ..]:
             var mkdir_proc: ProcessMkdir = ProcessMkdir.new(
                 self.fs_man,
@@ -90,12 +128,16 @@ func _on_prompt_user_entered() -> void:
                 self.CWD
             )
             ls_proc.run()
+        # remove history on single command "clear"
         ["clear"]:
             self.history.text = ""
-        ["exit"]:
+        ["clear", ..]:
+            self.history.text += "Usage: clear\n"
+        ["exit", ..]:
             self.get_tree().quit(0)
         var huh:
             print("no match (%s)" % " ".join(input))
-    
+
     self.prompt.clear()
-    self.scroll_bottom()
+    self.history.text += self.CWD.as_string() + " $ "
+    self.scroll_frames = 1
