@@ -30,8 +30,6 @@ func display_cwd_on() -> void:
 func change_cwd(p: FSPath) -> void:
     self.cwd_node.get_parent().remove_child(self.cwd_node)
     self.all_nodes[p.as_string()].add_child(self.cwd_node)
-    print(self.cwd_node.get_parent())
-    print(self.cwd_node.position)
 
 
 ## Manual initializer.
