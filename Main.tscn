@@ -16,6 +16,16 @@ script = ExtResource("1_ahk52")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FsViewport" parent="." instance=ExtResource("2_fy8vq")]
+[node name="Right" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="FsViewport" parent="Right" instance=ExtResource("2_fy8vq")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Narrator" type="Control" parent="Right"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 8

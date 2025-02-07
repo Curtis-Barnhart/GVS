@@ -10,7 +10,7 @@ extends HBoxContainer
 @onready var GvShell = $GvShell
 # This feels like very bad practice
 @onready var prompt = $GvShell/ScrollContainer/VBoxContainer/Prompt
-@onready var ViewpointContainer = $FsViewport/SubViewportContainer
+@onready var ViewpointContainer = $Right/FsViewport/SubViewportContainer
 
 ## A reference to the child FSViewport instance - the visual interface
 ## for the user.
@@ -36,11 +36,11 @@ func _input(event: InputEvent) -> void:
 func _ready() -> void:
     var test: FSManager = FSManager.new()
     self.GvShell.setup(test)
-    $FsViewport/SubViewportContainer/SubViewport/FSGraph.setup(test)
+    $Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.setup(test)
     test.create_dir(FSPath.new(["dir0"]))
     
     # Connect GVShell cwd changed to FSViewport cwd change
-    self.GvShell.cwd_changed.connect($FsViewport/SubViewportContainer/SubViewport/FSGraph.change_cwd)
+    self.GvShell.cwd_changed.connect($Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.change_cwd)
     
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
