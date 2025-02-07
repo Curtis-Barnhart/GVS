@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5js8dalnh4nb"]
+[gd_scene load_steps=5 format=3 uid="uid://b5js8dalnh4nb"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_ahk52"]
 [ext_resource type="PackedScene" uid="uid://20ur75p1xydl" path="res://gvm/shell/GVShell.tscn" id="1_avs1o"]
 [ext_resource type="PackedScene" uid="uid://dsws7i3ntxerw" path="res://gvm/filesystem/ui/FSViewport.tscn" id="2_fy8vq"]
+[ext_resource type="PackedScene" uid="uid://duxuodebilbwf" path="res://narrator/Narrator.tscn" id="4_c6jwc"]
 
 [node name="Main" type="HBoxContainer"]
 anchors_preset = 15
@@ -25,7 +26,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Narrator" type="Control" parent="Right"]
-custom_minimum_size = Vector2(0, 300)
+[node name="Narrator" parent="Right" instance=ExtResource("4_c6jwc")]
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
-size_flags_vertical = 8
