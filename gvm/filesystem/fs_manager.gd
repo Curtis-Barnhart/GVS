@@ -169,3 +169,16 @@ func contains_type(p: FSPath) -> FSManager.filetype:
     if self.contains_file(p):
         return self.filetype.FILE
     return self.filetype.NULL
+
+
+## Creates an FSPath from a string, taking into account whether it is
+## relative or absolute and the cwd.
+##
+## @param s: string to turn into FSPath.
+## @param cwd: FSPath of the current working directory.
+## @return: Absolute FSPath of `s`.
+func from_str(s: String, cwd: FSPath = FSPath.ROOT) -> FSPath:
+    if s.begins_with("/"):
+        return FSPath.new(s.split(" ", false))
+    else:
+        return cwd.compose(FSPath.new(s.split(" ", false)))
