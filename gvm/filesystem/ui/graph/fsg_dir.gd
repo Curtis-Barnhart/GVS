@@ -16,6 +16,8 @@ var sub_width: float = 0
 ## total width of myself - max of myself (my level) or my subobjects'
 ## cumulative total_widths
 @onready var total_width: float = self.width
+## Is my path to my parent currently highlighted or not
+var path_glow: bool = false
 
 ## starting position before interpolating movement.
 var start_pos: Vector2 = Vector2.ZERO
@@ -98,14 +100,19 @@ func _ready() -> void:
 func _draw() -> void:
     var parent = self.get_parent()
     if is_instance_of(parent, FSGDir):
+        var lcolor: Color
+        if self.path_glow:
+            lcolor = Color.CRIMSON
+        else:
+            lcolor = Color.STEEL_BLUE
         var diff: Vector2 = parent.global_position - self.global_position
         var begin: Vector2 = Vector2.ZERO
         var up: Vector2 = begin + Vector2(0, diff.y / 2)
         var right: Vector2 = up + Vector2(diff.x, 0)
         var up_again: Vector2 = right + up + Vector2(0, parent.icon_height / 2)
-        self.draw_line(begin, up, Color.STEEL_BLUE, 7)
-        self.draw_line(up, right, Color.STEEL_BLUE, 7)
-        self.draw_line(right, up_again, Color.STEEL_BLUE, 7)
+        self.draw_line(begin, up, lcolor, 7)
+        self.draw_line(up, right, lcolor, 7)
+        self.draw_line(right, up_again, lcolor, 7)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

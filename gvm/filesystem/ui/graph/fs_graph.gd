@@ -14,6 +14,10 @@ var cwd: FSPath = FSPath.new([])
 ## The camera that will end up being a child of this node (will be set in _ready().
 ## This seems like pretty sloppy code to me. Figure out who owns the camera better later.
 var camera: Camera2D = null
+## Origin of the last highlighted path
+var hl_origin: FSPath = FSPath.new([])
+## Last highlighted path (so we can unhighlight it when we want to highlight a new one)
+var hl_path: FSPath = FSPath.new([])
 
 ## Texture for a normal directory
 const dir_text: Texture2D = preload("res://shared/folder.svg")
@@ -22,6 +26,27 @@ const cwd_text: Texture2D = preload("res://shared/folder_cwd.svg")
 
 ## FSGDir Scene object so we can spawn new ones
 const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
+
+
+func highlight_path(origin: FSPath, path: FSPath) -> void:
+    # TODO: make this better
+    for any_node in self.all_nodes.values():
+        any_node.path_glow = false
+        
+    # highlight new path
+    self.hl_origin = origin
+    self.hl_path = path
+    var complete_hl: FSPath = origin.compose(path)
+    while origin.as_string() != complete_hl.as_string():
+        var next_hop: String = path.head()
+        if next_hop == "..":
+            self.all_nodes[self.fs_man.reduce_path(origin).as_string()].path_glow = true
+        else:
+            self.all_nodes[self.fs_man.reduce_path(origin.extend(next_hop)).as_string()].path_glow = true
+        origin = origin.extend(next_hop)
+        path = path.tail()
+    # TODO: figure out if this is necessary
+    self.queue_redraw()
 
 
 ## Gets the vector from myself to a directory in my tree.
@@ -91,6 +116,7 @@ func remove_dir(p: FSPath) -> void:
     parent.total_width_notifier(parent_width_delta)
     parent.arrange_subnodes()
     dir_node.queue_free()
+    self.all_nodes.erase(p.as_string())
     
 
 
