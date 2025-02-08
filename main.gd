@@ -63,6 +63,10 @@ func _ready() -> void:
     self.GvShell.cwd_changed.connect($Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.change_cwd)
     # Connect GVShell previewing_path to FWViewport highlight path
     self.GvShell.previewing_path.connect($Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.highlight_path) 
+        
+    $GvShell/ScrollContainer/VBoxContainer/Prompt.focus_released.connect(
+        $Right/Narrator/VBoxContainer/Toggle.accept_focus
+    )
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

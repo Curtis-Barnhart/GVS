@@ -1,6 +1,7 @@
 extends TextEdit
 
 signal user_entered
+signal focus_released
 
 
 # I don't understand why this is called when something else has been clicked on
@@ -12,16 +13,19 @@ func _input(event: InputEvent) -> void:
     if (
         event is InputEventKey
         and event.is_pressed()
-        and event.keycode == KEY_ENTER
         and self.get_viewport().gui_get_focus_owner() == self
     ):
-        self.user_entered.emit()
-        get_viewport().set_input_as_handled()
+        if event.keycode == KEY_ENTER:
+            self.user_entered.emit()
+            get_viewport().set_input_as_handled()
+        elif event.keycode == KEY_TAB:
+            self.focus_released.emit()
+            get_viewport().set_input_as_handled()
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-    pass # Replace with function body.
+    self.grab_focus()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
