@@ -12,7 +12,8 @@ extends HBoxContainer
 @onready var prompt = $GvShell/ScrollContainer/VBoxContainer/Prompt
 @onready var FsViewport = $Right/FsViewport
 @onready var ViewportContainer = $Right/FsViewport/SubViewportContainer
-@onready var NarratorToggle = $Right/Narrator/Toggle
+@onready var NarratorToggle = $Right/Narrator/VBoxContainer/Toggle
+@onready var NarratorNext = $Right/Narrator/VBoxContainer/Next
 
 
 ## It would be helpful to be able to forward user input to the
@@ -31,7 +32,8 @@ func _input(event: InputEvent) -> void:
         # Update this when there are other focus stealers around
         and focus_owner in [
             self.prompt,
-            self.NarratorToggle
+            self.NarratorToggle,
+            self.NarratorNext
         ]
     ):
         self.ViewportContainer._input(event)
