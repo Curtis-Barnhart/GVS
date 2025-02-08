@@ -14,6 +14,8 @@ signal removed_dir(path: FSPath)
 # Guaranteed non null
 var _root: FSDir = FSDir.new("", null)
 
+enum filetype { FILE, DIR, NULL }
+
 
 func _init() -> void:
     # This creates a cyclic references that will never be deleted because of reference counting.
@@ -156,3 +158,10 @@ func reduce_path(p: FSPath) -> FSPath:
         return null
     return loc.get_path()
     
+
+func contains_type(p: FSPath) -> FSManager.filetype:
+    if self.contains_dir(p):
+        return self.filetype.DIR
+    if self.contains_file(p):
+        return self.filetype.FILE
+    return self.filetype.NULL
