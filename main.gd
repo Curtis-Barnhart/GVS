@@ -10,11 +10,13 @@ extends HBoxContainer
 @onready var GvShell = $GvShell
 # This feels like very bad practice
 @onready var prompt = $GvShell/ScrollContainer/VBoxContainer/Prompt
-@onready var ViewpointContainer = $Right/FsViewport/SubViewportContainer
+@onready var FsViewport = $Right/FsViewport
+@onready var ViewportContainer = $Right/FsViewport/SubViewportContainer
+@onready var NarratorToggle = $Right/Narrator/Toggle
 
 
 ## It would be helpful to be able to forward user input to the
-## FSViewport when the GVShell terminal has focus
+## FSViewport when the GVShell terminal (or anyone else!) has focus
 ## (specifically its text input component).
 ## This function takes input that is not handled by the GVShell
 ## (e.g. clicks on the FSViewport that is part of the Main scene)
@@ -22,8 +24,17 @@ extends HBoxContainer
 ##
 ## @param event: The event to forward to the FSViewport.
 func _input(event: InputEvent) -> void:
-    if event is InputEventMouseButton and self.get_viewport().gui_get_focus_owner() == self.prompt:
-        self.ViewpointContainer._input(event)
+    var focus_owner = self.get_viewport().gui_get_focus_owner()
+    if (
+        event is InputEventMouseButton
+        and self.FsViewport.get_global_rect().has_point(self.get_global_mouse_position())
+        # Update this when there are other focus stealers around
+        and focus_owner in [
+            self.prompt,
+            self.NarratorToggle
+        ]
+    ):
+        self.ViewportContainer._input(event)
 
 
 ## As the FSManager - the filesystem - is not a scene,

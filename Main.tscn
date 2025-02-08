@@ -33,5 +33,5 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Narrator" parent="Right" instance=ExtResource("4_c6jwc")]
-custom_minimum_size = Vector2(0, 200)
+custom_minimum_size = Vector2(0, 600)
 layout_mode = 2

@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://duxuodebilbwf"]
+[gd_scene load_steps=4 format=3 uid="uid://duxuodebilbwf"]
 
 [ext_resource type="Script" path="res://narrator/narrator.gd" id="1_ne5f2"]
+[ext_resource type="Texture2D" uid="uid://p2qtk5ccvwp1" path="res://shared/bordered.png" id="2_j8vlk"]
+[ext_resource type="Texture2D" uid="uid://ble8onr527ifk" path="res://icon.svg" id="3_mqrw7"]
 
 [node name="Narrator" type="Control"]
 layout_mode = 3
@@ -10,3 +12,29 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ne5f2")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_j8vlk")
+patch_margin_left = 26
+patch_margin_top = 26
+patch_margin_right = 26
+patch_margin_bottom = 26
+
+[node name="Toggle" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -68.0
+offset_right = 68.0
+offset_bottom = 136.0
+grow_horizontal = 2
+icon = ExtResource("3_mqrw7")
+
+[connection signal="pressed" from="Toggle" to="." method="_on_button_pressed"]
