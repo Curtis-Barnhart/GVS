@@ -169,19 +169,6 @@ func contains_type(p: FSPath) -> FSManager.filetype:
     return self.filetype.NULL
 
 
-## Creates an FSPath from a string, taking into account whether it is
-## relative or absolute and the cwd.
-##
-## @param s: string to turn into FSPath.
-## @param cwd: FSPath of the current working directory.
-## @return: Absolute FSPath of `s`.
-func from_str(s: String, cwd: FSPath = FSPath.ROOT) -> FSPath:
-    if s.begins_with("/"):
-        return FSPath.new(s.split("/", false))
-    else:
-        return cwd.compose(FSPath.new(s.split("/", false)))
-
-
 ## If you have a nonexistant path, give it here and you'll get back the longest
 ## matching existing path (in simplest form)
 ##

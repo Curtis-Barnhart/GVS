@@ -73,3 +73,15 @@ func as_string(absolute: bool = true) -> String:
     if absolute:
         return "/" + "/".join(self._segments)
     return "/".join(self._segments)
+
+
+## Creates an FSPath from a string, taking into account whether it is
+## relative or absolute and using self as a potential cwd.
+##
+## @param s: string to turn into FSPath.
+## @return: Absolute FSPath of `s`.
+func as_cwd(s: String) -> FSPath:
+    if s.begins_with("/"):
+        return FSPath.new(s.split("/", false))
+    else:
+        return self.compose(FSPath.new(s.split("/", false)))

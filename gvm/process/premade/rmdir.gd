@@ -10,7 +10,7 @@ func run() -> int:
         _:
             var some_worked: bool = false
             for name in args:
-                var qualified: FSPath = self.cwd.compose(FSPath.new(name.split("/")))
+                var qualified: FSPath = self.cwd.as_cwd(name)
                 if self.fs_man.contains_dir(qualified):
                     if self.cwd.as_string() == self.fs_man.reduce_path(qualified).as_string():
                         self.stdout.write("rmdir: failed to remove '%s': Cannot remove current working directory\n" % name)

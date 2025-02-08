@@ -54,13 +54,13 @@ bbcode_enabled = true
 text = "[font=res://shared/JetBrainsMonoNerdFontMono-Regular.ttf][font_size=36]
 [center]Instructions[/center]
 [ul]
-[code]pwd[/code]
-[code]ls[/code]
-[code]cd[/code]
-[code]mkdir[/code]
-[code]rmdir[/code]
-[code]clear[/code]
-[code]exit[/code]
+pwd
+ls
+cd
+mkdir
+rmdir
+clear
+exit
 [/ul]
 [/font_size][/font]"
 

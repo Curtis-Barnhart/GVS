@@ -36,7 +36,7 @@ func run() -> int:
 
 func analyze_path(p_str: String, f_hidden: bool) -> int:
     # Path is absolute if it started with "/", otherwise it starts at cwd
-    var path: FSPath = self.fs_man.from_str(p_str, self.cwd)
+    var path: FSPath = self.cwd.as_cwd(p_str)
 
     match self.fs_man.contains_type(path):
         FSManager.filetype.FILE:

@@ -40,7 +40,7 @@ func run() -> int:
 
 
 func make_a_dir(name: String) -> int:
-    var path: FSPath = self.fs_man.from_str(name, self.cwd)
+    var path: FSPath = self.cwd.as_cwd(name)
     var real_ancestor: FSPath = self.fs_man.real_ancestry(path)
     var path_parent = path.base()
     
@@ -59,7 +59,7 @@ func make_a_dir(name: String) -> int:
 
 
 func make_dirs_recur(name: String) -> int:
-    var path: FSPath = self.fs_man.from_str(name, self.cwd)
+    var path: FSPath = self.cwd.as_cwd(name)
     var real_ancestor: FSPath = self.fs_man.real_ancestry(path)
     
     if self.fs_man.contains_path(path):
