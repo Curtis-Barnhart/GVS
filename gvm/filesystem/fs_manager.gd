@@ -179,6 +179,6 @@ func contains_type(p: FSPath) -> FSManager.filetype:
 ## @return: Absolute FSPath of `s`.
 func from_str(s: String, cwd: FSPath = FSPath.ROOT) -> FSPath:
     if s.begins_with("/"):
-        return FSPath.new(s.split(" ", false))
+        return FSPath.new(s.split("/", false))
     else:
-        return cwd.compose(FSPath.new(s.split(" ", false)))
+        return cwd.compose(FSPath.new(s.split("/", false)))
