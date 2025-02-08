@@ -6,6 +6,7 @@ class_name GVShell
 extends NinePatchRect
 
 signal cwd_changed(path: FSPath, old_path: FSPath)
+signal previewing_path(origin: FSPath, path: FSPath)
 
 ## Stores the current working directory of the shell.
 ## Aside from after the GVShell is initialized but before setup() is called,
@@ -153,3 +154,36 @@ func _on_prompt_user_entered() -> void:
 
 func _on_prompt_text_changed() -> void:
     self.scroll_frames = 1
+
+
+func _on_prompt_caret_changed() -> void:
+    var caret_string: String = self.prompt.get_word_under_caret()
+    if caret_string == "":
+        var last_char: int = utils_strings.prev_f(
+            self.prompt.text,
+            self.prompt.get_caret_column() - 1,
+            func (c): return c != " "
+        )
+        if last_char == -1:
+            # There is no word to analyze at all
+            return      
+        caret_string = utils_strings.extract_word(self.prompt.text, last_char)
+    
+    var caret_path: FSPath = FSPath.new(caret_string.split("/", false))
+    var parent_path: FSPath = caret_path.base()
+    print("\nWord '%s' detected - path '%s'" % [caret_string, caret_path.as_string()])
+    if caret_string.begins_with("/"):
+        print("Absolute path detected")
+        print("Paths changed to:\n\t%s\n\t%s" % [caret_path.as_string(), parent_path.as_string()])
+        if self.fs_man.contains_dir(caret_path):
+            print("path found")
+            self.previewing_path.emit(FSPath.ROOT, caret_path)
+        elif self.fs_man.contains_dir(parent_path):
+            print("partial path found")
+            self.previewing_path.emit(FSPath.ROOT, parent_path)
+        else:
+            print("Path %s not located" % caret_path.as_string())
+        
+
+    #if self.fs_man.contains_dir(caret_path):
+        #self.previewing_path.emit()

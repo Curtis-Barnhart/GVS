@@ -29,9 +29,12 @@ const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
 
 
 func highlight_path(origin: FSPath, path: FSPath) -> void:
+    print("Highlighting path:\n\t%s\n\t%s" % [origin.as_string(), path.as_string(false)])
     # TODO: make this better
     for any_node in self.all_nodes.values():
         any_node.path_glow = false
+        any_node.z_index = 0
+        any_node.queue_redraw()
         
     # highlight new path
     self.hl_origin = origin
@@ -39,10 +42,17 @@ func highlight_path(origin: FSPath, path: FSPath) -> void:
     var complete_hl: FSPath = origin.compose(path)
     while origin.as_string() != complete_hl.as_string():
         var next_hop: String = path.head()
+        var node_to_highlight: FSGDir
         if next_hop == "..":
-            self.all_nodes[self.fs_man.reduce_path(origin).as_string()].path_glow = true
+            node_to_highlight = self.all_nodes[self.fs_man.reduce_path(origin).as_string()]
+            node_to_highlight.path_glow = true
+            node_to_highlight.z_index = 1
+            node_to_highlight.queue_redraw()
         else:
-            self.all_nodes[self.fs_man.reduce_path(origin.extend(next_hop)).as_string()].path_glow = true
+            node_to_highlight = self.all_nodes[self.fs_man.reduce_path(origin.extend(next_hop)).as_string()]
+            node_to_highlight.path_glow = true
+            node_to_highlight.z_index = 1
+            node_to_highlight.queue_redraw()
         origin = origin.extend(next_hop)
         path = path.tail()
     # TODO: figure out if this is necessary

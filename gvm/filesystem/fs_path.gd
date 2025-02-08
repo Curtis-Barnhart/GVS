@@ -3,6 +3,7 @@
 class_name FSPath
 extends RefCounted
 
+static var ROOT: FSPath = FSPath.new([])
 ## Stores segments of path (each dir on the way/file name)
 var _segments: PackedStringArray
 

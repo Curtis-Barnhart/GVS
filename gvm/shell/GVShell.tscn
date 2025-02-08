@@ -55,5 +55,6 @@ caret_blink = true
 caret_multiple = false
 script = ExtResource("3_yiyy1")
 
+[connection signal="caret_changed" from="ScrollContainer/VBoxContainer/Prompt" to="." method="_on_prompt_caret_changed"]
 [connection signal="text_changed" from="ScrollContainer/VBoxContainer/Prompt" to="." method="_on_prompt_text_changed"]
 [connection signal="user_entered" from="ScrollContainer/VBoxContainer/Prompt" to="." method="_on_prompt_user_entered"]
