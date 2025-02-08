@@ -52,7 +52,8 @@ wrap_mode = 1
 scroll_fit_content_height = true
 caret_type = 1
 caret_blink = true
+caret_multiple = false
 script = ExtResource("3_yiyy1")
 
-[connection signal="caret_changed" from="ScrollContainer/VBoxContainer/Prompt" to="." method="scroll_bottom"]
+[connection signal="text_changed" from="ScrollContainer/VBoxContainer/Prompt" to="." method="_on_prompt_text_changed"]
 [connection signal="user_entered" from="ScrollContainer/VBoxContainer/Prompt" to="." method="_on_prompt_user_entered"]

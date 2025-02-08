@@ -149,3 +149,7 @@ func _on_prompt_user_entered() -> void:
     self.prompt.clear()
     self.history.text += self.CWD.as_string() + " $ "
     self.scroll_frames = 1
+
+
+func _on_prompt_text_changed() -> void:
+    self.scroll_frames = 1
