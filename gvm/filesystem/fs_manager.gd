@@ -89,7 +89,6 @@ func create_dir(p: FSPath) -> bool:
     p = contain_dir.get_path().extend(new_dir_name)
     contain_dir.subdirs.push_back(FSDir.new(new_dir_name, contain_dir))
     self.created_dir.emit(p)
-    #emit_signal("created_dir", p)
     return true
 
 
@@ -125,7 +124,6 @@ func remove_dir(p: FSPath) -> bool:
     var i: int = parent.subdirs.find(dir)
     parent.subdirs.remove_at(i)
     self.removed_dir.emit(p)
-    #emit_signal("removed_dir", p)
     return true
 
 
@@ -182,3 +180,14 @@ func from_str(s: String, cwd: FSPath = FSPath.ROOT) -> FSPath:
         return FSPath.new(s.split("/", false))
     else:
         return cwd.compose(FSPath.new(s.split("/", false)))
+
+
+## If you have a nonexistant path, give it here and you'll get back the longest
+## matching existing path (in simplest form)
+##
+## @param p: path to shorten until it is real.
+## @return: closest real version of that path.
+func real_ancestry(p: FSPath) -> FSPath:
+    while not self.contains_path(p):
+        p = p.base()
+    return p

@@ -108,9 +108,9 @@ func _on_prompt_user_entered() -> void:
                 self.CWD = self.fs_man.reduce_path(loc)
                 self.cwd_changed.emit(self.CWD, old_cwd)
             elif self.fs_man.contains_file(loc):
-                self.history.text += "-gvs: cd: %s: Not a directory\n"
+                self.history.text += "-gvs: cd: %s: Not a directory\n" % where
             else:
-                self.history.text += "-gvs: cd: %s: No such file or directory\n"
+                self.history.text += "-gvs: cd: %s: No such file or directory\n" % where
         ["cd", ..]:
             self.history.text += "-gvs: cd: too many arguments\n"
         ["mkdir", ..]:

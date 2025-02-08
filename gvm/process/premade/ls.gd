@@ -12,7 +12,10 @@ func run() -> int:
             if string == "-a":
                 f_hidden = true
             elif len(string) > 1:
+                # TODO: this could print the wrong offender
                 self.stdout.write("ls: invalid option -- '%s'" % string[1])
+            else:
+                arguments.push_back(string)
         else:
             arguments.push_back(string)
     
