@@ -1,6 +1,10 @@
 extends Control
 
 var expanded: bool = true
+var target_expanded: bool = true
+var expanding_time: float = 0
+@onready var min_size: float = $VBoxContainer/Toggle.size.y
+const max_size: float = 800
 @onready var label: RichTextLabel = $VBoxContainer/RichTextLabel
 @onready var next: Button = $VBoxContainer/Next
 
@@ -11,18 +15,32 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-    pass
+func _process(delta: float) -> void:
+    if self.expanding_time > 0:
+        self.expanding_time -= delta
+        if self.target_expanded:
+            self.custom_minimum_size.y = utils_math.log_interp(
+                self.min_size,
+                self.max_size,
+                1 - (self.expanding_time / 2)
+            )
+        else:
+            self.custom_minimum_size.y = utils_math.log_interp(
+                self.max_size,
+                self.min_size,
+                1 - (self.expanding_time / 2)
+            )
+    elif self.target_expanded != self.expanded:
+        self.expanded = self.target_expanded
+        if self.expanded:
+            self.label.show()
+            self.next.show()
 
 
 func _on_button_pressed() -> void:
     if self.expanded:
-        self.custom_minimum_size.y = 160
         self.label.hide()
         self.next.hide()
-    else:
-        self.label.show()
-        self.next.show()
-        self.custom_minimum_size.y = 600
     
-    self.expanded = not self.expanded
+    self.expanding_time = 2
+    self.target_expanded = not self.target_expanded
