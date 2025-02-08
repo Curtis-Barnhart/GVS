@@ -29,12 +29,12 @@ const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
 
 
 func highlight_path(origin: FSPath, path: FSPath) -> void:
-    print("Highlighting path:\n\t%s\n\t%s" % [origin.as_string(), path.as_string(false)])
     # TODO: make this better
     for any_node in self.all_nodes.values():
-        any_node.path_glow = false
-        any_node.z_index = 0
-        any_node.queue_redraw()
+        if any_node.path_glow:
+            any_node.path_glow = false
+            any_node.z_index = 0
+            any_node.queue_redraw()
         
     # highlight new path
     self.hl_origin = origin
