@@ -39,8 +39,10 @@ func analyze_path(p_str: String, f_hidden: bool) -> int:
     else:
         path = self.cwd.compose(FSPath.new(p_str.split("/", false)))
 
-    if self.fs_man.contains_path(path):
-        if self.fs_man.contains_dir(path):
+    match self.fs_man.contains_type(path):
+        FSManager.filetype.FILE:
+            self.stdout.write(p_str + "\n")
+        FSManager.filetype.DIR:
             for child in self.fs_man.read_dirs_in_dir(path):
                 var str_child: String = child.last()
                 if not f_hidden:
@@ -48,9 +50,8 @@ func analyze_path(p_str: String, f_hidden: bool) -> int:
                         self.stdout.write(str_child + "\n")
                 else:
                     self.stdout.write(str_child + "\n")
-        else:
-            self.stdout.write(p_str + "\n")
-        return 0
-    
-    self.stdout.write("ls: cannot access '%s': No such file or directory\n" % p_str)
-    return 1
+        FSManager.filetype.NULL:
+            self.stdout.write("ls: cannot access '%s': No such file or directory\n" % p_str)
+            return 1
+
+    return 0

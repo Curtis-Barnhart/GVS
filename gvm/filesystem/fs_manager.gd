@@ -159,6 +159,10 @@ func reduce_path(p: FSPath) -> FSPath:
     return loc.get_path()
     
 
+## Better contains that tells you what type of thing a path points to is.
+##
+## @param p: The path to test.
+## @return: enum DIR if directory, FILE if file, NULL otherwise.
 func contains_type(p: FSPath) -> FSManager.filetype:
     if self.contains_dir(p):
         return self.filetype.DIR
