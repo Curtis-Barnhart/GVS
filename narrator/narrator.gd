@@ -3,7 +3,7 @@ extends Control
 var expanded: bool = true
 var target_expanded: bool = true
 var expanding_time: float = 0
-@onready var min_size: float = $VBoxContainer/Toggle.size.y
+@onready var min_size: float = $VBoxContainer/Toggle.size.y + 12
 const max_size: float = 800
 @onready var label: RichTextLabel = $VBoxContainer/RichTextLabel
 @onready var next: Button = $VBoxContainer/Next
