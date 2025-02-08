@@ -33,7 +33,18 @@ func _ready() -> void:
     var test: FSManager = FSManager.new()
     self.GvShell.setup(test)
     $Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.setup(test)
-    test.create_dir(FSPath.new(["dir0"]))
+    test.create_dir(FSPath.new(["0"]))
+    test.create_dir(FSPath.new(["1"]))
+    test.create_dir(FSPath.new(["2"]))
+    test.create_dir(FSPath.new(["3"]))
+    test.create_dir(FSPath.new(["0", "0"]))
+    test.create_dir(FSPath.new(["0", "1"]))
+    test.create_dir(FSPath.new(["1", "0"]))
+    test.create_dir(FSPath.new(["1", "0"]))
+    test.create_dir(FSPath.new(["1", "1"]))
+    test.create_dir(FSPath.new(["1", "1", "0"]))
+    test.create_dir(FSPath.new(["1", "1", "1"]))
+
     
     # Connect GVShell cwd changed to FSViewport cwd change
     self.GvShell.cwd_changed.connect($Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.change_cwd)

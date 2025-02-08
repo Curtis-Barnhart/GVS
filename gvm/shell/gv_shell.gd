@@ -11,7 +11,7 @@ signal previewing_path(origin: FSPath, path: FSPath)
 ## Stores the current working directory of the shell.
 ## Aside from after the GVShell is initialized but before setup() is called,
 ## this must always be a valid path to a directory in the backing filesystem.
-var CWD: FSPath = FSPath.new([])
+var CWD: FSPath = FSPath.ROOT
 ## The filesystem that this GVShell is attached to.
 var fs_man: FSManager = null
 ## This the GVShell's "fake" IOQueue - it can give it to a process as the
@@ -23,6 +23,11 @@ var shell_write: ShellWriter = ShellWriter.new()
 ## When scroll_frames > 0, the _process function knows to scroll down
 ## and decrement scroll_frames.
 var scroll_frames: int = 1
+## Contains the last highlighted path so that we don't have to send repeat signals
+## every time the prompt caret is over a valid path.
+## I'm fairly certain rehighlighting the path is somewhat expensive
+var last_preview_origin: FSPath = FSPath.ROOT
+var last_preview_path: FSPath = FSPath.ROOT
 
 ## history is a label that displays the past history of all commands
 ## and command outputs.
@@ -152,38 +157,111 @@ func _on_prompt_user_entered() -> void:
     self.scroll_frames = 1
 
 
+## Sets scroll_frames to 1 so that we scroll down again.
+## Should be connected to the prompt text changing.
 func _on_prompt_text_changed() -> void:
     self.scroll_frames = 1
 
 
+## Checks if the user is currently typing a valid pathname.
+## If so, broadcasts it.
 func _on_prompt_caret_changed() -> void:
+    # get_word_under_caret works if the caret is in the middle of or at the
+    # start of a word, but does not work if we're at the end of one,
+    # which is unfortunately where you are while you type.
     var caret_string: String = self.prompt.get_word_under_caret()
     if caret_string == "":
+        # Get most recent previous non space character
         var last_char: int = utils_strings.prev_f(
             self.prompt.text,
             self.prompt.get_caret_column() - 1,
             func (c): return c != " "
         )
+        
+        # If there is no word to analyze at all (no previous non space character),
+        # we check if we've already broadcasted this recently, and if we haven't,
+        # we broadcast an empty highlight.
         if last_char == -1:
-            # There is no word to analyze at all
-            return      
+            if (
+                self.last_preview_origin.degen()
+                and self.last_preview_path.degen()
+            ):
+                return
+            else:
+                self.last_preview_origin = FSPath.ROOT
+                self.last_preview_path = FSPath.ROOT
+                self.previewing_path.emit(FSPath.ROOT, FSPath.ROOT)
+                return
+        
+        # Get the word behind the cursor (no matter how much whitespace)
         caret_string = utils_strings.extract_word(self.prompt.text, last_char)
     
+    # Try to interpret the path the user is typing and its parent.
+    # If the user is typing a path, when they start a new name,
+    # it will be incorrect since they are still typing.
+    # However, the parent will be correct, which we can still detect.
     var caret_path: FSPath = FSPath.new(caret_string.split("/", false))
     var parent_path: FSPath = caret_path.base()
-    print("\nWord '%s' detected - path '%s'" % [caret_string, caret_path.as_string()])
-    if caret_string.begins_with("/"):
-        print("Absolute path detected")
-        print("Paths changed to:\n\t%s\n\t%s" % [caret_path.as_string(), parent_path.as_string()])
-        if self.fs_man.contains_dir(caret_path):
-            print("path found")
-            self.previewing_path.emit(FSPath.ROOT, caret_path)
-        elif self.fs_man.contains_dir(parent_path):
-            print("partial path found")
-            self.previewing_path.emit(FSPath.ROOT, parent_path)
-        else:
-            print("Path %s not located" % caret_path.as_string())
-        
 
-    #if self.fs_man.contains_dir(caret_path):
-        #self.previewing_path.emit()
+    if caret_string.begins_with("/"):
+        # Absolute path detected
+        if self.fs_man.contains_dir(caret_path):
+            # whole path was found - check if we've already broadcasted,
+            # if not, then broadcast it
+            if not (
+                self.last_preview_origin.degen()
+                and self.last_preview_path.as_string() == caret_path.as_string()
+            ):
+                self.last_preview_origin = FSPath.ROOT
+                self.last_preview_path = caret_path
+                self.previewing_path.emit(FSPath.ROOT, caret_path)
+            return
+        elif self.fs_man.contains_dir(parent_path):
+            # whole path was not found, but it looks like a partially written out
+            # path because we could find its parent - check if we've already
+            # broadcasted, if not, then broadcast it
+            if not (
+                self.last_preview_origin.degen()
+                and self.last_preview_path.as_string() == parent_path.as_string()
+            ):
+                self.last_preview_origin = FSPath.ROOT
+                self.last_preview_path = parent_path
+                self.previewing_path.emit(FSPath.ROOT, parent_path)
+            return
+        # path could not be located as absolute path
+    else:
+        # Relative path detected
+        if self.fs_man.contains_dir(self.CWD.compose(caret_path)):
+            # whole path was found - check if we've already broadcasted,
+            # if not, then broadcast it
+            if not (
+                self.last_preview_origin.as_string() == self.CWD.as_string()
+                and self.last_preview_path.as_string() == caret_path.as_string()
+            ):
+                self.last_preview_origin = self.CWD
+                self.last_preview_path = caret_path
+                self.previewing_path.emit(self.CWD, caret_path)
+            return
+        elif self.fs_man.contains_dir(self.CWD.compose(parent_path)):
+            # whole path was not found, but it looks like a partially written out
+            # path because we could find its parent - check if we've already
+            # broadcasted, if not, then broadcast it
+            if not (
+                self.last_preview_origin.as_string() == self.CWD.as_string()
+                and self.last_preview_path.as_string() == parent_path.as_string()
+            ):
+                self.last_preview_origin = self.CWD
+                self.last_preview_path = parent_path
+                self.previewing_path.emit(self.CWD, parent_path)
+            return
+        # path could not be found as a relative path    
+    
+    # If we recently broadcasted a legitimate path, let's broadcast again
+    # to signal that we no longer have a path from the user
+    if not (
+        self.last_preview_origin.degen()
+        and self.last_preview_path.degen()
+    ):
+        self.last_preview_origin = FSPath.ROOT
+        self.last_preview_path = FSPath.ROOT
+        self.previewing_path.emit(FSPath.ROOT, FSPath.ROOT)

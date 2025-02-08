@@ -48,6 +48,8 @@ func highlight_path(origin: FSPath, path: FSPath) -> void:
             node_to_highlight.path_glow = true
             node_to_highlight.z_index = 1
             node_to_highlight.queue_redraw()
+        elif next_hop == ".":
+            pass
         else:
             node_to_highlight = self.all_nodes[self.fs_man.reduce_path(origin.extend(next_hop)).as_string()]
             node_to_highlight.path_glow = true
