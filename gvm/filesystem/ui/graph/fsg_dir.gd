@@ -7,7 +7,7 @@ extends Node2D
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var area: Area2D = $Area2D
 ## height - used to calculate how far below me to put subdirs visually
-@onready var height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y + 160
+@onready var height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y + 120
 ## width - used to calculate how far apart to print subobjects
 @onready var width: float = $Area2D/CollisionShape2D.shape.get_rect().size.x + 40
 @onready var icon_height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y
