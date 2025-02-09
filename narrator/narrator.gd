@@ -7,9 +7,13 @@ var expanding_time: float = 0
 const max_size: float = 800
 @onready var label: RichTextLabel = $VBoxContainer/RichTextLabel
 @onready var next: Button = $VBoxContainer/Next
+@onready var toggle: Button = $VBoxContainer/Toggle
 var fs_man: FSManager
 var shell: GVShell
 var current_checkpoint: Checkpoint
+
+const up_arrow = preload("res://narrator/up.svg")
+const down_arrow = preload("res://narrator/down.svg")
 
 
 func setup(fs_man: FSManager, shell: GVShell) -> void:
@@ -62,6 +66,9 @@ func _on_button_pressed() -> void:
     if self.expanded:
         self.label.hide()
         self.next.hide()
+        self.toggle.icon = self.up_arrow
+    else:
+        self.toggle.icon = self.down_arrow
     
     self.expanding_time = 2
     self.target_expanded = not self.target_expanded

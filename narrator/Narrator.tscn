@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://duxuodebilbwf"]
+[gd_scene load_steps=6 format=3 uid="uid://duxuodebilbwf"]
 
 [ext_resource type="Script" path="res://narrator/narrator.gd" id="1_ne5f2"]
 [ext_resource type="Texture2D" uid="uid://p2qtk5ccvwp1" path="res://shared/bordered.png" id="2_j8vlk"]
+[ext_resource type="Texture2D" uid="uid://5tgapfhhv6cf" path="res://narrator/down.svg" id="3_6v6d2"]
 [ext_resource type="Texture2D" uid="uid://ble8onr527ifk" path="res://icon.svg" id="3_mqrw7"]
 [ext_resource type="Script" path="res://narrator/toggle.gd" id="4_wmf1e"]
 
@@ -43,7 +44,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-icon = ExtResource("3_mqrw7")
+icon = ExtResource("3_6v6d2")
 script = ExtResource("4_wmf1e")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
