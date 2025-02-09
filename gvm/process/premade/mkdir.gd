@@ -19,7 +19,6 @@ func run() -> int:
         else:
             arguments.push_back(string)
 
-    var failure: int = 0
     var dirmaker: Callable
     if f_recur:
         dirmaker = self.make_dirs_recur
@@ -28,14 +27,14 @@ func run() -> int:
     
     if len(arguments) == 0:
         self.stdout.write("mkdir: missing operand\n")
-        failure = 1
+        return 1
     else:
-            var some_worked: bool = false
-            for name in arguments:
-                if dirmaker.call(name) == 0:
-                    some_worked = true
-            if some_worked:
-                return 0
+        var some_worked: bool = false
+        for name in arguments:
+            if dirmaker.call(name) == 0:
+                some_worked = true
+        if some_worked:
+            return 0
     return 1
 
 
