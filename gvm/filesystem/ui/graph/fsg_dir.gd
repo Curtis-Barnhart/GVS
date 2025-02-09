@@ -25,6 +25,7 @@ var start_pos: Vector2 = Vector2.ZERO
 var dest_pos: Vector2 = Vector2.ZERO
 ## amount of time left to interpolate. 2 is t=0 and 0 is t=1
 var interp_t: float = 0
+var label_redraw_frames = true
 
 
 func set_texture(texture: Texture2D) -> void:
@@ -125,3 +126,5 @@ func _process(delta: float) -> void:
             (1 - (self.interp_t/2))
         )
         self.queue_redraw()
+    if self.label_redraw_frames:
+        self.label.position.x = -self.label.size.x / 2
