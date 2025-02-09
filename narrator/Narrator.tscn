@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" path="res://narrator/narrator.gd" id="1_ne5f2"]
 [ext_resource type="Texture2D" uid="uid://p2qtk5ccvwp1" path="res://shared/bordered.png" id="2_j8vlk"]
-[ext_resource type="Texture2D" uid="uid://5tgapfhhv6cf" path="res://narrator/down.svg" id="3_6v6d2"]
-[ext_resource type="Texture2D" uid="uid://ble8onr527ifk" path="res://icon.svg" id="3_mqrw7"]
+[ext_resource type="Texture2D" uid="uid://do7vmtvdv60x6" path="res://narrator/continue.svg" id="4_gj3sb"]
 [ext_resource type="Script" path="res://narrator/toggle.gd" id="4_wmf1e"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lns7w"]
+load_path = "res://.godot/imported/down.svg-08c761e4449e0b2e4a25432951408e9a.ctex"
 
 [node name="Narrator" type="Control"]
 layout_mode = 3
@@ -44,7 +46,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-icon = ExtResource("3_6v6d2")
+icon = SubResource("CompressedTexture2D_lns7w")
 script = ExtResource("4_wmf1e")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
@@ -69,6 +71,6 @@ exit
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-icon = ExtResource("3_mqrw7")
+icon = ExtResource("4_gj3sb")
 
 [connection signal="pressed" from="VBoxContainer/Toggle" to="." method="_on_button_pressed"]

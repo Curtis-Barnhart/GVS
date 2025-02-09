@@ -37,6 +37,7 @@ func load_checkpoint(c: Checkpoint) -> void:
     self.current_checkpoint = c
     c.start()
     c.completed.connect(self.load_checkpoint)
+    self.next.disabled = true
     
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -57,12 +58,14 @@ func _process(delta: float) -> void:
             )
     elif self.target_expanded != self.expanded:
         self.expanded = self.target_expanded
+        self.toggle.disabled = false
         if self.expanded:
             self.label.show()
             self.next.show()
 
 
 func _on_button_pressed() -> void:
+    self.toggle.disabled = true
     if self.expanded:
         self.label.hide()
         self.next.hide()

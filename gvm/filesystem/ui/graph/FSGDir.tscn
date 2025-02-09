@@ -1,11 +1,11 @@
 [gd_scene load_steps=6 format=3 uid="uid://dayudvd81fjbp"]
 
 [ext_resource type="Script" path="res://gvm/filesystem/ui/graph/fsg_dir.gd" id="1_kp0kf"]
-[ext_resource type="Texture2D" uid="uid://cq4ntu80ajv0n" path="res://shared/folder.svg" id="2_2n6uc"]
+[ext_resource type="Texture2D" uid="uid://bd0kfksu5ed7n" path="res://gvm/filesystem/ui/graph/directory.svg" id="2_rn3d3"]
 [ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_0g5nk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yfsys"]
-size = Vector2(129, 128.5)
+size = Vector2(129, 95)
 
 [sub_resource type="LabelSettings" id="LabelSettings_5ksyd"]
 font = ExtResource("3_0g5nk")
@@ -15,11 +15,12 @@ font_size = 36
 script = ExtResource("1_kp0kf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_2n6uc")
+texture = ExtResource("2_rn3d3")
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_yfsys")
 
 [node name="Label" type="Label" parent="."]
