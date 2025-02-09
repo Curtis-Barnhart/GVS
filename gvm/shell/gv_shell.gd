@@ -2,6 +2,7 @@
 ## It allows someone interacting with it to manipulate a backing
 ## filesystem (the GVShell contains a FSManager instance).
 
+class_name GVShell
 extends NinePatchRect
 
 signal cwd_changed(path: FSPath, old_path: FSPath)
@@ -46,7 +47,7 @@ var last_preview_path: FSPath = FSPath.ROOT
 class ShellWriter extends IOQueue:
     ## GVShell who owns this ShellWriter so we can set their scroll_frames
     ## after printing to their screen.
-    var shell
+    var shell: GVShell
 
     ## Overrides IOQueue's write method to write immediately to history Label.
     ##

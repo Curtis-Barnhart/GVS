@@ -7,16 +7,33 @@ var expanding_time: float = 0
 const max_size: float = 800
 @onready var label: RichTextLabel = $VBoxContainer/RichTextLabel
 @onready var next: Button = $VBoxContainer/Next
+var fs_man: FSManager
+var shell: GVShell
+var current_checkpoint: Checkpoint
+
+
+func setup(fs_man: FSManager, shell: GVShell) -> void:
+    self.fs_man = fs_man
+    self.shell = shell
+    self.load_checkpoint(
+        load("res://narrator/lesson/navigation/intro_to_cd_0.gd").new(
+            self.fs_man, self.label, self.shell, $VBoxContainer/Next
+        )
+    )
+
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-    pass # Replace with function body.
+    pass
 
 
 func load_checkpoint(c: Checkpoint) -> void:
+    # have to hold a reference so it's not deleted from memory while it waits lol
+    self.current_checkpoint = c
+    c.start()
+    c.completed.connect(self.load_checkpoint)
     
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

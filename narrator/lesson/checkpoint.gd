@@ -3,18 +3,24 @@ extends RefCounted
 
 var fs_man: FSManager
 var text_screen: RichTextLabel
+var shell: GVShell
+var next_button: Button
 
-signal completed
+signal completed(checkpoint: Checkpoint)
 
 
 func _init(
     fs_manager: FSManager,
-    text_screen: RichTextLabel
+    text_screen: RichTextLabel,
+    shell: GVShell,
+    next_button: Button
 ) -> void:
     self.fs_man = fs_manager
     self.text_screen = text_screen
+    self.shell = shell
+    self.next_button = next_button
 
 
-func get_text() -> String:
+func start() -> void:
     assert(false, "Checkpoint is an ABC that shouldn't have been instantiated.")
-    return ""
+    return

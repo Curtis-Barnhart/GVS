@@ -45,6 +45,8 @@ func _input(event: InputEvent) -> void:
 func _ready() -> void:
     var test: FSManager = FSManager.new()
     self.GvShell.setup(test)
+    $Right/Narrator.setup(test, self.GvShell)
+    
     $Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.setup(test)
     test.create_dir(FSPath.new(["0"]))
     test.create_dir(FSPath.new(["1"]))
