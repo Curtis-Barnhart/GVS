@@ -10,12 +10,12 @@ signal completed(checkpoint: Checkpoint)
 
 
 func _init(
-    fs_manager: FSManager,
+    fs_man: FSManager,
     text_screen: RichTextLabel,
     shell: GVShell,
     next_button: Button
 ) -> void:
-    self.fs_man = fs_manager
+    self.fs_man = fs_man
     self.text_screen = text_screen
     self.shell = shell
     self.next_button = next_button

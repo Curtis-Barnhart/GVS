@@ -103,7 +103,7 @@ func _on_prompt_user_entered() -> void:
             self.cwd_changed.emit(self.CWD, old_cwd)
         ["cd", var where]:
             var old_cwd: FSPath = self.CWD
-            var loc: FSPath = self.CWD.compose(FSPath.new(where.split("/")))
+            var loc: FSPath = self.CWD.as_cwd(where)
             if self.fs_man.contains_dir(loc):
                 self.CWD = self.fs_man.reduce_path(loc)
                 self.cwd_changed.emit(self.CWD, old_cwd)

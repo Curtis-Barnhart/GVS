@@ -13,8 +13,9 @@ func _on_cwd_changed(_origin: FSPath, _path: FSPath) -> void:
 Good job changing the current working directory!
 You can now press the continue button.
 [/font_size][/font]"""
-    self.next_button.disabled = false
-    self.next_button.pressed.connect(self.finished)
+    if self.next_button.disabled:
+        self.next_button.disabled = false
+        self.next_button.pressed.connect(self.finished)
 
 
 func finished() -> void:
