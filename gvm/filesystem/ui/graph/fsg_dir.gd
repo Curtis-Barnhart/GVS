@@ -97,15 +97,12 @@ func modify_subwidth(delta: float) -> float:
 func setup(label_str: String) -> void:
     self.label.text = label_str
     var label_size = JetBrainsFont.get_string_size(label_str, 0, -1, 36).x
-    print(label_size)
     self.width = max(
         $Area2D/CollisionShape2D.shape.get_rect().size.x,
         label_size
     ) + 40
     self.total_width = self.width
     self.label.position.x = -label_size / 2
-    print(-label_size / 2)
-    print(self.label.position.x)
 
 
 # Called when the node enters the scene tree for the first time.

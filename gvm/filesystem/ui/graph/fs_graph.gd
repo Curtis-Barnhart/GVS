@@ -92,7 +92,6 @@ func setup(fs_manager: FSManager) -> void:
     self.fs_man = fs_manager
     self.all_nodes["/"] = FSGDir_Obj.instantiate()
     self.add_child(self.all_nodes["/"])
-    #self.all_nodes["/"].label.text = "/"
     self.all_nodes["/"].setup("/")
     self.change_cwd(FSPath.new([]), FSPath.new([]))
     
