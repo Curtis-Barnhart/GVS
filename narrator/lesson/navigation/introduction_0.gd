@@ -31,6 +31,7 @@ func start() -> void:
             "click the button labelled [color=steel blue]continue[/color] below."
         ],
     ])
+    self.text_screen.scroll_to_line(0)
     self.next_button.pressed.connect(self.finished)
     self.next_button.disabled = false
 

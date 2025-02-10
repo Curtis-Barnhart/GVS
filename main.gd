@@ -48,17 +48,17 @@ func _ready() -> void:
     $Right/Narrator.setup(test, self.GvShell)
     
     $Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.setup(test)
-    test.create_dir(FSPath.new(["dir0"]))
-    test.create_dir(FSPath.new(["dir1"]))
-    test.create_dir(FSPath.new(["dir2"]))
-    test.create_dir(FSPath.new(["dir3"]))
-    test.create_dir(FSPath.new(["dir0", "0"]))
-    test.create_dir(FSPath.new(["dir0", "1"]))
-    test.create_dir(FSPath.new(["dir1", "0"]))
-    test.create_dir(FSPath.new(["dir1", "0"]))
-    test.create_dir(FSPath.new(["dir1", "1"]))
-    test.create_dir(FSPath.new(["dir1", "1", "0"]))
-    test.create_dir(FSPath.new(["dir1", "1", "1"]))
+    #test.create_dir(FSPath.new(["dir0"]))
+    #test.create_dir(FSPath.new(["dir1"]))
+    #test.create_dir(FSPath.new(["dir2"]))
+    #test.create_dir(FSPath.new(["dir3"]))
+    #test.create_dir(FSPath.new(["dir0", "0"]))
+    #test.create_dir(FSPath.new(["dir0", "1"]))
+    #test.create_dir(FSPath.new(["dir1", "0"]))
+    #test.create_dir(FSPath.new(["dir1", "0"]))
+    #test.create_dir(FSPath.new(["dir1", "1"]))
+    #test.create_dir(FSPath.new(["dir1", "1", "0"]))
+    #test.create_dir(FSPath.new(["dir1", "1", "1"]))
 
     
     # Connect GVShell cwd changed to FSViewport cwd change
