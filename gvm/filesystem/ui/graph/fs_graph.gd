@@ -92,7 +92,8 @@ func setup(fs_manager: FSManager) -> void:
     self.fs_man = fs_manager
     self.all_nodes["/"] = FSGDir_Obj.instantiate()
     self.add_child(self.all_nodes["/"])
-    self.all_nodes["/"].label.text = "/"
+    #self.all_nodes["/"].label.text = "/"
+    self.all_nodes["/"].setup("/")
     self.change_cwd(FSPath.new([]), FSPath.new([]))
     
     fs_manager.created_dir.connect(self.create_dir)
@@ -108,8 +109,7 @@ func setup(fs_manager: FSManager) -> void:
 func create_dir(p: FSPath) -> void:
     var parent: FSGDir = self.all_nodes[p.base().as_string()]
     var child: FSGDir = FSGDir_Obj.instantiate()
-    parent.add_subdir(child)
-    child.label.text = p.last()
+    parent.add_subdir(child, p.last())
     self.all_nodes[p.as_string()] = child
 
 

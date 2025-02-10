@@ -16,6 +16,7 @@ var sub_width: float = 0
 ## total width of myself - max of myself (my level) or my subobjects'
 ## cumulative total_widths
 @onready var total_width: float = self.width
+const JetBrainsFont: Font = preload("res://shared/JetBrainsMonoNerdFontMono-Regular.ttf")
 ## Is my path to my parent currently highlighted or not
 var path_glow: bool = false
 
@@ -25,7 +26,6 @@ var start_pos: Vector2 = Vector2.ZERO
 var dest_pos: Vector2 = Vector2.ZERO
 ## amount of time left to interpolate. 2 is t=0 and 0 is t=1
 var interp_t: float = 0
-var label_redraw_frames = true
 
 
 func set_texture(texture: Texture2D) -> void:
@@ -43,8 +43,9 @@ func interp_movement(dest: Vector2) -> void:
     self.interp_t = 2
 
 
-func add_subdir(subdir: FSGDir) -> void:
+func add_subdir(subdir: FSGDir, subdir_name: String) -> void:
     self.add_child(subdir)
+    subdir.setup(subdir_name)
     
     var total_width_delta: float = self.modify_subwidth(subdir.total_width)
     #print("Adding subdir with width = %f" % subdir.total_width)
@@ -93,9 +94,23 @@ func modify_subwidth(delta: float) -> float:
     return self.total_width - temp
 
 
+func setup(label_str: String) -> void:
+    self.label.text = label_str
+    var label_size = JetBrainsFont.get_string_size(label_str, 0, -1, 36).x
+    print(label_size)
+    self.width = max(
+        $Area2D/CollisionShape2D.shape.get_rect().size.x,
+        label_size
+    ) + 40
+    self.total_width = self.width
+    self.label.position.x = -label_size / 2
+    print(-label_size / 2)
+    print(self.label.position.x)
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-    pass # Replace with function body.
+    pass
 
 
 func _draw() -> void:
@@ -126,5 +141,3 @@ func _process(delta: float) -> void:
             (1 - (self.interp_t/2))
         )
         self.queue_redraw()
-    if self.label_redraw_frames:
-        self.label.position.x = -self.label.size.x / 2

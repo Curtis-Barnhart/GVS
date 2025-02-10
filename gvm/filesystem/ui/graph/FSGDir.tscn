@@ -25,8 +25,9 @@ shape = SubResource("RectangleShape2D_yfsys")
 
 [node name="Label" type="Label" parent="."]
 z_index = 2
-offset_top = 50.0
-offset_right = 1.0
-offset_bottom = 98.0
+offset_top = 48.0
+offset_right = 173.0
+offset_bottom = 96.0
 text = "dir name"
 label_settings = SubResource("LabelSettings_5ksyd")
+vertical_alignment = 1
