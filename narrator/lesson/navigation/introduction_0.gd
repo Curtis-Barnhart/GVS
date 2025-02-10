@@ -28,7 +28,7 @@ func start() -> void:
             "This series of tutorials hopes to help demystify and acquaint you",
             "with this essential tool.",
             "To begin learning about some of its functionality,",
-            "click the button labelled [color=steel blue]continue[/color] below."
+            "click the button labelled [color=steel blue]Continue[/color] below."
         ],
     ])
     self.text_screen.scroll_to_line(0)
