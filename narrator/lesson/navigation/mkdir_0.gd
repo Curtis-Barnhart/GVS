@@ -13,7 +13,7 @@ func start() -> void:
             "Many parts of this tutorial require some action from you,",
             "so that you can practice the concepts you'll learn about.",
             "To continue with the tutorial, you have to create a new directory",
-            "named 'new_folder'.",
+            "named 'new_directory'.",
         ],
         [
             "Notice the strip of darker grey on the bottom",
@@ -47,7 +47,7 @@ func _on_directory_made(path: FSPath):
 
 func finished() -> void:
     self.completed.emit(
-        load("res://narrator/lesson/navigation/introduction_1.gd").new(
+        load("res://narrator/lesson/navigation/mkdir_1.gd").new(
             self.fs_man, self.text_screen, self.shell, self.next_button
         )
     )

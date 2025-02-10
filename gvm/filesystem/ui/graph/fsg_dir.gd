@@ -49,30 +49,29 @@ func interp_movement(dest: Vector2) -> void:
     self.interp_t = 2
 
 
+## Adds a subdirectory to this directory.
+##
+## @param subdir: the subdirectory to add.
+## @param subdir_name: the name to put on the label of the subdirectory.
 func add_subdir(subdir: FSGDir, subdir_name: String) -> void:
     self.add_child(subdir)
     subdir.setup(subdir_name)
     
     var total_width_delta: float = self.modify_subwidth(subdir.total_width)
-    #print("Adding subdir with width = %f" % subdir.total_width)
-    #print("New subwidth = %f" % self.sub_width)
     if total_width_delta != 0:
         self.total_width_notifier(total_width_delta)
     
     self.arrange_subnodes()
 
 
+## Arrange the positions of my children directories so they are evenly spaced
+## (taking into account their own children, so that no one's children overlap).
 func arrange_subnodes() -> void:
     var offset: float = -self.total_width/2
-    #print("arranging subnodes for node with total width = %f" % self.total_width)
     # TODO: someday update this to check for files as well
     for sd in self.get_children() \
                   .filter(func (c): return is_instance_of(c, FSGDir)):
-        #print("Setting x = %f and y = %f" % [offset + (sd.total_width/2), height])
-        #print("  - node width = %f" % sd.total_width)
         sd.interp_movement(Vector2(offset + (sd.total_width / 2), self.height))
-        #sd.position.y = height
-        #sd.position.x = offset + (sd.total_width / 2)
         offset += sd.total_width
 
 
@@ -100,6 +99,10 @@ func modify_subwidth(delta: float) -> float:
     return self.total_width - temp
 
 
+## Correctly calculates my own size and positions my name label accordingly.
+## This should be called after the node has entered the scene.
+##
+## @param label_str: the name to assign this directory.
 func setup(label_str: String) -> void:
     self.label.text = label_str
     var label_size = JetBrainsFont.get_string_size(label_str, 0, -1, 36).x
@@ -116,6 +119,7 @@ func _ready() -> void:
     pass
 
 
+## Draws my connection to my parent (and highlights it if applicable).
 func _draw() -> void:
     var parent = self.get_parent()
     if is_instance_of(parent, FSGDir):
@@ -134,7 +138,9 @@ func _draw() -> void:
         self.draw_line(right, up_again, lcolor, 7)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+## Interpolates my position if I am in the middle of being moved.
+##
+## @param delta: the time passed since the last frame.
 func _process(delta: float) -> void:
     if self.interp_t > 0:
         self.interp_t -= delta
