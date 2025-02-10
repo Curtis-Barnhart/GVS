@@ -20,11 +20,10 @@ func setup(fs_man: FSManager, shell: GVShell) -> void:
     self.fs_man = fs_man
     self.shell = shell
     self.load_checkpoint(
-        load("res://narrator/lesson/navigation/intro_to_cd_0.gd").new(
+        load("res://narrator/lesson/navigation/introduction_0.gd").new(
             self.fs_man, self.label, self.shell, $VBoxContainer/Next
         )
     )
-
 
 
 # Called when the node enters the scene tree for the first time.
@@ -35,9 +34,9 @@ func _ready() -> void:
 func load_checkpoint(c: Checkpoint) -> void:
     # have to hold a reference so it's not deleted from memory while it waits lol
     self.current_checkpoint = c
+    self.next.disabled = true
     c.start()
     c.completed.connect(self.load_checkpoint)
-    self.next.disabled = true
     
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
