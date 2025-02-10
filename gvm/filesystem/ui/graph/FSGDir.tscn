@@ -24,6 +24,7 @@ position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_yfsys")
 
 [node name="Label" type="Label" parent="."]
+z_index = 2
 offset_top = 50.0
 offset_right = 1.0
 offset_bottom = 98.0
