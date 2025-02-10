@@ -28,7 +28,7 @@ func start() -> void:
             "It's time to introduce the program [color=firebrick]mkdir[/color],",
             "which is a program that creates a new directory",
             "([color=firebrick]mkdir[/color] is short for 'make directory').",
-            "type in the command `[color=firebrick]mkdir new_directory[/color]`",
+            "Type in the command `[color=firebrick]mkdir new_directory[/color]`",
             "and hit the enter key on your keyboard.",
             "Once the new directory is completed,",
             "you'll be able to continue the tutorial.",

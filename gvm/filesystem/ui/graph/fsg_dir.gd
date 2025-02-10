@@ -1,21 +1,32 @@
 class_name FSGDir
 extends Node2D
 
-# This will almost certainly be changed in the future to look better
+## Label to display the directory name
+## This will almost certainly be changed in the future to look better
 @onready var label: Label = $Label
-
+## Sprite to display a folder icon
 @onready var sprite: Sprite2D = $Sprite2D
+## Area2D keeps track of our size (which the sprite does not have)
+## and also would allow for mouse interaction more easily if we wanted in the future.
 @onready var area: Area2D = $Area2D
 ## height - used to calculate how far below me to put subdirs visually
 @onready var height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y + 120
 ## width - used to calculate how far apart to print subobjects
-@onready var width: float = $Area2D/CollisionShape2D.shape.get_rect().size.x + 40
+## The width is whichever is wider - the folder icon or the name label
+var width: float
+## Icon height gives the exact height of the icon (technically the area2d)
+## which we use for drawing paths. The height variable has additional room
+## for spacing, which icon_height does not
 @onready var icon_height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y
 ## cumulative width of all my subobjects
 var sub_width: float = 0
 ## total width of myself - max of myself (my level) or my subobjects'
 ## cumulative total_widths
 @onready var total_width: float = self.width
+## Having the font loaded lets us determine how large a text label will be
+## before that text label actually has to be rendered,
+## which is necessary because we have to give our width to our parents on the
+## same frame that we are instantiated before our label has time to render
 const JetBrainsFont: Font = preload("res://shared/JetBrainsMonoNerdFontMono-Regular.ttf")
 ## Is my path to my parent currently highlighted or not
 var path_glow: bool = false
@@ -26,11 +37,6 @@ var start_pos: Vector2 = Vector2.ZERO
 var dest_pos: Vector2 = Vector2.ZERO
 ## amount of time left to interpolate. 2 is t=0 and 0 is t=1
 var interp_t: float = 0
-
-
-func set_texture(texture: Texture2D) -> void:
-    self.sprite.texture = texture
-    self.queue_redraw()
 
 
 ## interp_movement tells the FSGDir that it is ready to begin interpolating

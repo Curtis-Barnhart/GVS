@@ -75,9 +75,9 @@ func node_rel_pos(dir: FSGDir) -> Vector2:
 ## @param new_p: The path to the new cwd. Must be in simplest form.
 ## @param old_p: Path to the former cwd. Must be in simplest form.
 func change_cwd(new_p: FSPath, old_p: FSPath) -> void:
-    self.all_nodes[old_p.as_string()].set_texture(dir_text)
+    self.all_nodes[old_p.as_string()].sprite.texture = dir_text
     var new_cwd: FSGDir = self.all_nodes[new_p.as_string()]
-    new_cwd.set_texture(cwd_text)
+    new_cwd.sprite.texture = cwd_text
     self.camera.interp_movement(self.node_rel_pos(new_cwd))
 
 
