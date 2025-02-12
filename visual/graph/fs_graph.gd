@@ -20,12 +20,12 @@ var hl_origin: FSPath = FSPath.new([])
 var hl_path: FSPath = FSPath.new([])
 
 ## Texture for a normal directory
-const dir_text: Texture2D = preload("res://gvm/filesystem/ui/graph/directory.svg")
+const dir_text: Texture2D = preload("res://visual/assets/directory.svg")
 ## Texture for the current working directory
-const cwd_text: Texture2D = preload("res://gvm/filesystem/ui/graph/cwd.svg")
+const cwd_text: Texture2D = preload("res://visual/assets/cwd.svg")
 
 ## FSGDir Scene object so we can spawn new ones
-const FSGDir_Obj = preload("res://gvm/filesystem/ui/graph/FSGDir.tscn")
+const FSGDir_Obj = preload("res://visual/graph/FSGDir.tscn")
 
 
 func highlight_path(origin: FSPath, path: FSPath) -> void:

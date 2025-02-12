@@ -12,8 +12,8 @@ var fs_man: FSManager
 var shell: GVShell
 var current_checkpoint: Checkpoint
 
-const up_arrow = preload("res://narrator/up.svg")
-const down_arrow = preload("res://narrator/down.svg")
+const up_arrow = preload("res://narrator/assets/up.svg")
+const down_arrow = preload("res://narrator/assets/down.svg")
 
 
 func setup(fs_man: FSManager, shell: GVShell) -> void:
