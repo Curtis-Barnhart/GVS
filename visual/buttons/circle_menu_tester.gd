@@ -1,7 +1,7 @@
 extends Node2D
 
 
-const CMenu = preload("res://gvm/filesystem/ui/graph/buttons/CircleMenu.tscn")
+const CMenu = preload("res://visual/buttons/CircleMenu.tscn")
 var cmenu: Control = null
 
 # Called when the node enters the scene tree for the first time.
