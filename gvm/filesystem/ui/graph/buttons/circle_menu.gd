@@ -22,6 +22,10 @@ func _global_center() -> Vector2:
 func _ready() -> void:
     self._children = self.get_children() \
                          .filter(func (child): return child is Sprite2D)
+    
+    var segment_width: float = 2*PI / len(self._children)
+    for i in range(len(self._children)):
+        self._children[i].position = Vector2((self._rad_out - self._rad_in)/2 + self._rad_in, 0).rotated(segment_width * (i + 0.5)) + self._center()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -70,6 +74,8 @@ func _on_gui_input(event: InputEvent) -> void:
             and not self._menu_open
         ):
             self._menu_open = true
+            for child in self._children:
+                child.visible = true
             self.queue_redraw()
             self.menu_opened.emit()
         elif (
@@ -77,6 +83,8 @@ func _on_gui_input(event: InputEvent) -> void:
             and self._menu_open
         ):
             self._menu_open = false
+            for child in self._children:
+                child.visible = false
             self.queue_redraw()
             self.menu_closed.emit(-1)
     elif (
