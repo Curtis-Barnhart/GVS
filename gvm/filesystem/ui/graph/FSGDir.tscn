@@ -31,3 +31,4 @@ offset_bottom = 96.0
 text = "dir name"
 label_settings = SubResource("LabelSettings_5ksyd")
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
