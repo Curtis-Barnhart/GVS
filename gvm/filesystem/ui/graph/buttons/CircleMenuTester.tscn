@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://dg72at2atv1yy"]
+
+[ext_resource type="Script" path="res://gvm/filesystem/ui/graph/buttons/circle_menu_tester.gd" id="1_4in83"]
+[ext_resource type="PackedScene" uid="uid://bbunind7pu871" path="res://gvm/filesystem/ui/graph/buttons/CircleMenu.tscn" id="1_ll3sj"]
+[ext_resource type="Texture2D" uid="uid://bd0kfksu5ed7n" path="res://gvm/filesystem/ui/graph/directory.svg" id="2_ybh4h"]
+
+[node name="CircleMenuTester" type="Node2D"]
+script = ExtResource("1_4in83")
+
+[node name="CircleMenu" parent="." instance=ExtResource("1_ll3sj")]
+offset_left = 473.0
+offset_top = 389.0
+offset_right = 597.0
+offset_bottom = 483.0
+
+[node name="Sprite2D" type="Sprite2D" parent="CircleMenu"]
+
+[node name="Sprite2D2" type="Sprite2D" parent="CircleMenu"]
+
+[node name="Sprite2D3" type="Sprite2D" parent="CircleMenu"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(535, 436)
+texture = ExtResource("2_ybh4h")
