@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://400vyh7u13la"]
+
+[ext_resource type="Script" path="res://vfs/vfs_main.gd" id="1_ifaxc"]
+[ext_resource type="PackedScene" uid="uid://duxuodebilbwf" path="res://narrator/Narrator.tscn" id="1_t5tv6"]
+[ext_resource type="PackedScene" uid="uid://dsws7i3ntxerw" path="res://visual/FSView/FSViewport.tscn" id="2_c8ho1"]
+
+[node name="VfsMain" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ifaxc")
+
+[node name="FsView" parent="." instance=ExtResource("2_c8ho1")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Narrator" parent="." instance=ExtResource("1_t5tv6")]
+layout_mode = 2
+size_flags_horizontal = 3

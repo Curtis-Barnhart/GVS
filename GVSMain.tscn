@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://b5js8dalnh4nb"]
+
+[ext_resource type="Script" path="res://gvs_main.gd" id="1_kpvxm"]
+[ext_resource type="PackedScene" uid="uid://20ur75p1xydl" path="res://gvm/shell/GVShell.tscn" id="2_t6xqt"]
+[ext_resource type="Texture2D" uid="uid://c160plkxvcl12" path="res://shared/bordered_box.png" id="3_7eruh"]
+[ext_resource type="PackedScene" uid="uid://dsws7i3ntxerw" path="res://visual/FSView/FSViewport.tscn" id="4_b2q3q"]
+[ext_resource type="PackedScene" uid="uid://duxuodebilbwf" path="res://narrator/Narrator.tscn" id="5_6lx1e"]
+
+[node name="Main" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kpvxm")
+
+[node name="GvShell" parent="." instance=ExtResource("2_t6xqt")]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_7eruh")
+patch_margin_left = 26
+patch_margin_top = 26
+patch_margin_right = 26
+patch_margin_bottom = 26
+
+[node name="Right" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FsViewport" parent="Right" instance=ExtResource("4_b2q3q")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Narrator" parent="Right" instance=ExtResource("5_6lx1e")]
+custom_minimum_size = Vector2(0, 800)
+layout_mode = 2
