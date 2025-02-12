@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dsws7i3ntxerw"]
 
 [ext_resource type="Texture2D" uid="uid://p2qtk5ccvwp1" path="res://shared/bordered.png" id="2_2bo01"]
-[ext_resource type="Script" path="res://gvm/filesystem/ui/sub_viewport_container.gd" id="2_ly32g"]
-[ext_resource type="PackedScene" uid="uid://b6cxarc58vq0a" path="res://gvm/filesystem/ui/graph/FSGraph.tscn" id="3_sl6xo"]
-[ext_resource type="Script" path="res://gvm/filesystem/ui/camera_2d.gd" id="4_a8qst"]
+[ext_resource type="Script" path="res://gvm/FSView/sub_viewport_container.gd" id="2_ly32g"]
+[ext_resource type="PackedScene" uid="uid://b6cxarc58vq0a" path="res://visual/graph/FSGraph.tscn" id="3_sl6xo"]
+[ext_resource type="Script" path="res://gvm/FSView/camera_2d.gd" id="4_a8qst"]
 
 [node name="FsView" type="Control"]
 layout_mode = 3
