@@ -4,6 +4,7 @@ const ClassLoader = preload("res://gvs_class_loader.gd")
 const FSManager = ClassLoader.gvm.filesystem.Manager
 const Shell = ClassLoader.gvm.Shell
 const MathUtils = ClassLoader.shared.Math
+const Checkpoint = ClassLoader.narrator.lesson.Checkpoint
 
 const up_arrow = preload("res://narrator/assets/up.svg")
 const down_arrow = preload("res://narrator/assets/down.svg")
