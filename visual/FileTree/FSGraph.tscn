@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b6cxarc58vq0a"]
 
-[ext_resource type="Script" path="res://visual/graph/fs_graph.gd" id="1_rw4f1"]
+[ext_resource type="Script" path="res://visual/FileTree/fs_graph.gd" id="1_rw4f1"]
 
 [node name="FSGraph" type="Node2D"]
 script = ExtResource("1_rw4f1")

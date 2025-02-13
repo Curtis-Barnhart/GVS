@@ -5,6 +5,11 @@
 
 extends HBoxContainer
 
+const GVSClassLoader = preload("res://gvs_class_loader.gd")
+const FSGraph_C = GVSClassLoader.visual.DragViewport.DragViewport
+const FileTree_C = GVSClassLoader.visual.FileTree.FileTree
+const DragViewport_C = GVSClassLoader.visual.DragViewport.DragViewport
+
 ## A reference to the child GVShell instance - the textual interface
 ## for the user.
 @onready var GvShell = $GvShell
@@ -14,6 +19,7 @@ extends HBoxContainer
 @onready var ViewportContainer = $Right/FsViewport/SubViewportContainer
 @onready var NarratorToggle = $Right/Narrator/VBoxContainer/Toggle
 @onready var NarratorNext = $Right/Narrator/VBoxContainer/Next
+@onready var DragViewport: DragViewport_C  = $Right/DragViewport
 
 
 ## It would be helpful to be able to forward user input to the
@@ -43,11 +49,16 @@ func _input(event: InputEvent) -> void:
 ## it is created as a local variable and references to it are handed out
 ## to anyone who might need one (GVShell and FSViewport)
 func _ready() -> void:
-    var test: FSManager = FSManager.new()
-    self.GvShell.setup(test)
-    $Right/Narrator.setup(test, self.GvShell)
+    var file_manager: FSManager = FSManager.new()
     
-    $Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.setup(test)
+    var file_tree: FileTree_C = FileTree_C.make_new()
+    self.DragViewport.add_to_scene(file_tree)
+    file_tree.setup(file_manager)
+    
+    self.GvShell.setup(file_manager)
+    $Right/Narrator.setup(file_manager, self.GvShell)
+    
+    $Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.setup(file_manager)
     #test.create_dir(FSPath.new(["dir0"]))
     #test.create_dir(FSPath.new(["dir1"]))
     #test.create_dir(FSPath.new(["dir2"]))
@@ -62,7 +73,7 @@ func _ready() -> void:
 
     
     # Connect GVShell cwd changed to FSViewport cwd change
-    self.GvShell.cwd_changed.connect($Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.change_cwd)
+    #self.GvShell.cwd_changed.connect($Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.change_cwd)
     # Connect GVShell previewing_path to FWViewport highlight path
     self.GvShell.previewing_path.connect($Right/FsViewport/SubViewportContainer/SubViewport/FSGraph.highlight_path) 
         
