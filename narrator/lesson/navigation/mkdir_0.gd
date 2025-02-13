@@ -1,5 +1,9 @@
 extends "res://narrator/lesson/checkpoint.gd"
 
+## Contained in parent class
+# const ClassLoader = preload("res://gvs_class_loader.gd")
+const Path = ClassLoader.gvm.filesystem.Path
+
 
 func start() -> void:
     self.text_screen.text = Checkpoint.make_article([
@@ -40,7 +44,7 @@ func start() -> void:
     self.next_button.disabled = true
 
 
-func _on_directory_made(path: FSPath):
+func _on_directory_made(path: Path):
     if path.as_string() == "/new_directory":
         self.next_button.disabled = false
 

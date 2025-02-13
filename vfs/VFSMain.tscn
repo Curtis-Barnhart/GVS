@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://vfs/vfs_main.gd" id="1_ifaxc"]
 [ext_resource type="PackedScene" uid="uid://duxuodebilbwf" path="res://narrator/Narrator.tscn" id="1_t5tv6"]
-[ext_resource type="PackedScene" uid="uid://dsws7i3ntxerw" path="res://visual/FSView/FSViewport.tscn" id="2_c8ho1"]
+[ext_resource type="PackedScene" uid="uid://pb5jip50o1vp" path="res://visual/DragViewport/DragViewport.tscn" id="2_0t8lm"]
 
 [node name="VfsMain" type="HBoxContainer"]
 anchors_preset = 15
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ifaxc")
 
-[node name="FsView" parent="." instance=ExtResource("2_c8ho1")]
+[node name="DragViewport" parent="." instance=ExtResource("2_0t8lm")]
 layout_mode = 2
 size_flags_horizontal = 3
 
