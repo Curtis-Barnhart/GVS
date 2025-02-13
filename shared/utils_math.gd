@@ -1,12 +1,14 @@
-class_name utils_math
 extends Object
+
+const ClassLoader = preload("res://gvs_class_loader.gd")
+const MathUtils = ClassLoader.shared.Math
 
 
 ## Performs interpolation on a logistic curve
 ## between a and b.
 ## A t value of 0 
 static func half_log_interp(a: float, b: float, t: float) -> float:
-    return utils_math.log_interp(2*a - b, b, (t + 1)/2)
+    return MathUtils.log_interp(2*a - b, b, (t + 1)/2)
 
 
 ## Performs interpolation on a logistic curve

@@ -1,5 +1,9 @@
-class_name FSGDir
 extends Node2D
+
+const SelfScene = preload("res://visual/FileTree/Directory.tscn")
+const ClassLoader = preload("res://gvs_class_loader.gd")
+const Directory_C = ClassLoader.visual.FileTree.Directory
+const MathUtil = ClassLoader.shared.Math
 
 ## Label to display the directory name
 ## This will almost certainly be changed in the future to look better
@@ -53,7 +57,7 @@ func interp_movement(dest: Vector2) -> void:
 ##
 ## @param subdir: the subdirectory to add.
 ## @param subdir_name: the name to put on the label of the subdirectory.
-func add_subdir(subdir: FSGDir, subdir_name: String) -> void:
+func add_subdir(subdir: Directory_C, subdir_name: String) -> void:
     self.add_child(subdir)
     subdir.setup(subdir_name)
     
@@ -70,7 +74,7 @@ func arrange_subnodes() -> void:
     var offset: float = -self.total_width/2
     # TODO: someday update this to check for files as well
     for sd in self.get_children() \
-                  .filter(func (c): return is_instance_of(c, FSGDir)):
+                  .filter(func (c): return is_instance_of(c, Directory_C)):
         sd.interp_movement(Vector2(offset + (sd.total_width / 2), self.height))
         offset += sd.total_width
 
@@ -80,7 +84,7 @@ func arrange_subnodes() -> void:
 ## @param total_width_d: the change in my own width
 func total_width_notifier(total_width_d: float) -> void:
     var parent = self.get_parent()
-    if is_instance_of(parent, FSGDir):
+    if is_instance_of(parent, Directory_C):
         var parent_total_width_d: float = parent.modify_subwidth(total_width_d)
         if parent_total_width_d != 0:
             parent.total_width_notifier(parent_total_width_d)
@@ -97,6 +101,10 @@ func modify_subwidth(delta: float) -> float:
     self.sub_width += delta
     self.total_width = max(self.width, self.sub_width)
     return self.total_width - temp
+
+
+static func make_new() -> Directory_C:
+    return SelfScene.instantiate()
 
 
 ## Correctly calculates my own size and positions my name label accordingly.
@@ -122,7 +130,7 @@ func _ready() -> void:
 ## Draws my connection to my parent (and highlights it if applicable).
 func _draw() -> void:
     var parent = self.get_parent()
-    if is_instance_of(parent, FSGDir):
+    if is_instance_of(parent, Directory_C):
         var lcolor: Color
         if self.path_glow:
             lcolor = Color.CRIMSON
@@ -144,7 +152,7 @@ func _draw() -> void:
 func _process(delta: float) -> void:
     if self.interp_t > 0:
         self.interp_t -= delta
-        self.position = utils_math.log_interp_v(
+        self.position = MathUtil.log_interp_v(
             self.start_pos,
             self.dest_pos,
             (1 - (self.interp_t/2))

@@ -1,13 +1,11 @@
-# Call me an idiot, but this class is only supposed to be used
-# with a backing fs_manager.
-# The fs_manager handles the logic, and this handles the display.
-
 extends Node2D
 
-const SelfScene = preload("res://visual/FileTree/FSGraph.tscn")
-const GVSClassLoader = preload("res://gvs_class_loader.gd")
-const FileTree_C = GVSClassLoader.visual.FileTree.FileTree
-const Directory_C = GVSClassLoader.visual.FileTree.Directory
+const SelfScene = preload("res://visual/FileTree/FileTree.tscn")
+const ClassLoader = preload("res://gvs_class_loader.gd")
+const FileTree_C = ClassLoader.visual.FileTree.FileTree
+const Directory_C = ClassLoader.visual.FileTree.Directory
+const FSManager = ClassLoader.gvm.filesystem.Manager
+const Path = ClassLoader.gvm.filesystem.Path
 
 ## The backing file system which this visual representation tracks.
 var fs_man: FSManager = null
@@ -15,22 +13,19 @@ var fs_man: FSManager = null
 ## Instead, all files/dirs are stored flat in this dict by their path.
 var all_nodes: Dictionary = {}
 ## Path to the cwd
-var cwd: FSPath = FSPath.new([])
+var cwd: Path = Path.ROOT
 ## Origin of the last highlighted path
-var hl_origin: FSPath = FSPath.new([])
+var hl_origin: Path = Path.ROOT
 ## Last highlighted path (so we can unhighlight it when we want to highlight a new one)
-var hl_path: FSPath = FSPath.new([])
+var hl_path: Path = Path.ROOT
 
 ## Texture for a normal directory
 const dir_text: Texture2D = preload("res://visual/assets/directory.svg")
 ## Texture for the current working directory
 const cwd_text: Texture2D = preload("res://visual/assets/cwd.svg")
 
-## FSGDir Scene object so we can spawn new ones
-const FSGDir_Obj = preload("res://visual/FileTree/FSGDir.tscn")
 
-
-func highlight_path(origin: FSPath, path: FSPath) -> void:
+func highlight_path(origin: Path, path: Path) -> void:
     # TODO: make this better
     for any_node in self.all_nodes.values():
         if any_node.path_glow:
@@ -41,10 +36,10 @@ func highlight_path(origin: FSPath, path: FSPath) -> void:
     # highlight new path
     self.hl_origin = origin
     self.hl_path = path
-    var complete_hl: FSPath = origin.compose(path)
+    var complete_hl: Path = origin.compose(path)
     while origin.as_string() != complete_hl.as_string():
         var next_hop: String = path.head()
-        var node_to_highlight: FSGDir
+        var node_to_highlight: Directory_C
         if next_hop == "..":
             node_to_highlight = self.all_nodes[self.fs_man.reduce_path(origin).as_string()]
             node_to_highlight.path_glow = true
@@ -63,11 +58,19 @@ func highlight_path(origin: FSPath, path: FSPath) -> void:
     self.queue_redraw()
 
 
+## Gets the vector from myself to a directory in my tree given its path.
+##
+## @param path: the path to the directory to get directions to.
+## @return: the vector pointing from me to the directory specified by `path`.
+func node_rel_pos_from_path(path: Path) -> Vector2:
+    return self.node_rel_pos(self.all_nodes[path.as_string()])
+
+
 ## Gets the vector from myself to a directory in my tree.
 ##
 ## @param dir: the directory to get directions to.
 ## @return: the vector pointing from me to `dir`.
-func node_rel_pos(dir: FSGDir) -> Vector2:
+func node_rel_pos(dir: Directory_C) -> Vector2:
     return dir.global_position - self.global_position
 
 
@@ -76,11 +79,10 @@ func node_rel_pos(dir: FSGDir) -> Vector2:
 ##
 ## @param new_p: The path to the new cwd. Must be in simplest form.
 ## @param old_p: Path to the former cwd. Must be in simplest form.
-#func change_cwd(new_p: FSPath, old_p: FSPath) -> void:
-    #self.all_nodes[old_p.as_string()].sprite.texture = dir_text
-    #var new_cwd: FSGDir = self.all_nodes[new_p.as_string()]
-    #new_cwd.sprite.texture = cwd_text
-    #self.camera.interp_movement(self.node_rel_pos(new_cwd))
+func change_cwd(new_p: Path, old_p: Path) -> void:
+    self.all_nodes[old_p.as_string()].sprite.texture = dir_text
+    var new_cwd: Directory_C = self.all_nodes[new_p.as_string()]
+    new_cwd.sprite.texture = cwd_text
 
 
 ## Instantiates new FileTree_C/FSGraph node
@@ -97,10 +99,10 @@ static func make_new() -> FileTree_C:
 ##      fs_manager should be empty.
 func setup(fs_manager: FSManager) -> void:
     self.fs_man = fs_manager
-    self.all_nodes["/"] = FSGDir_Obj.instantiate()
+    self.all_nodes["/"] = Directory_C.make_new()
     self.add_child(self.all_nodes["/"])
     self.all_nodes["/"].setup("/")
-    #self.change_cwd(FSPath.new([]), FSPath.new([]))
+    self.change_cwd(Path.new([]), Path.new([]))
     
     fs_manager.created_dir.connect(self.create_dir)
     fs_manager.removed_dir.connect(self.remove_dir)
@@ -112,9 +114,9 @@ func setup(fs_manager: FSManager) -> void:
 ## @param p: Path to the directory to create.
 ##      p's parent directory (p.base()) must be a valid path in this graph,
 ##      and also must be a simplified absolute path.
-func create_dir(p: FSPath) -> void:
-    var parent: FSGDir = self.all_nodes[p.base().as_string()]
-    var child: FSGDir = FSGDir_Obj.instantiate()
+func create_dir(p: Path) -> void:
+    var parent: Directory_C = self.all_nodes[p.base().as_string()]
+    var child: Directory_C = Directory_C.make_new()
     parent.add_subdir(child, p.last())
     self.all_nodes[p.as_string()] = child
 
@@ -125,10 +127,10 @@ func create_dir(p: FSPath) -> void:
 ## @param p: Path to the directory to remove.
 ##      p must be a valid path in the visual graph,
 ##      and also must be a simplified absolute path.
-func remove_dir(p: FSPath) -> void:
-    var dir_node: FSGDir = self.all_nodes[p.as_string()]
+func remove_dir(p: Path) -> void:
+    var dir_node: Directory_C = self.all_nodes[p.as_string()]
     var removed_width: float = dir_node.width
-    var parent: FSGDir = self.all_nodes[p.base().as_string()]
+    var parent: Directory_C = self.all_nodes[p.base().as_string()]
     parent.remove_child(dir_node)
     var parent_width_delta: float = parent.modify_subwidth(-removed_width)
     parent.total_width_notifier(parent_width_delta)

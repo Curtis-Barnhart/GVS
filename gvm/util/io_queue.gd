@@ -1,4 +1,3 @@
-class_name IOQueue
 extends RefCounted
 
 var data: PackedStringArray = []

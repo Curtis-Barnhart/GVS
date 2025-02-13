@@ -1,6 +1,10 @@
-class_name ProcessMkdir
-extends GVProcess
+extends "res://gvm/process/process.gd"
 
+## Defined in parent class
+#const ClassLoader = preload("res://gvs_class_loader.gd")
+#const FSManager = ClassLoader.gvm.filesystem.Manager
+#const Path = ClassLoader.gvm.filesystem.Path
+const Process = ClassLoader.gvm.process.Process
 
 func run() -> int:
     var args: PackedStringArray = self.vargs.slice(1)
@@ -39,8 +43,8 @@ func run() -> int:
 
 
 func make_a_dir(name: String) -> int:
-    var path: FSPath = self.cwd.as_cwd(name)
-    var real_ancestor: FSPath = self.fs_man.real_ancestry(path)
+    var path: Path = self.cwd.as_cwd(name)
+    var real_ancestor: Path = self.fs_man.real_ancestry(path)
     var path_parent = path.base()
     
     if self.fs_man.contains_path(path):
@@ -58,8 +62,8 @@ func make_a_dir(name: String) -> int:
 
 
 func make_dirs_recur(name: String) -> int:
-    var path: FSPath = self.cwd.as_cwd(name)
-    var real_ancestor: FSPath = self.fs_man.real_ancestry(path)
+    var path: Path = self.cwd.as_cwd(name)
+    var real_ancestor: Path = self.fs_man.real_ancestry(path)
     
     if self.fs_man.contains_path(path):
         self.stdout.write("mkdir: cannot create directory ‘%s’: File exists\n" % name)
@@ -71,11 +75,11 @@ func make_dirs_recur(name: String) -> int:
     return 1
 
 
-func _make_dirs_recur_unchecked(target: FSPath, ancestor: FSPath) -> void:
+func _make_dirs_recur_unchecked(target: Path, ancestor: Path) -> void:
     if target.as_string() == ancestor.as_string():
         return
     
-    var parent: FSPath = target.base()
+    var parent: Path = target.base()
     if self.fs_man.contains_dir(target):
         self._make_dirs_recur_unchecked(parent, ancestor)
     elif self.fs_man.contains_dir(parent):

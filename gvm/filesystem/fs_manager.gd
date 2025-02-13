@@ -3,16 +3,21 @@
 # of the references to file/dir structures.
 # He is also guaranteed to never contain loops in the underlying file structure.
 
-class_name FSManager
 extends RefCounted
 
+const ClassLoader = preload("res://gvs_class_loader.gd")
+const Directory_C = ClassLoader.gvm.filesystem.Directory
+const Path_C = ClassLoader.gvm.filesystem.Path
+const FSManager = ClassLoader.gvm.filesystem.Manager
+
+
 ## path is guaranteed to be in simplest form
-signal created_dir(path: FSPath)
+signal created_dir(path: Path_C)
 ## path is guaranteed to be in simplest form
-signal removed_dir(path: FSPath)
+signal removed_dir(path: Path_C)
 
 # Guaranteed non null
-var _root: FSDir = FSDir.new("", null)
+var _root: Directory_C = Directory_C.new("", null)
 
 enum filetype { FILE, DIR, NULL }
 
@@ -36,19 +41,19 @@ func _notification(what: int) -> void:
         _root.parent = null
 
 
-func contains_file(p: FSPath) -> bool:
+func contains_file(p: Path_C) -> bool:
     return self._root.get_file(p) != null
 
 
-func contains_dir(p: FSPath) -> bool:
+func contains_dir(p: Path_C) -> bool:
     return self._get_dir(p) != null
 
 
-func contains_path(p: FSPath) -> bool:
+func contains_path(p: Path_C) -> bool:
     return self.contains_file(p) or self.contains_dir(p)
 
 
-#func write_file(p: FSPath, content: String) -> bool:
+#func write_file(p: Path_C, content: String) -> bool:
     #if p.degen():
         #return false
     #if self.contains_path(p.base()):
@@ -56,11 +61,11 @@ func contains_path(p: FSPath) -> bool:
     #return false
 
 
-## Get a FSDir object by path, if it exists.
+## Get a Directory_C object by path, if it exists.
 ##
 ## @param p: Non null path to the directory to get.
-## @return: the FSDir object located by path p, or null if it does not exist.
-func _get_dir(p: FSPath) -> FSDir:
+## @return: the Directory_C object located by path p, or null if it does not exist.
+func _get_dir(p: Path_C) -> Directory_C:
     if p.degen():
         return self._root
     return self._root.get_dir(p)
@@ -71,8 +76,8 @@ func _get_dir(p: FSPath) -> FSDir:
 ##
 ## @param p: Non null path to the directory to create.
 ## @return: true if directory was created, false otherwise.
-func create_dir(p: FSPath) -> bool:
-    var contain_path: FSPath = p.base()
+func create_dir(p: Path_C) -> bool:
+    var contain_path: Path_C = p.base()
     var new_dir_name: String = p.last()
     
     if new_dir_name == "":
@@ -80,32 +85,32 @@ func create_dir(p: FSPath) -> bool:
     
     # Only create the new directory if the claimed parent is a real directory
     # and that parent does not already contain a directory with the same name.
-    var contain_dir: FSDir = self._get_dir(contain_path)
+    var contain_dir: Directory_C = self._get_dir(contain_path)
     if contain_dir == null:
         return false
     if new_dir_name in contain_dir.subdirs.map(func (sd): return sd.name):
         return false
    
     p = contain_dir.get_path().extend(new_dir_name)
-    contain_dir.subdirs.push_back(FSDir.new(new_dir_name, contain_dir))
+    contain_dir.subdirs.push_back(Directory_C.new(new_dir_name, contain_dir))
     self.created_dir.emit(p)
     return true
 
 
-#func create_dir_nested(p: FSPath) -> bool:
+#func create_dir_nested(p: Path_C) -> bool:
     #if self.contains_dir(p):
         #return false
 
 
-#func move(p: FSPath) -> bool:
+#func move(p: Path_C) -> bool:
     #return false
 
 
-#func copy(p: FSPath) -> bool:
+#func copy(p: Path_C) -> bool:
     #return false
 
 
-#func remove_file(p: FSPath) -> bool:
+#func remove_file(p: Path_C) -> bool:
     #return false
 
 
@@ -113,13 +118,13 @@ func create_dir(p: FSPath) -> bool:
 ##
 ## @param p: Non null path to the directory to remove.
 ## @return: true if directory was removed, false otherwise.
-func remove_dir(p: FSPath) -> bool:
-    var dir: FSDir = self._get_dir(p)
+func remove_dir(p: Path_C) -> bool:
+    var dir: Directory_C = self._get_dir(p)
     if dir == self._root or dir == null or (not dir.subdirs.is_empty()):
         return false
     
     p = self.reduce_path(p)
-    var parent: FSDir = dir.parent
+    var parent: Directory_C = dir.parent
     # TODO: I'm sure there's a method to remove it directly?
     var i: int = parent.subdirs.find(dir)
     parent.subdirs.remove_at(i)
@@ -127,16 +132,16 @@ func remove_dir(p: FSPath) -> bool:
     return true
 
 
-#func remove_recursive(p: FSPath) -> bool:
+#func remove_recursive(p: Path_C) -> bool:
     #return false
 
 
 ## get a list of files in a directory
 ##
 ## @param p: Non null path to the directory to read.
-## @return: (Array[FSPath]) an array of FSPaths to all directories contained in p.
-func read_dirs_in_dir(p: FSPath) -> Array:
-    var dir: FSDir = self._get_dir(p)
+## @return: (Array[Path_C]) an array of FSPaths to all directories contained in p.
+func read_dirs_in_dir(p: Path_C) -> Array:
+    var dir: Directory_C = self._get_dir(p)
     if dir == null:
         return []
     
@@ -149,9 +154,9 @@ func read_dirs_in_dir(p: FSPath) -> Array:
 ## We would need self._get_file to be implemented to have it work for files.
 ##
 ## @param p: Non null path to simplify.
-## @return: simplified FSPath if found, null if path did not exist.
-func reduce_path(p: FSPath) -> FSPath:
-    var loc: FSDir = self._get_dir(p)
+## @return: simplified Path_C if found, null if path did not exist.
+func reduce_path(p: Path_C) -> Path_C:
+    var loc: Directory_C = self._get_dir(p)
     if loc == null:
         return null
     return loc.get_path()
@@ -161,7 +166,7 @@ func reduce_path(p: FSPath) -> FSPath:
 ##
 ## @param p: The path to test.
 ## @return: enum DIR if directory, FILE if file, NULL otherwise.
-func contains_type(p: FSPath) -> FSManager.filetype:
+func contains_type(p: Path_C) -> FSManager.filetype:
     if self.contains_dir(p):
         return self.filetype.DIR
     if self.contains_file(p):
@@ -174,7 +179,7 @@ func contains_type(p: FSPath) -> FSManager.filetype:
 ##
 ## @param p: path to shorten until it is real.
 ## @return: closest real version of that path.
-func real_ancestry(p: FSPath) -> FSPath:
+func real_ancestry(p: Path_C) -> Path_C:
     while not self.contains_path(p):
         p = p.base()
     return p

@@ -1,9 +1,13 @@
 class_name Checkpoint
 extends RefCounted
 
+const ClassLoader = preload("res://gvs_class_loader.gd")
+const FSManager = ClassLoader.gvm.filesystem.Manager
+const Shell = ClassLoader.gvm.Shell
+
 var fs_man: FSManager
 var text_screen: RichTextLabel
-var shell: GVShell
+var shell: Shell
 var next_button: Button
 
 ## The completed signal is how we tell the narrator we are done.
@@ -15,7 +19,7 @@ signal completed(checkpoint: Checkpoint)
 func _init(
     fs_man: FSManager,
     text_screen: RichTextLabel,
-    shell: GVShell,
+    shell: Shell,
     next_button: Button
 ) -> void:
     self.fs_man = fs_man

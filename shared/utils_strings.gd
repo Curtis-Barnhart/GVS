@@ -1,5 +1,7 @@
-class_name utils_strings
 extends Object
+
+const ClassLoader = preload("res://gvs_class_loader.gd")
+const StringsUtil = ClassLoader.shared.Strings
 
 
 ## Find the index of the next character satisfying `functor` in a string.
@@ -37,8 +39,8 @@ static func extract_word(s: String, index: int) -> String:
         return ""
 
     # Get bounds of word
-    var start: int = utils_strings.prev_f(s, index, func (c): return c == " ")
-    var end: int = utils_strings.next_f(s, index, func (c): return c == " ")
+    var start: int = StringsUtil.prev_f(s, index, func (c): return c == " ")
+    var end: int = StringsUtil.next_f(s, index, func (c): return c == " ")
     if start == -1:
         start = 0
     else:

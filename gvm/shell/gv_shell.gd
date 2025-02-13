@@ -1,19 +1,25 @@
 ## GVShell is a class that acts as a sort of shell.
 ## It allows someone interacting with it to manipulate a backing
 ## filesystem (the GVShell contains a FSManager instance).
-
-class_name GVShell
 extends NinePatchRect
 
-const loader = preload("res://gvm/loader.gd")
+const ClassLoader = preload("res://gvs_class_loader.gd")
+const FSManager = ClassLoader.gvm.filesystem.Manager
+const Path = ClassLoader.gvm.filesystem.Path
+const Mkdir = ClassLoader.gvm.process.premade.Mkdir
+const Rmdir = ClassLoader.gvm.process.premade.Rmdir
+const Ls = ClassLoader.gvm.process.premade.Ls
+const Shell = ClassLoader.gvm.Shell
+const IOQueue = ClassLoader.gvm.util.IOQueue
+const StringsUtil = ClassLoader.shared.Strings
 
-signal cwd_changed(path: FSPath, old_path: FSPath)
-signal previewing_path(origin: FSPath, path: FSPath)
+signal cwd_changed(path: Path, old_path: Path)
+signal previewing_path(origin: Path, path: Path)
 
 ## Stores the current working directory of the shell.
 ## Aside from after the GVShell is initialized but before setup() is called,
 ## this must always be a valid path to a directory in the backing filesystem.
-var CWD: FSPath = FSPath.ROOT
+var CWD: Path = Path.ROOT
 ## The filesystem that this GVShell is attached to.
 var fs_man: FSManager = null
 ## This the GVShell's "fake" IOQueue - it can give it to a process as the
@@ -28,8 +34,8 @@ var scroll_frames: int = 1
 ## Contains the last highlighted path so that we don't have to send repeat signals
 ## every time the prompt caret is over a valid path.
 ## I'm fairly certain rehighlighting the path is somewhat expensive
-var last_preview_origin: FSPath = FSPath.ROOT
-var last_preview_path: FSPath = FSPath.ROOT
+var last_preview_origin: Path = Path.ROOT
+var last_preview_path: Path = Path.ROOT
 
 ## history is a label that displays the past history of all commands
 ## and command outputs.
@@ -49,7 +55,7 @@ var last_preview_path: FSPath = FSPath.ROOT
 class ShellWriter extends IOQueue:
     ## GVShell who owns this ShellWriter so we can set their scroll_frames
     ## after printing to their screen.
-    var shell: GVShell
+    var shell: Shell
 
     ## Overrides IOQueue's write method to write immediately to history Label.
     ##
@@ -100,12 +106,12 @@ func _on_prompt_user_entered() -> void:
         # be able to access the GVShell's CWD, which... on second thought,
         # is actually totally reasonable and could be done eventually.
         ["cd"]:
-            var old_cwd: FSPath = self.CWD
-            self.CWD = FSPath.new([])
+            var old_cwd: Path = self.CWD
+            self.CWD = Path.ROOT
             self.cwd_changed.emit(self.CWD, old_cwd)
         ["cd", var where]:
-            var old_cwd: FSPath = self.CWD
-            var loc: FSPath = self.CWD.as_cwd(where)
+            var old_cwd: Path = self.CWD
+            var loc: Path = self.CWD.as_cwd(where)
             if self.fs_man.contains_dir(loc):
                 self.CWD = self.fs_man.reduce_path(loc)
                 self.cwd_changed.emit(self.CWD, old_cwd)
@@ -116,7 +122,7 @@ func _on_prompt_user_entered() -> void:
         ["cd", ..]:
             self.history.text += "-gvs: cd: too many arguments\n"
         ["mkdir", ..]:
-            var mkdir_proc: ProcessMkdir = ProcessMkdir.new(
+            var mkdir_proc: Mkdir = Mkdir.new(
                 self.fs_man,
                 null,
                 self.shell_write,
@@ -125,7 +131,7 @@ func _on_prompt_user_entered() -> void:
             )
             mkdir_proc.run()
         ["rmdir", ..]:
-            var rmdir_proc: ProcessRmdir = ProcessRmdir.new(
+            var rmdir_proc: Rmdir = Rmdir.new(
                 self.fs_man,
                 null,
                 self.shell_write,
@@ -134,7 +140,7 @@ func _on_prompt_user_entered() -> void:
             )
             rmdir_proc.run()
         ["ls", ..]:
-            var ls_proc: ProcessLs = ProcessLs.new(
+            var ls_proc: Ls = Ls.new(
                 self.fs_man,
                 null,
                 self.shell_write,
@@ -174,7 +180,7 @@ func _on_prompt_caret_changed() -> void:
     var caret_string: String = self.prompt.get_word_under_caret()
     if caret_string == "":
         # Get most recent previous non space character
-        var last_char: int = utils_strings.prev_f(
+        var last_char: int = StringsUtil.prev_f(
             self.prompt.text,
             self.prompt.get_caret_column() - 1,
             func (c): return c != " "
@@ -190,20 +196,20 @@ func _on_prompt_caret_changed() -> void:
             ):
                 return
             else:
-                self.last_preview_origin = FSPath.ROOT
-                self.last_preview_path = FSPath.ROOT
-                self.previewing_path.emit(FSPath.ROOT, FSPath.ROOT)
+                self.last_preview_origin = Path.ROOT
+                self.last_preview_path = Path.ROOT
+                self.previewing_path.emit(Path.ROOT, Path.ROOT)
                 return
         
         # Get the word behind the cursor (no matter how much whitespace)
-        caret_string = utils_strings.extract_word(self.prompt.text, last_char)
+        caret_string = StringsUtil.extract_word(self.prompt.text, last_char)
     
     # Try to interpret the path the user is typing and its parent.
     # If the user is typing a path, when they start a new name,
     # it will be incorrect since they are still typing.
     # However, the parent will be correct, which we can still detect.
-    var caret_path: FSPath = FSPath.new(caret_string.split("/", false))
-    var parent_path: FSPath = caret_path.base()
+    var caret_path: Path = Path.new(caret_string.split("/", false))
+    var parent_path: Path = caret_path.base()
 
     if caret_string.begins_with("/"):
         # Absolute path detected
@@ -214,9 +220,9 @@ func _on_prompt_caret_changed() -> void:
                 self.last_preview_origin.degen()
                 and self.last_preview_path.as_string() == caret_path.as_string()
             ):
-                self.last_preview_origin = FSPath.ROOT
+                self.last_preview_origin = Path.ROOT
                 self.last_preview_path = caret_path
-                self.previewing_path.emit(FSPath.ROOT, caret_path)
+                self.previewing_path.emit(Path.ROOT, caret_path)
             return
         elif self.fs_man.contains_dir(parent_path):
             # whole path was not found, but it looks like a partially written out
@@ -226,9 +232,9 @@ func _on_prompt_caret_changed() -> void:
                 self.last_preview_origin.degen()
                 and self.last_preview_path.as_string() == parent_path.as_string()
             ):
-                self.last_preview_origin = FSPath.ROOT
+                self.last_preview_origin = Path.ROOT
                 self.last_preview_path = parent_path
-                self.previewing_path.emit(FSPath.ROOT, parent_path)
+                self.previewing_path.emit(Path.ROOT, parent_path)
             return
         # path could not be located as absolute path
     else:
@@ -264,6 +270,6 @@ func _on_prompt_caret_changed() -> void:
         self.last_preview_origin.degen()
         and self.last_preview_path.degen()
     ):
-        self.last_preview_origin = FSPath.ROOT
-        self.last_preview_path = FSPath.ROOT
-        self.previewing_path.emit(FSPath.ROOT, FSPath.ROOT)
+        self.last_preview_origin = Path.ROOT
+        self.last_preview_path = Path.ROOT
+        self.previewing_path.emit(Path.ROOT, Path.ROOT)
