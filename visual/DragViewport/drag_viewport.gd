@@ -22,7 +22,7 @@ func add_to_scene(node: CanvasItem) -> void:
 ##
 ## @param loc: location to move the camera to.
 func move_cam_to(loc: Vector2) -> void:
-    $SubViewport/Camera2D.interp_movement()
+    $SubViewport/Camera2D.interp_movement(loc)
 
 
 ## If the user clicks down, start the camera drag process.
@@ -31,8 +31,8 @@ func move_cam_to(loc: Vector2) -> void:
 ##
 ## @param event: The InputEvent to process.
 func _input(event: InputEvent) -> void:
-    #if event is InputEventMouseButton and self.get_global_rect().has_point(self.get_global_mouse_position()):
-    if event is InputEventMouseButton:
+    if event is InputEventMouseButton and self.get_global_rect().has_point(self.get_global_mouse_position()):
+    #if event is InputEventMouseButton:
         if event.is_pressed() && not self.drag:
             self.drag = true
             self.camera_origin = self.cam.position

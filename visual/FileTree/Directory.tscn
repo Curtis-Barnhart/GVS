@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dayudvd81fjbp"]
 
-[ext_resource type="Script" path="res://visual/FileTree/fsg_dir.gd" id="1_kp0kf"]
+[ext_resource type="Script" path="res://visual/FileTree/directory.gd" id="1_kp0kf"]
 [ext_resource type="Texture2D" uid="uid://bd0kfksu5ed7n" path="res://visual/assets/directory.svg" id="2_rn3d3"]
 [ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_0g5nk"]
 

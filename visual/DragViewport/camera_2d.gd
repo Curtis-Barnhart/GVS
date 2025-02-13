@@ -1,6 +1,8 @@
 # Not a named class
 extends Camera2D
 
+const ClassLoader = preload("res://gvs_class_loader.gd")
+const MathUtils = ClassLoader.shared.Math
 
 ## starting position before interpolating movement.
 var _start_pos: Vector2 = Vector2.ZERO
@@ -29,7 +31,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     if self._interp_t > 0:
         self._interp_t -= delta
-        self.position = utils_math.log_interp_v(
+        self.position = MathUtils.log_interp_v(
             self._start_pos,
             self._dest_pos,
             (1 - (self._interp_t/2))

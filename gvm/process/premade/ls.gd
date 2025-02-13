@@ -1,5 +1,8 @@
-class_name ProcessLs
-extends GVProcess
+extends "res://gvm/process/process.gd"
+
+## Defined in parent class
+#const ClassLoader = preload("res://gvs_class_loader.gd")
+#const Path = ClassLoader.gvm.filesystem.Path
 
 
 func run() -> int:
@@ -36,7 +39,7 @@ func run() -> int:
 
 func analyze_path(p_str: String, f_hidden: bool) -> int:
     # Path is absolute if it started with "/", otherwise it starts at cwd
-    var path: FSPath = self.cwd.as_cwd(p_str)
+    var path: Path = self.cwd.as_cwd(p_str)
 
     match self.fs_man.contains_type(path):
         FSManager.filetype.FILE:

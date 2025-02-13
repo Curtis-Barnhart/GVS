@@ -1,5 +1,13 @@
 extends Control
 
+const ClassLoader = preload("res://gvs_class_loader.gd")
+const FSManager = ClassLoader.gvm.filesystem.Manager
+const Shell = ClassLoader.gvm.Shell
+const MathUtils = ClassLoader.shared.Math
+
+const up_arrow = preload("res://narrator/assets/up.svg")
+const down_arrow = preload("res://narrator/assets/down.svg")
+
 var expanded: bool = true
 var target_expanded: bool = true
 var expanding_time: float = 0
@@ -8,20 +16,17 @@ const max_size: float = 800
 @onready var label: RichTextLabel = $VBoxContainer/RichTextLabel
 @onready var next: Button = $VBoxContainer/Next
 @onready var toggle: Button = $VBoxContainer/Toggle
-var fs_man: FSManager
-var shell: GVShell
+var _fs_man: FSManager
+var _shell: Shell
 var current_checkpoint: Checkpoint
 
-const up_arrow = preload("res://narrator/assets/up.svg")
-const down_arrow = preload("res://narrator/assets/down.svg")
 
-
-func setup(fs_man: FSManager, shell: GVShell) -> void:
-    self.fs_man = fs_man
-    self.shell = shell
+func setup(fs_man: FSManager, shell: Shell) -> void:
+    self._fs_man = fs_man
+    self._shell = shell
     self.load_checkpoint(
         load("res://narrator/lesson/navigation/introduction_0.gd").new(
-            self.fs_man, self.label, self.shell, $VBoxContainer/Next
+            self._fs_man, self.label, self._shell, $VBoxContainer/Next
         )
     )
 
@@ -44,13 +49,13 @@ func _process(delta: float) -> void:
     if self.expanding_time > 0:
         self.expanding_time -= delta
         if self.target_expanded:
-            self.custom_minimum_size.y = utils_math.log_interp(
+            self.custom_minimum_size.y = MathUtils.log_interp(
                 self.min_size,
                 self.max_size,
                 1 - (self.expanding_time / 2)
             )
         else:
-            self.custom_minimum_size.y = utils_math.log_interp(
+            self.custom_minimum_size.y = MathUtils.log_interp(
                 self.max_size,
                 self.min_size,
                 1 - (self.expanding_time / 2)
