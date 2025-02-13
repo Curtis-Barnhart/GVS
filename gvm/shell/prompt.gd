@@ -1,3 +1,4 @@
+# This is attached to a visually created scene
 extends TextEdit
 
 signal user_entered

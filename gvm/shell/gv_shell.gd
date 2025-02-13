@@ -5,6 +5,8 @@
 class_name GVShell
 extends NinePatchRect
 
+const loader = preload("res://gvm/loader.gd")
+
 signal cwd_changed(path: FSPath, old_path: FSPath)
 signal previewing_path(origin: FSPath, path: FSPath)
 

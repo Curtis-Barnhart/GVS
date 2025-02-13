@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://pb5jip50o1vp"]
+
+[ext_resource type="Script" path="res://visual/DragViewport/camera_2d.gd" id="1_k2572"]
+[ext_resource type="Script" path="res://visual/DragViewport/drag_viewport.gd" id="1_venwq"]
+
+[node name="DragViewport" type="SubViewportContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+script = ExtResource("1_venwq")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="SubViewport"]
+script = ExtResource("1_k2572")
+
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

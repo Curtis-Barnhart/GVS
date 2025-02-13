@@ -4,6 +4,11 @@
 
 extends Node2D
 
+const SelfScene = preload("res://visual/FileTree/FSGraph.tscn")
+const GVSClassLoader = preload("res://gvs_class_loader.gd")
+const FileTree_C = GVSClassLoader.visual.FileTree.FileTree
+const Directory_C = GVSClassLoader.visual.FileTree.Directory
+
 ## The backing file system which this visual representation tracks.
 var fs_man: FSManager = null
 ## We let FSManager handle all file system logic - no need to implement it twice.
@@ -11,9 +16,6 @@ var fs_man: FSManager = null
 var all_nodes: Dictionary = {}
 ## Path to the cwd
 var cwd: FSPath = FSPath.new([])
-## The camera that will end up being a child of this node (will be set in _ready().
-## This seems like pretty sloppy code to me. Figure out who owns the camera better later.
-var camera: Camera2D = null
 ## Origin of the last highlighted path
 var hl_origin: FSPath = FSPath.new([])
 ## Last highlighted path (so we can unhighlight it when we want to highlight a new one)
@@ -25,7 +27,7 @@ const dir_text: Texture2D = preload("res://visual/assets/directory.svg")
 const cwd_text: Texture2D = preload("res://visual/assets/cwd.svg")
 
 ## FSGDir Scene object so we can spawn new ones
-const FSGDir_Obj = preload("res://visual/graph/FSGDir.tscn")
+const FSGDir_Obj = preload("res://visual/FileTree/FSGDir.tscn")
 
 
 func highlight_path(origin: FSPath, path: FSPath) -> void:
@@ -74,11 +76,16 @@ func node_rel_pos(dir: FSGDir) -> Vector2:
 ##
 ## @param new_p: The path to the new cwd. Must be in simplest form.
 ## @param old_p: Path to the former cwd. Must be in simplest form.
-func change_cwd(new_p: FSPath, old_p: FSPath) -> void:
-    self.all_nodes[old_p.as_string()].sprite.texture = dir_text
-    var new_cwd: FSGDir = self.all_nodes[new_p.as_string()]
-    new_cwd.sprite.texture = cwd_text
-    self.camera.interp_movement(self.node_rel_pos(new_cwd))
+#func change_cwd(new_p: FSPath, old_p: FSPath) -> void:
+    #self.all_nodes[old_p.as_string()].sprite.texture = dir_text
+    #var new_cwd: FSGDir = self.all_nodes[new_p.as_string()]
+    #new_cwd.sprite.texture = cwd_text
+    #self.camera.interp_movement(self.node_rel_pos(new_cwd))
+
+
+## Instantiates new FileTree_C/FSGraph node
+static func make_new() -> FileTree_C:
+    return SelfScene.instantiate()
 
 
 ## Manual initializer.
@@ -93,7 +100,7 @@ func setup(fs_manager: FSManager) -> void:
     self.all_nodes["/"] = FSGDir_Obj.instantiate()
     self.add_child(self.all_nodes["/"])
     self.all_nodes["/"].setup("/")
-    self.change_cwd(FSPath.new([]), FSPath.new([]))
+    #self.change_cwd(FSPath.new([]), FSPath.new([]))
     
     fs_manager.created_dir.connect(self.create_dir)
     fs_manager.removed_dir.connect(self.remove_dir)
@@ -133,8 +140,9 @@ func remove_dir(p: FSPath) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+    pass
     # Disgusting. Fix this (later).
-    self.camera = self.get_children().filter(func (c): return is_instance_of(c, Camera2D))[0]
+    #self.camera = self.get_children().filter(func (c): return is_instance_of(c, Camera2D))[0]
     
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
