@@ -40,7 +40,12 @@ func _draw() -> void:
         var segment_width: float = 2*PI / len(self._children)
         for child_index in range(len(self._children)):
             var line_start: Vector2 = Vector2(self._rad_in, 0).rotated(segment_width * child_index)
-            draw_line(self._center() + line_start, self._center() + self._rad_out/self._rad_in*line_start, Color.STEEL_BLUE, 6)
+            draw_line(
+                self._center() + line_start,
+                self._center() + self._rad_out/self._rad_in*line_start,
+                Color.STEEL_BLUE,
+                6
+            )
         
         if self._selected != -1:
             draw_arc(
