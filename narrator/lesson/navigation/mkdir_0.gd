@@ -1,4 +1,4 @@
-extends Checkpoint
+extends "res://narrator/lesson/checkpoint.gd"
 
 
 func start() -> void:

@@ -1,9 +1,9 @@
-class_name Checkpoint
 extends RefCounted
 
 const ClassLoader = preload("res://gvs_class_loader.gd")
 const FSManager = ClassLoader.gvm.filesystem.Manager
 const Shell = ClassLoader.gvm.Shell
+const Checkpoint = ClassLoader.narrator.lesson.Checkpoint
 
 var fs_man: FSManager
 var text_screen: RichTextLabel
