@@ -11,37 +11,15 @@ var click_down: Vector2 = Vector2.ZERO
 var drag: bool = false
 
 
-#func _draw() -> void:
-    #self.draw_rect(Rect2(self.get_rect()), Color.RED, false)
-
-
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventMouseButton:
-        print("Viewport root got unhandled mouse button (sub_scene_root.gd)")
         if event.is_pressed() && not self.drag:
             self.drag = true
             self.camera_origin = self.cam.position
             self.click_down = self.get_viewport().get_mouse_position()
         elif event.is_released() && self.drag:
-            #self.cam.position.x = clamp(self.cam.position.x, 0, 10000)
-            #self.cam.position.y = clamp(self.cam.position.y, 0, 10000)
             self.camera_origin = self.cam.position
             self.drag = false
-
-
-#func _gui_input(event: InputEvent) -> void:
-    #if event is InputEventMouseButton:
-        #print("Viewport root got mouse button (sub_scene_root.gd)")
-        #print("Viewport root location: " + str(self.position))
-        #if event.is_pressed() && not self.drag:
-            #self.drag = true
-            #self.camera_origin = self.cam.position
-            #self.click_down = self.get_viewport().get_mouse_position()
-        #elif event.is_released() && self.drag:
-            #self.cam.position.x = clamp(self.cam.position.x, 0, 10000)
-            #self.cam.position.y = clamp(self.cam.position.y, 0, 10000)
-            #self.camera_origin = self.cam.position
-            #self.drag = false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -59,8 +37,5 @@ func _process(_delta: float) -> void:
 
 func _on_drag_viewport_mouse_exited() -> void:
     if self.drag:
-        # set camera_origin so that it can be used on next drag
-        #self.cam.position.x = clamp(self.cam.position.x, 0, 10000)
-        #self.cam.position.y = clamp(self.cam.position.y, 0, 10000)
         self.camera_origin = self.cam.position
     self.drag = false
