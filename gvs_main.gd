@@ -14,34 +14,7 @@ const Path = ClassLoader.gvm.filesystem.Path
 ## A reference to the child GVShell instance - the textual interface
 ## for the user.
 @onready var gvshell: Shell = $GvShell
-# This feels like very bad practice
-@onready var prompt = $GvShell/ScrollContainer/VBoxContainer/Prompt
-@onready var NarratorToggle = $Right/Narrator/VBoxContainer/Toggle
-@onready var NarratorNext = $Right/Narrator/VBoxContainer/Next
 @onready var drag_viewport: DragViewport  = $Right/DragViewport
-
-
-## It would be helpful to be able to forward user input to the
-## FSViewport when the GVShell terminal (or anyone else!) has focus
-## (specifically its text input component).
-## This function takes input that is not handled by the GVShell
-## (e.g. clicks on the FSViewport that is part of the Main scene)
-## and sends them to the FSViewport.
-##
-## @param event: The event to forward to the FSViewport.
-func _input(event: InputEvent) -> void:
-    var focus_owner = self.get_viewport().gui_get_focus_owner()
-    if (
-        event is InputEventMouseButton
-        and self.drag_viewport.get_global_rect().has_point(self.get_global_mouse_position())
-        # Update this when there are other focus stealers around
-        and focus_owner in [
-            self.prompt,
-            self.NarratorToggle,
-            self.NarratorNext
-        ]
-    ):
-        self.drag_viewport._input(event)
 
 
 ## As the FSManager - the filesystem - is not a scene,
