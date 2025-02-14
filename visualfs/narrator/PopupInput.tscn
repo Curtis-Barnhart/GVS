@@ -25,21 +25,21 @@ patch_margin_bottom = 26
 layout_mode = 1
 offset_right = 730.0
 offset_bottom = 152.0
+focus_mode = 1
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(730, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_hb8h2")
 theme_override_font_sizes/font_size = 36
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="TextureButton" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
+[node name="Cancel" type="TextureButton" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 texture_normal = ExtResource("3_3fqrj")
 
-[node name="TextureButton2" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 6
-texture_normal = ExtResource("3_3fqrj")
+[connection signal="focus_exited" from="VBoxContainer" to="." method="_on_child_focus_exited"]
+[connection signal="focus_exited" from="VBoxContainer/LineEdit" to="." method="_on_child_focus_exited"]
+[connection signal="text_submitted" from="VBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="focus_exited" from="VBoxContainer/Cancel" to="." method="_on_child_focus_exited"]
+[connection signal="pressed" from="VBoxContainer/Cancel" to="." method="_on_cancel_pressed"]
