@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://dq8b8lpiitxh4"]
+
+[ext_resource type="Texture2D" uid="uid://do7vmtvdv60x6" path="res://narrator/assets/continue.svg" id="1_gh6c7"]
+[ext_resource type="Script" path="res://visualfs/narrator/narrator.gd" id="1_km8bo"]
+
+[node name="Narrator" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_km8bo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[font_size=36][center]lorem ipsum[/center][/font_size]"
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("1_gh6c7")
