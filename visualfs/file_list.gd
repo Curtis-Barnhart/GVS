@@ -1,10 +1,11 @@
 extends Node2D
 
 const FileListScene = preload("res://visualfs/FileList.tscn")
+const Path = GVSClassLoader.gvm.filesystem.Path
 const File = GVSClassLoader.visual.file_nodes.File
 const FileList = GVSClassLoader.visualfs.FileList
 
-var _all_files: Array[File] = []
+var _all_files: Array = []
 
 
 static func make_new() -> FileList:
@@ -35,11 +36,29 @@ func _ready() -> void:
     pass # Replace with function body.
 
 
-func extend_files(files: Array[File]) -> void:
-    for file in files:
-        self.add_child(file)
-        file.interp_movement(FileList._index_to_vec(len(self._all_files)))
-        self._all_files.append(file)
+# TODO: update to write in file name with right size
+func add_file(path: Path) -> void:
+    assert(
+        path.as_string() not in self._all_files.map(func (pair): return pair[0]),
+        "Path already contained in FileList"
+    )
+    var file: File = File.make_new()
+    self.add_child(file)
+    file.label.text = path.as_string(false) # TODO: this is the part to replace
+    file.interp_movement(FileList._index_to_vec(len(self._all_files)))
+    self._all_files.append([path.as_string(false), file])
+
+
+func remove_file(path: Path) -> void:
+    var index: int = self._all_files.map(func (pair): return pair[0]).find(path.as_string(false))
+    assert(index != -1, "FileList didn't contain file to remove")
+    var file: File = self._all_files[index][1]
+    file.queue_free()
+    self._all_files.remove_at(index)
+    
+    for new_index in range(index, self._all_files.size()):
+        self._all_files[new_index][1].interp_movement(FileList._index_to_vec(new_index))
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
