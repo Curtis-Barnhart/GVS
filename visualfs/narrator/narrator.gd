@@ -22,6 +22,7 @@ func setup(
     fs_manager: FSManager
 ):
     self._fs_man = fs_manager
+    
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
