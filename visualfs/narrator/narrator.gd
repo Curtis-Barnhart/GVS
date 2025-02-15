@@ -15,7 +15,7 @@ func user_dialog(text_callback: Callable, cancel_callback: Callable) -> void:
     var popup: PopupInput = PopupInput.make_new()
     popup.user_input.connect(text_callback)
     popup.user_cancelled.connect(cancel_callback)
-    self.add_child(popup)
+    popup.popup(self)
 
 
 func setup(

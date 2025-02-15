@@ -11,8 +11,8 @@ signal user_input(msg: String)
 signal user_cancelled
 
 @onready var _border: NinePatchRect = $NinePatchRect
-@onready var _container: VBoxContainer = $VBoxContainer
 @onready var _ledit: LineEdit = $VBoxContainer/LineEdit
+@onready var _container: VBoxContainer = $VBoxContainer
 @onready var _cancel_button: TextureButton = $VBoxContainer/Cancel
 
 
