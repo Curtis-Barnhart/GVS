@@ -13,6 +13,10 @@ func add_to_scene(node: CanvasItem) -> void:
     $SubViewport/SubSceneRoot.add_child(node)
 
 
+func node_from_scene(name: NodePath) -> Node:
+    return $SubViewport/SubSceneRoot.get_node(name)
+
+
 ## moves camera smoothly to location `loc`.
 ##
 ## @param loc: location to move the camera to.
