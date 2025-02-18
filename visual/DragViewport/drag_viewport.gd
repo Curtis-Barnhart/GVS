@@ -11,7 +11,6 @@ extends SubViewportContainer
 ## @param node: Node to add to the viewport.
 func add_to_scene(node: CanvasItem) -> void:
     $SubViewport/SubSceneRoot.add_child(node)
-    #node.position = Vector2(5000, 5000)
 
 
 ## moves camera smoothly to location `loc`.

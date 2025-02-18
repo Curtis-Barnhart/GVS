@@ -11,16 +11,25 @@ const Path = GVSClassLoader.gvm.filesystem.Path
 func _ready() -> void:
     while true:
         var t: float = 0.25
-        for x in range(32):
+        for x in range(64):
             self.f_list.add_file(Path.new([str(x)]))
             await get_tree().create_timer(t).timeout
             t = max(0.95*t, 1.0/16)
         
         t = 2
-        var nums = range(32)
-        for _a in range(32):
+        var nums = range(64)
+        for _a in range(16):
             await get_tree().create_timer(t).timeout
             var index: int = randi() % nums.size()
+            self.f_list.remove_file(Path.new([str(nums[index])]))
+            nums.remove_at(index)
+            index = randi() % nums.size()
+            self.f_list.remove_file(Path.new([str(nums[index])]))
+            nums.remove_at(index)
+            index = randi() % nums.size()
+            self.f_list.remove_file(Path.new([str(nums[index])]))
+            nums.remove_at(index)
+            index = randi() % nums.size()
             self.f_list.remove_file(Path.new([str(nums[index])]))
             nums.remove_at(index)
 
