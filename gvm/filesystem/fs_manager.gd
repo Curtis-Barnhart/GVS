@@ -121,7 +121,7 @@ func create_file(p: Path_C) -> bool:
         return false
    
     p = contain_dir.get_path().extend(new_file_name)
-    contain_dir.files.push_back(File.new(new_file_name))
+    contain_dir.files.push_back(File.new(new_file_name, contain_dir))
     self.created_file.emit(p)
     return true
 
@@ -161,14 +161,14 @@ func remove_file(p: Path_C) -> bool:
     if file == null:
         return false
     
-    var parent: Directory_C = self._get_dir(p.base())
+    var parent: Directory_C = file._parent
     var i: int = parent.files.find(file)
     parent.files.remove_at(i)
     self.removed_file.emit(parent.get_path().extend(p.last()))
     return true
 
 
-## get a list of files in a directory
+## get a list of directories in a directory
 ##
 ## @param p: Non null path to the directory to read.
 ## @return: (Array[Path_C]) an array of FSPaths to all directories contained in p.
@@ -183,6 +183,10 @@ func read_dirs_in_dir(p: Path_C) -> Array:
     ]
 
 
+## get a list of files in a directory
+##
+## @param p: Non null path to the directory to read.
+## @return: (Array[Path_C]) an array of FSPaths to all files contained in p.
 func read_files_in_dir(p: Path_C) -> Array:
     var dir: Directory_C = self._get_dir(p.base())
     if dir == null:
@@ -191,6 +195,11 @@ func read_files_in_dir(p: Path_C) -> Array:
     return dir.files.map(func (f): return f.get_path())
 
 
+## get a list of files and directories in a directory
+##
+## @param p: Non null path to the directory to read.
+## @return: (Array[Path_C]) an array of FSPaths to all directories
+##          and files contained in p.
 func read_all_in_dir(p: Path_C) -> Array:
     return self.read_dirs_in_dir(p) + self.read_files_in_dir(p)
 
