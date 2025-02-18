@@ -40,7 +40,7 @@ func local_dir(local_name: String) -> Directory:
 
 func local_file(local_name: String) -> File:
     for f in self.files:
-        if f.name == local_name:
+        if f._name == local_name:
             return f
     return null
 

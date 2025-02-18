@@ -1,8 +1,7 @@
 extends "res://narrator/lesson/checkpoint.gd"
 
 ## Contained in parent class
-# const ClassLoader = preload("res://gvs_class_loader.gd")
-const Path = ClassLoader.gvm.filesystem.Path
+const Path = GVSClassLoader.gvm.filesystem.Path
 
 
 func start() -> void:

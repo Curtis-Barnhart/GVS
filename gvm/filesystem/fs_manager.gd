@@ -5,16 +5,18 @@
 
 extends RefCounted
 
-const ClassLoader = preload("res://gvs_class_loader.gd")
-const Directory_C = ClassLoader.gvm.filesystem.Directory
-const Path_C = ClassLoader.gvm.filesystem.Path
-const FSManager = ClassLoader.gvm.filesystem.Manager
+const Directory_C = GVSClassLoader.gvm.filesystem.Directory
+const File = GVSClassLoader.gvm.filesystem.File
+const Path_C = GVSClassLoader.gvm.filesystem.Path
+const FSManager = GVSClassLoader.gvm.filesystem.Manager
 
 
 ## path is guaranteed to be in simplest form
 signal created_dir(path: Path_C)
+signal created_file(path: Path_C)
 ## path is guaranteed to be in simplest form
 signal removed_dir(path: Path_C)
+signal removed_file(path: Path_C)
 
 # Guaranteed non null
 var _root: Directory_C = Directory_C.new("", null)
@@ -71,6 +73,10 @@ func _get_dir(p: Path_C) -> Directory_C:
     return self._root.get_dir(p)
 
 
+func _get_file(p: Path_C) -> File:
+    return self._root.get_file(p)
+
+
 ## Create a single directory as a subdirectory of an existing directory,
 ## then emits a single with a path to the created dictionary.
 ##
@@ -88,7 +94,8 @@ func create_dir(p: Path_C) -> bool:
     var contain_dir: Directory_C = self._get_dir(contain_path)
     if contain_dir == null:
         return false
-    if new_dir_name in contain_dir.subdirs.map(func (sd): return sd.name):
+    if new_dir_name in self.read_all_in_dir(contain_path)       \
+                           .map(func (path): return path.last()):
         return false
    
     p = contain_dir.get_path().extend(new_dir_name)
@@ -97,9 +104,26 @@ func create_dir(p: Path_C) -> bool:
     return true
 
 
-#func create_dir_nested(p: Path_C) -> bool:
-    #if self.contains_dir(p):
-        #return false
+func create_file(p: Path_C) -> bool:
+    var contain_path: Path_C = p.base()
+    var new_file_name: String = p.last()
+    
+    if new_file_name == "":
+        return false
+    
+    # Only create the new file if the claimed parent is a real directory
+    # and that parent does not already contain anything with the same name.
+    var contain_dir: Directory_C = self._get_dir(contain_path)
+    if contain_dir == null:
+        return false
+    if new_file_name in self.read_all_in_dir(contain_path)       \
+                            .map(func (path): return path.last()):
+        return false
+   
+    p = contain_dir.get_path().extend(new_file_name)
+    contain_dir.files.push_back(File.new(new_file_name))
+    self.created_file.emit(p)
+    return true
 
 
 #func move(p: Path_C) -> bool:
@@ -132,8 +156,16 @@ func remove_dir(p: Path_C) -> bool:
     return true
 
 
-#func remove_recursive(p: Path_C) -> bool:
-    #return false
+func remove_file(p: Path_C) -> bool:
+    var file: File = self._get_file(p)
+    if file == null:
+        return false
+    
+    var parent: Directory_C = self._get_dir(p.base())
+    var i: int = parent.files.find(file)
+    parent.files.remove_at(i)
+    self.removed_file.emit(parent.get_path().extend(p.last()))
+    return true
 
 
 ## get a list of files in a directory
@@ -145,7 +177,22 @@ func read_dirs_in_dir(p: Path_C) -> Array:
     if dir == null:
         return []
     
-    return dir.subdirs.map(func (sd): return sd.get_path())
+    return dir.subdirs.map(func (sd): return sd.get_path()) + [
+        dir.get_path().extend("."),
+        dir.get_path().extend("..")
+    ]
+
+
+func read_files_in_dir(p: Path_C) -> Array:
+    var dir: Directory_C = self._get_dir(p.base())
+    if dir == null:
+        return []
+    
+    return dir.files.map(func (f): return f.get_path())
+
+
+func read_all_in_dir(p: Path_C) -> Array:
+    return self.read_dirs_in_dir(p) + self.read_files_in_dir(p)
 
 
 ## Take a path, which may contain "." and ".." and return an absolute path
