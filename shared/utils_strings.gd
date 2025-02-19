@@ -51,3 +51,18 @@ static func extract_word(s: String, index: int) -> String:
         end += 1
 
     return s.substr(start, end - start)
+
+
+## Helper function to format text with BBCode markup.
+## first element of text should be the title (String).
+## every subsequent element should be an array of strings,
+## where each array is one paragraph in full.
+## the elements of each array will be joined with spaces,
+## and the arrays themselves with two newlines and 4 spaces for indentation.
+##
+## @param text: data structure with strings to format.
+## @return: formatted string with BBCode markup.
+static func make_article(text) -> String:
+    return "[font=res://shared/JetBrainsMonoNerdFontMono-Regular.ttf][font_size=48][center][color=steel blue]%s[/color][/center][/font_size][font_size=36]\n\n    " % text[0] + \
+        "\n\n    ".join(text.slice(1).map(func (sent): return " ".join(sent))) + \
+        "[/font_size][/font]"

@@ -27,7 +27,7 @@ func setup(fs_man: FSManager, shell: Shell) -> void:
     self._shell = shell
     self.load_checkpoint(
         load("res://narrator/lesson/navigation/introduction_0.gd").new(
-            self._fs_man, self.label, self._shell, $VBoxContainer/Next
+            self._fs_man, self.label, self._shell, self.next
         )
     )
 
