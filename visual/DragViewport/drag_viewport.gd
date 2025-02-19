@@ -14,6 +14,8 @@ func add_to_scene(node: CanvasItem) -> void:
 
 
 func node_from_scene(name: NodePath) -> Node:
+    for n in $SubViewport/SubSceneRoot.get_children():
+        print("Name: ", n.name)
     return $SubViewport/SubSceneRoot.get_node(name)
 
 

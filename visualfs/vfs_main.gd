@@ -20,6 +20,8 @@ func _ready() -> void:
     
     for x in range(62):
         fs_man.create_file(Path.new([str(x)]))
+    
+    self.narrator.setup(fs_man, self.viewport)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
