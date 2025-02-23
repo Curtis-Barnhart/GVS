@@ -5,6 +5,7 @@ const Path = GVSClassLoader.gvm.filesystem.Path
 const File = GVSClassLoader.visual.file_nodes.File
 const FileList = GVSClassLoader.visualfs.FileList
 
+## [name/path of file, file object]
 var _all_files: Array = []
 
 
@@ -36,6 +37,15 @@ func _ready() -> void:
     pass # Replace with function body.
 
 
+func get_file(path: Path) -> File:
+    var index: int = self._all_files                       \
+                         .map(func (pair): return pair[0]) \
+                         .find(path.as_string(false))
+    if index == -1:
+        return null
+    return self._all_files[index][1]
+
+
 # TODO: update to write in file name with right size
 func add_file(path: Path) -> void:
     assert(
@@ -50,7 +60,9 @@ func add_file(path: Path) -> void:
 
 
 func remove_file(path: Path) -> void:
-    var index: int = self._all_files.map(func (pair): return pair[0]).find(path.as_string(false))
+    var index: int = self._all_files                       \
+                         .map(func (pair): return pair[0]) \
+                         .find(path.as_string(false))
     assert(index != -1, "FileList didn't contain file to remove")
     var file: File = self._all_files[index][1]
     file.queue_free()
@@ -58,7 +70,6 @@ func remove_file(path: Path) -> void:
     
     for new_index in range(index, self._all_files.size()):
         self._all_files[new_index][1].interp_movement(FileList._index_to_vec(new_index))
-
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

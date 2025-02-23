@@ -11,9 +11,6 @@ var _cur_checkpt: Checkpoint
 @onready var _next_button: TextureButton = $VBoxContainer/TextureButton
 @onready var _text: RichTextLabel = $VBoxContainer/RichTextLabel
 
-# Called when the node enters the scene tree for the first time.
-#func _ready() -> void:
-
 
 func user_dialog(text_callback: Callable, cancel_callback: Callable) -> void:
     var popup: PopupInput = PopupInput.make_new()
@@ -29,15 +26,9 @@ func setup(
     self._fs_man = fs_manager
     self._viewport = viewport
     var first_checkpoint: Checkpoint = load("res://visualfs/narrator/lesson/files/file_0.gd").new(
-        self._fs_man, self._next_button, self._text
+        self._fs_man, self._next_button, self._text, self._viewport
     )
     first_checkpoint.start()
-    #self.load_checkpoint(
-        #load("res://visualfs/narrator/lesson/files/file_0.gd").new(
-            #self._fs_man, self._next_button, self._text
-        #)
-    #)
-
 
 
 func load_checkpoint(c: Checkpoint) -> void:
