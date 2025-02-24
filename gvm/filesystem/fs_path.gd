@@ -2,8 +2,7 @@
 ## All methods on Path are const.
 extends RefCounted
 
-const ClassLoader = preload("res://gvs_class_loader.gd")
-const Path = ClassLoader.gvm.filesystem.Path
+const Path = GVSClassLoader.gvm.filesystem.Path
 
 ## ROOT... I guess it saves a few characters? Hopefully it's more readable.
 static var ROOT: Path = Path.new([])
@@ -71,8 +70,6 @@ func extend(name: String) -> Path:
 ## @param absolute: Whether the path is absolute (i.e. begins with "/").
 ## @return: string representation of this path.
 func as_string(absolute: bool = true) -> String:
-    if self.degen():
-        return "/"
     if absolute:
         return "/" + "/".join(self._segments)
     return "/".join(self._segments)
