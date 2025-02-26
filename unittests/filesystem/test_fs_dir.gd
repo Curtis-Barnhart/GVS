@@ -3,7 +3,6 @@ extends GutTest
 const Dir = GVSClassLoader.gvm.filesystem.Directory
 const File = GVSClassLoader.gvm.filesystem.File
 
-var root := Dir.new("", null)
 var map: Dictionary = Dictionary()
 
 
@@ -15,7 +14,7 @@ var map: Dictionary = Dictionary()
 #                             .----.^------.
 #                           file3 file4 file5
 func before_all() -> void:
-    var root := self.root
+    var root := Dir.new("", null)
     root.parent = root
     self.map["root"] = root
     var sd0 := Dir.new("two", root)
@@ -49,7 +48,7 @@ func before_all() -> void:
 
 # remove the cyclic reference before freeing
 func after_all() -> void:
-    self.root.parent = null
+    self.map["root"].parent = null
 
 
 func test_get_path() -> void:
@@ -67,69 +66,47 @@ func test_get_path() -> void:
 
 func test_local_dir() -> void:
     # Tests on root node
-    assert_eq(
-        (self.map["root"] as Dir).local_dir("two"),
-        self.map["two"]
-    )
-    assert_eq(
-        (self.map["root"] as Dir).local_dir("three"),
-        self.map["three"]
-    )
-    assert_eq(
-        (self.map["root"] as Dir).local_dir("four"),
-        null
-    )
-    assert_eq(
-        (self.map["root"] as Dir).local_dir("three/four"),
-        null
-    )
-    assert_eq(
-        (self.map["root"] as Dir).local_dir("/"),
-        null
-    )
-    assert_eq(
-        (self.map["root"] as Dir).local_dir("."),
-        self.map["root"]
-    )
-    assert_eq(
-        (self.map["root"] as Dir).local_dir(".."),
-        self.map["root"]
-    )
+    assert_eq((self.map["root"] as Dir).local_dir("two"), self.map["two"])
+    assert_eq((self.map["root"] as Dir).local_dir("three"), self.map["three"])
+    assert_eq((self.map["root"] as Dir).local_dir("four"), null)
+    assert_eq((self.map["root"] as Dir).local_dir("three/four"), null)
+    assert_eq((self.map["root"] as Dir).local_dir(""), null)
+    assert_eq((self.map["root"] as Dir).local_dir("."), self.map["root"])
+    assert_eq((self.map["root"] as Dir).local_dir(".."), self.map["root"])
 
     # Tests for /three
-    assert_eq(
-        (self.map["three"] as Dir).local_dir("two"),
-        null
-    )
-    assert_eq(
-        (self.map["three"] as Dir).local_dir("/"),
-        null
-    )
-    assert_eq(
-        (self.map["three"] as Dir).local_dir("three"),
-        null
-    )
-    assert_eq(
-        (self.map["three"] as Dir).local_dir("four"),
-        self.map["four"]
-    )
-    assert_eq(
-        (self.map["three"] as Dir).local_dir("../three"),
-        null
-    )
-    assert_eq(
-        (self.map["three"] as Dir).local_dir("file1"),
-        null
-    )
-    assert_eq(
-        (self.map["three"] as Dir).local_dir("file2"),
-        null
-    )
-    assert_eq(
-        (self.map["three"] as Dir).local_dir("."),
-        self.map["three"]
-    )
-    assert_eq(
-        (self.map["three"] as Dir).local_dir(".."),
-        self.map["three"]
-    )
+    assert_eq((self.map["three"] as Dir).local_dir("two"), null)
+    assert_eq((self.map["three"] as Dir).local_dir(""), null)
+    assert_eq((self.map["three"] as Dir).local_dir("three"), null)
+    assert_eq((self.map["three"] as Dir).local_dir("four"), self.map["four"])
+    assert_eq((self.map["three"] as Dir).local_dir("../three"), null)
+    assert_eq((self.map["three"] as Dir).local_dir("file1"), null)
+    assert_eq((self.map["three"] as Dir).local_dir("file2"), null)
+    assert_eq((self.map["three"] as Dir).local_dir("."), self.map["three"])
+    assert_eq((self.map["three"] as Dir).local_dir(".."), self.map["root"])
+
+
+func test_local_file() -> void:
+    # Tests on root node
+    assert_eq((self.map["root"] as Dir).local_file("two"), null)
+    assert_eq((self.map["root"] as Dir).local_file("two/file0"), null)
+    assert_eq((self.map["root"] as Dir).local_file("file0"), null)
+    assert_eq((self.map["root"] as Dir).local_file("three"), null)
+    assert_eq((self.map["root"] as Dir).local_file("four"), null)
+    assert_eq((self.map["root"] as Dir).local_file("three/four"), null)
+    assert_eq((self.map["root"] as Dir).local_file(""), null)
+    assert_eq((self.map["root"] as Dir).local_file("."), null)
+    assert_eq((self.map["root"] as Dir).local_file(".."), null)
+
+    # Tests for /three
+    assert_eq((self.map["three"] as Dir).local_file("two"), null)
+    assert_eq((self.map["three"] as Dir).local_file(""), null)
+    assert_eq((self.map["three"] as Dir).local_file("three"), null)
+    assert_eq((self.map["three"] as Dir).local_file("four"), null)
+    assert_eq((self.map["three"] as Dir).local_file("../three"), null)
+    assert_eq((self.map["three"] as Dir).local_file("file1"), self.map["file1"])
+    assert_eq((self.map["three"] as Dir).local_file("file2"), self.map["file2"])
+    assert_eq((self.map["three"] as Dir).local_file("file3"), null)
+    assert_eq((self.map["three"] as Dir).local_file("four/file3"), null)
+    assert_eq((self.map["three"] as Dir).local_file("."), null)
+    assert_eq((self.map["three"] as Dir).local_file(".."), null)
