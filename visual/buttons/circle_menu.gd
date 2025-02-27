@@ -15,7 +15,7 @@ func popup(tree_access: Node) -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
     self._children = self.get_children() \
-                         .filter(func (child): return child is Sprite2D)
+                         .filter(func (child: Node) -> bool: return child is Sprite2D)
     
     var segment_width: float = 2*PI / len(self._children)
     for i in range(len(self._children)):

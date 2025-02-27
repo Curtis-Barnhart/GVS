@@ -183,7 +183,7 @@ func _on_prompt_caret_changed() -> void:
         var last_char: int = StringsUtil.prev_f(
             self.prompt.text,
             self.prompt.get_caret_column() - 1,
-            func (c): return c != " "
+            func (c: String) -> bool: return c != " "
         )
         
         # If there is no word to analyze at all (no previous non space character),

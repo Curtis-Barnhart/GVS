@@ -30,7 +30,7 @@ func _ready() -> void:
     self.gvshell.setup(file_manager)
     $Right/Narrator.setup(file_manager, self.gvshell)
     self.gvshell.cwd_changed.connect(
-        func (path, _old_path):
+        func (path: Path, _old_path: Path) -> void:
         self.drag_viewport.move_cam_to(file_tree.node_rel_pos_from_path(path))
     )
     self.gvshell.cwd_changed.connect(file_tree.change_cwd)
@@ -49,5 +49,5 @@ func _ready() -> void:
     #test.create_dir(FSPath.new(["dir1", "1", "1"]))
 
     $GvShell/ScrollContainer/VBoxContainer/Prompt.focus_released.connect(
-        $Right/Narrator/VBoxContainer/Toggle.accept_focus
+        $Right/Narrator/VBoxContainer/Toggle.grab_focus
     )

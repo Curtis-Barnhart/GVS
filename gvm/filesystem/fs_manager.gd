@@ -95,7 +95,7 @@ func create_dir(p: Path_C) -> bool:
     if contain_dir == null:
         return false
     if new_dir_name in self.read_all_in_dir(contain_path)       \
-                           .map(func (path): return path.last()):
+                           .map(func (path: Path_C) -> String: return path.last()):
         return false
    
     p = contain_dir.get_path().extend(new_dir_name)
@@ -117,13 +117,31 @@ func create_file(p: Path_C) -> bool:
     if contain_dir == null:
         return false
     if new_file_name in self.read_all_in_dir(contain_path)       \
-                            .map(func (path): return path.last()):
+                            .map(func (path: Path_C) -> String: return path.last()):
         return false
    
     p = contain_dir.get_path().extend(new_file_name)
     contain_dir.files.push_back(File.new(new_file_name, contain_dir))
     self.created_file.emit(p)
     return true
+
+
+func write_file(p: Path_C, text: String) -> bool:
+    var file: File = self._get_file(p)
+    if file != null:
+        file._contents = text
+        return true
+    return false
+
+
+# I have been troubled as to whether this should handle files not existing
+# differently. Unfortunately, Godot does not support nullable values.
+
+func read_file(p: Path_C) -> String:
+    var file: File = self._get_file(p)
+    if file != null:
+        return file._contents
+    return ""
 
 
 #func move(p: Path_C) -> bool:
@@ -181,7 +199,7 @@ func read_dirs_in_dir(p: Path_C) -> Array:
     if dir == null:
         return []
     
-    return dir.subdirs.map(func (sd): return sd.get_path()) + [
+    return dir.subdirs.map(func (sd: Directory_C) -> Path_C: return sd.get_path()) + [
         dir.get_path().extend("."),
         dir.get_path().extend("..")
     ]
@@ -196,7 +214,7 @@ func read_files_in_dir(p: Path_C) -> Array:
     if dir == null:
         return []
     
-    return dir.files.map(func (f): return f.get_path())
+    return dir.files.map(func (f: File) -> Path_C: return f.get_path())
 
 
 ## get a list of files and directories in a directory

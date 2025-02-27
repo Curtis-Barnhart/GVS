@@ -27,7 +27,7 @@ const cwd_text: Texture2D = preload("res://visual/assets/cwd.svg")
 
 func highlight_path(origin: Path, path: Path) -> void:
     # TODO: make this better
-    for any_node in self.all_nodes.values():
+    for any_node: Directory_C in self.all_nodes.values():
         if any_node.path_glow:
             any_node.path_glow = false
             any_node.z_index = 0

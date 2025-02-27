@@ -49,7 +49,7 @@ func get_dir(path: Path) -> Directory:
     if path.degen():
         return null
     
-    var subdir = self.local_dir(path.head())
+    var subdir := self.local_dir(path.head())
     if subdir == null:
         return null
     
