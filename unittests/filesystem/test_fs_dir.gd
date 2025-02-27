@@ -2,6 +2,7 @@ extends GutTest
 
 const Dir = GVSClassLoader.gvm.filesystem.Directory
 const File = GVSClassLoader.gvm.filesystem.File
+const Path = GVSClassLoader.gvm.filesystem.Path
 
 var map: Dictionary = Dictionary()
 
@@ -110,3 +111,32 @@ func test_local_file() -> void:
     assert_eq((self.map["three"] as Dir).local_file("four/file3"), null)
     assert_eq((self.map["three"] as Dir).local_file("."), null)
     assert_eq((self.map["three"] as Dir).local_file(".."), null)
+
+
+func test_get_dir() -> void:
+    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["two"])), self.map["two"])
+    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["three"])), self.map["three"])
+    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["three", "four"])), self.map["four"])
+    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["four"])), self.map["four"])
+    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["..", "two"])), self.map["two"])
+    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["..", "three"])), self.map["three"])
+    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["four", ".."])), self.map["three"])
+    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["four", "file3"])), null)
+    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["four"])), null)
+
+
+func test_get_file() -> void:
+    assert_eq((self.map["two"] as Dir).get_file(Path.new(["file0"])), self.map["file0"])
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["file1"])), self.map["file1"])
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["file2"])), self.map["file2"])
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "file3"])), self.map["file3"])
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "file4"])), self.map["file4"])
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "file5"])), self.map["file5"])
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["..", "two", "file0"])), self.map["file0"])
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "..", "file3"])), null)
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["..", "three", "file1"])), self.map["file1"])
+    assert_eq((self.map["root"] as Dir).get_file(Path.new(["file0"])), null)
+    assert_eq((self.map["root"] as Dir).get_file(Path.new(["two"])), null)
+    assert_eq((self.map["root"] as Dir).get_file(Path.new(["three"])), null)
+    assert_eq((self.map["root"] as Dir).get_file(Path.new(["three", "four"])), null)
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four"])), null)
