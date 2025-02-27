@@ -144,7 +144,11 @@ func create_file(p: Path_C) -> bool:
 ## @return: true if directory was removed, false otherwise.
 func remove_dir(p: Path_C) -> bool:
     var dir: Directory_C = self._get_dir(p)
-    if dir == self._root or dir == null or (not dir.subdirs.is_empty()):
+    if (
+        dir == self._root
+        or dir == null
+        or not dir.is_empty()
+    ):
         return false
     
     p = self.reduce_path(p)
@@ -188,7 +192,7 @@ func read_dirs_in_dir(p: Path_C) -> Array:
 ## @param p: Non null path to the directory to read.
 ## @return: (Array[Path_C]) an array of FSPaths to all files contained in p.
 func read_files_in_dir(p: Path_C) -> Array:
-    var dir: Directory_C = self._get_dir(p.base())
+    var dir: Directory_C = self._get_dir(p)
     if dir == null:
         return []
     
