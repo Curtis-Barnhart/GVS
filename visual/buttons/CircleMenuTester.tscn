@@ -1,31 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://dg72at2atv1yy"]
+[gd_scene load_steps=4 format=3 uid="uid://dg72at2atv1yy"]
 
 [ext_resource type="Script" path="res://visual/buttons/circle_menu_tester.gd" id="1_4in83"]
-[ext_resource type="PackedScene" uid="uid://bbunind7pu871" path="res://visual/buttons/CircleMenu.tscn" id="1_ll3sj"]
 [ext_resource type="Texture2D" uid="uid://bd0kfksu5ed7n" path="res://visual/assets/directory.svg" id="2_ybh4h"]
 [ext_resource type="Texture2D" uid="uid://dj0b3p1c7mp6j" path="res://visual/assets/cwd.svg" id="3_cpajj"]
 
 [node name="CircleMenuTester" type="Node2D"]
 script = ExtResource("1_4in83")
 
-[node name="CircleMenu" parent="." instance=ExtResource("1_ll3sj")]
-offset_left = 473.0
-offset_top = 389.0
-offset_right = 597.0
-offset_bottom = 483.0
+[node name="TextureButton" type="TextureButton" parent="."]
+offset_left = 472.0
+offset_top = 384.0
+offset_right = 596.0
+offset_bottom = 478.0
+texture_normal = ExtResource("2_ybh4h")
+texture_hover = ExtResource("3_cpajj")
 
-[node name="Sprite2D" type="Sprite2D" parent="CircleMenu"]
-visible = false
-texture = ExtResource("3_cpajj")
-
-[node name="Sprite2D2" type="Sprite2D" parent="CircleMenu"]
-visible = false
-texture = ExtResource("3_cpajj")
-
-[node name="Sprite2D3" type="Sprite2D" parent="CircleMenu"]
-visible = false
-texture = ExtResource("3_cpajj")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(535, 436)
-texture = ExtResource("2_ybh4h")
+[connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]

@@ -2,19 +2,5 @@
 
 [ext_resource type="Script" path="res://visual/buttons/circle_menu.gd" id="1_ag7fp"]
 
-[node name="CircleMenu" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CircleMenu" type="Node2D"]
 script = ExtResource("1_ag7fp")
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_top = 100.0
-offset_right = 40.0
-offset_bottom = 123.0
-
-[connection signal="gui_input" from="." to="." method="_on_gui_input"]
