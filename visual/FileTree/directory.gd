@@ -113,7 +113,7 @@ static func make_new() -> Directory_C:
 ## @param label_str: the name to assign this directory.
 func setup(label_str: String) -> void:
     self.label.text = label_str
-    var label_size = JetBrainsFont.get_string_size(label_str, 0, -1, 36).x
+    var label_size = JetBrainsFont.get_string_size(label_str, HORIZONTAL_ALIGNMENT_LEFT, -1, 36).x
     self.width = max(
         $Area2D/CollisionShape2D.shape.get_rect().size.x,
         label_size
