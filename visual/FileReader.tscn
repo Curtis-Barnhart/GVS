@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://de6k6vo51os32"]
+
+[ext_resource type="Script" path="res://visual/file_reader.gd" id="1_8tq1f"]
+[ext_resource type="Texture2D" uid="uid://p2qtk5ccvwp1" path="res://shared/bordered.png" id="2_ufjp1"]
+
+[node name="FileReader" type="Control"]
+custom_minimum_size = Vector2(400, 600)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8tq1f")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ufjp1")
+patch_margin_left = 26
+patch_margin_top = 26
+patch_margin_right = 26
+patch_margin_bottom = 26
