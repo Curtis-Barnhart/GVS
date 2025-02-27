@@ -75,3 +75,7 @@ func get_file(path: Path) -> File:
         return null
     
     return subdir.get_file(rest)
+
+
+func is_empty() -> bool:
+    return self.files.is_empty() and self.subdirs.is_empty()
