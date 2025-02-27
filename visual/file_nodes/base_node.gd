@@ -55,7 +55,7 @@ static func make_new() -> BaseNode:
 ## @param label_str: the name to assign this directory.
 func setup(label_str: String) -> void:
     self.label.text = label_str
-    var label_size = JetBrainsFont.get_string_size(
+    var label_size := JetBrainsFont.get_string_size(
         label_str,
         HORIZONTAL_ALIGNMENT_CENTER,
         -1,
@@ -66,7 +66,9 @@ func setup(label_str: String) -> void:
         label_size
     ) + 40
     self.total_width = self.width
-    self.label.position.x = -label_size / 2
+    # I swapped out the lines below and just wanna make sure it still works
+    self.label.position += Vector2.LEFT * label_size / 2
+    #self.label.position.x = -label_size / 2
 
 
 # Called when the node enters the scene tree for the first time.

@@ -45,7 +45,7 @@ func run() -> int:
 func make_a_dir(name: String) -> int:
     var path: Path = self.cwd.as_cwd(name)
     var real_ancestor: Path = self.fs_man.real_ancestry(path)
-    var path_parent = path.base()
+    var path_parent: Path = path.base()
     
     if self.fs_man.contains_path(path):
         self.stdout.write("mkdir: cannot create directory ‘%s’: File exists\n" % name)

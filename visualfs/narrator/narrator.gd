@@ -22,7 +22,7 @@ func user_dialog(text_callback: Callable, cancel_callback: Callable) -> void:
 func setup(
     fs_manager: FSManager,
     viewport: DragViewport
-):
+) -> void:
     self._fs_man = fs_manager
     self._viewport = viewport
     var first_checkpoint: Checkpoint = load("res://visualfs/narrator/lesson/files/file_0.gd").new(

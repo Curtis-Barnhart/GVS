@@ -39,8 +39,8 @@ static func extract_word(s: String, index: int) -> String:
         return ""
 
     # Get bounds of word
-    var start: int = StringsUtil.prev_f(s, index, func (c): return c == " ")
-    var end: int = StringsUtil.next_f(s, index, func (c): return c == " ")
+    var start: int = StringsUtil.prev_f(s, index, func (c: String) -> bool: return c == " ")
+    var end: int = StringsUtil.next_f(s, index, func (c: String) -> bool: return c == " ")
     if start == -1:
         start = 0
     else:
@@ -62,7 +62,7 @@ static func extract_word(s: String, index: int) -> String:
 ##
 ## @param text: data structure with strings to format.
 ## @return: formatted string with BBCode markup.
-static func make_article(text) -> String:
+static func make_article(text: Array) -> String:
     return "[font=res://shared/JetBrainsMonoNerdFontMono-Regular.ttf][font_size=48][center][color=steel blue]%s[/color][/center][/font_size][font_size=36]\n\n    " % text[0] + \
-        "\n\n    ".join(text.slice(1).map(func (sent): return " ".join(sent))) + \
+        "\n\n    ".join(text.slice(1).map(func (sent: Array[String]) -> String: return " ".join(sent))) + \
         "[/font_size][/font]"

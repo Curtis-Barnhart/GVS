@@ -39,7 +39,7 @@ func _ready() -> void:
 
 func get_file(path: Path) -> File:
     var index: int = self._all_files                       \
-                         .map(func (pair): return pair[0]) \
+                         .map(func (pair: Array) -> String: return pair[0]) \
                          .find(path.as_string(false))
     if index == -1:
         return null
@@ -49,7 +49,8 @@ func get_file(path: Path) -> File:
 # TODO: update to write in file name with right size
 func add_file(path: Path) -> void:
     assert(
-        path.as_string() not in self._all_files.map(func (pair): return pair[0]),
+        path.as_string() not in
+        self._all_files.map(func (pair: Array) -> String: return pair[0]),
         "Path already contained in FileList"
     )
     var file: File = File.make_new()
@@ -61,7 +62,7 @@ func add_file(path: Path) -> void:
 
 func remove_file(path: Path) -> void:
     var index: int = self._all_files                       \
-                         .map(func (pair): return pair[0]) \
+                         .map(func (pair: Array) -> String: return pair[0]) \
                          .find(path.as_string(false))
     assert(index != -1, "FileList didn't contain file to remove")
     var file: File = self._all_files[index][1]

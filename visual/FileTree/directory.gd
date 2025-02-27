@@ -71,10 +71,10 @@ func add_subdir(subdir: Directory_C, subdir_name: String) -> void:
 ## Arrange the positions of my children directories so they are evenly spaced
 ## (taking into account their own children, so that no one's children overlap).
 func arrange_subnodes() -> void:
-    var offset: float = -self.total_width/2
+    var offset := -self.total_width/2
     # TODO: someday update this to check for files as well
-    for sd in self.get_children() \
-                  .filter(func (c): return is_instance_of(c, Directory_C)):
+    for sd: Directory_C in self.get_children() \
+                  .filter(func (c: Node) -> bool: return is_instance_of(c, Directory_C)):
         sd.interp_movement(Vector2(offset + (sd.total_width / 2), self.height))
         offset += sd.total_width
 
@@ -83,7 +83,7 @@ func arrange_subnodes() -> void:
 ##
 ## @param total_width_d: the change in my own width
 func total_width_notifier(total_width_d: float) -> void:
-    var parent = self.get_parent()
+    var parent := self.get_parent()
     if is_instance_of(parent, Directory_C):
         var parent_total_width_d: float = parent.modify_subwidth(total_width_d)
         if parent_total_width_d != 0:
@@ -113,7 +113,7 @@ static func make_new() -> Directory_C:
 ## @param label_str: the name to assign this directory.
 func setup(label_str: String) -> void:
     self.label.text = label_str
-    var label_size = JetBrainsFont.get_string_size(label_str, HORIZONTAL_ALIGNMENT_LEFT, -1, 36).x
+    var label_size := JetBrainsFont.get_string_size(label_str, HORIZONTAL_ALIGNMENT_LEFT, -1, 36).x
     self.width = max(
         $Area2D/CollisionShape2D.shape.get_rect().size.x,
         label_size
@@ -129,7 +129,7 @@ func _ready() -> void:
 
 ## Draws my connection to my parent (and highlights it if applicable).
 func _draw() -> void:
-    var parent = self.get_parent()
+    var parent := self.get_parent()
     if is_instance_of(parent, Directory_C):
         var lcolor: Color
         if self.path_glow:

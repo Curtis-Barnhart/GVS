@@ -45,7 +45,7 @@ func analyze_path(p_str: String, f_hidden: bool) -> int:
         FSManager.filetype.FILE:
             self.stdout.write(p_str + "\n")
         FSManager.filetype.DIR:
-            for child in self.fs_man.read_dirs_in_dir(path):
+            for child: Path in self.fs_man.read_dirs_in_dir(path):
                 var str_child: String = child.last()
                 if not f_hidden:
                     if not str_child.begins_with("."):
