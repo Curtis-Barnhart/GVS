@@ -9,7 +9,6 @@ const FileList = GVSClassLoader.visualfs.FileList
 const Menu = GVSClassLoader.visual.buttons.CircleMenu
 const File = GVSClassLoader.visual.file_nodes.File
 
-#@onready var _button: TextureButton = $TextureButton
 var _man: Manager = Manager.new()
 @onready var _viewport: DragViewport = $DragViewport
 var _ftree: FileList
@@ -28,13 +27,15 @@ func _ready() -> void:
         file_vis.connect_to_press(
             func () -> void:
                 var menu: Menu = Menu.make_new()
-                var read_file := Sprite2D.new()
-                read_file.texture = load("res://visual/assets/file.svg")
-                var write_file := Sprite2D.new()
-                write_file.texture = load("res://icon.svg")
-                menu.add_child(read_file)
-                menu.add_child(write_file)
-                file_vis._icon.disabled = true
+                var f0 := Sprite2D.new()
+                f0.texture = load("res://icon.svg")
+                menu.add_child(f0)
+                f0 = Sprite2D.new()
+                f0.texture = load("res://icon.svg")
+                menu.add_child(f0)
+                f0 = Sprite2D.new()
+                f0.texture = load("res://icon.svg")
+                menu.add_child(f0)
                 # golly this was a pain in the butt to realize im so dumb lol
                 # https://docs.godotengine.org/en/stable/tutorials/2d/2d_transforms.html#window-transform
                 menu.position = file_vis.get_viewport().get_screen_transform() * file_vis.get_global_transform_with_canvas() * Vector2.ZERO
