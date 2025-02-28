@@ -43,7 +43,7 @@ func start() -> void:
     self.next_button.disabled = true
 
 
-func _on_directory_made(path: Path):
+func _on_directory_made(path: Path) -> void:
     if path.as_string() == "/new_directory":
         self.next_button.disabled = false
 

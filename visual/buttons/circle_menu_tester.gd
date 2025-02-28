@@ -3,7 +3,7 @@ extends Node2D
 
 const CMenu = preload("res://visual/buttons/CircleMenu.tscn")
 var cmenu: Node2D = null
-@onready var _button = $TextureButton
+@onready var _button: TextureButton = $TextureButton
 
 
 func _on_texture_button_pressed() -> void:
@@ -23,5 +23,5 @@ func _on_texture_button_pressed() -> void:
     
     self.cmenu.popup(self)
     self._button.disabled = true
-    self.cmenu.menu_closed.connect(func (_x): self._button.disabled = false)
-    self.cmenu.menu_closed.connect(func (selection): print("Selected ", selection))
+    self.cmenu.menu_closed.connect(func (_x: int) -> void: self._button.disabled = false)
+    self.cmenu.menu_closed.connect(func (selection: int) -> void: print("Selected ", selection))

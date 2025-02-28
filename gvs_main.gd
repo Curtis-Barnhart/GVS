@@ -36,18 +36,6 @@ func _ready() -> void:
     self.gvshell.cwd_changed.connect(file_tree.change_cwd)
     self.gvshell.previewing_path.connect(file_tree.highlight_path)
 
-    #test.create_dir(FSPath.new(["dir0"]))
-    #test.create_dir(FSPath.new(["dir1"]))
-    #test.create_dir(FSPath.new(["dir2"]))
-    #test.create_dir(FSPath.new(["dir3"]))
-    #test.create_dir(FSPath.new(["dir0", "0"]))
-    #test.create_dir(FSPath.new(["dir0", "1"]))
-    #test.create_dir(FSPath.new(["dir1", "0"]))
-    #test.create_dir(FSPath.new(["dir1", "0"]))
-    #test.create_dir(FSPath.new(["dir1", "1"]))
-    #test.create_dir(FSPath.new(["dir1", "1", "0"]))
-    #test.create_dir(FSPath.new(["dir1", "1", "1"]))
-
     $GvShell/ScrollContainer/VBoxContainer/Prompt.focus_released.connect(
         $Right/Narrator/VBoxContainer/Toggle.grab_focus
     )
