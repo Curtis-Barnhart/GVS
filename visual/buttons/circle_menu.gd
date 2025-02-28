@@ -1,11 +1,18 @@
 extends Node2D
 
+const SelfScene = preload("res://visual/buttons/CircleMenu.tscn")
+const CircleMenu = GVSClassLoader.visual.buttons.CircleMenu
+
 var _children: Array
 var _rad_in: float = 60
 var _rad_out: float = 150
 var _selected: int = -1
 
 signal menu_closed(selection: int)
+
+
+static func make_new() -> CircleMenu:
+    return SelfScene.instantiate()
 
 
 func popup(tree_access: Node) -> void:
