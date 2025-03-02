@@ -17,7 +17,7 @@ static func _index_to_vec(index: int) -> Vector2:
     var ring: int = 1
     var ring_capacity: int = 6
     var segment: float = 2 * PI / 6
-    var diameter: float = 200
+    var diameter: float = 320
     
     if index == 0:
         return Vector2.ZERO
@@ -71,8 +71,3 @@ func remove_file(path: Path) -> void:
     
     for new_index in range(index, self._all_files.size()):
         self._all_files[new_index][1].interp_movement(FileList._index_to_vec(new_index))
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-    pass

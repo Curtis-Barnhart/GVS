@@ -31,11 +31,3 @@ func _init(
 func start() -> void:
     assert(false, "Checkpoint is an ABC that shouldn't have been instantiated.")
     return
-
-
-func load_checkpoint(c: Checkpoint) -> void:
-    # have to hold a reference so it's not deleted from memory while it waits lol
-    self.current_checkpoint = c
-    self.next.disabled = true
-    c.start()
-    c.completed.connect(self.load_checkpoint)

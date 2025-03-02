@@ -22,6 +22,4 @@ func _on_texture_button_pressed() -> void:
     self.cmenu.add_child(s)
     
     self.cmenu.popup(self)
-    self._button.disabled = true
-    self.cmenu.menu_closed.connect(func (_x: int) -> void: self._button.disabled = false)
     self.cmenu.menu_closed.connect(func (selection: int) -> void: print("Selected ", selection))

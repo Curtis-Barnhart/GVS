@@ -24,8 +24,8 @@ func _on_button_pressed() -> void:
 func _on_button_2_pressed() -> void:
     print("Popup made")
     var p: PopupInput = PopupInput.make_new()
-    p.user_input.connect(func (msg: String): print("User message: " + msg))
-    p.user_cancelled.connect(func (): print("User cancelled popup"))
+    p.user_input.connect(func (msg: String) -> void: print("User message: " + msg))
+    p.user_cancelled.connect(func () -> void: print("User cancelled popup"))
     p.popup(self)
 
 

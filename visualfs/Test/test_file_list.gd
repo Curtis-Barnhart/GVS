@@ -17,7 +17,7 @@ func _ready() -> void:
             t = max(0.95*t, 1.0/16)
         
         t = 2
-        var nums = range(64)
+        var nums: Array = range(64)
         for _a in range(16):
             await get_tree().create_timer(t).timeout
             var index: int = randi() % nums.size()
