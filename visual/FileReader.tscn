@@ -1,7 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://de6k6vo51os32"]
+[gd_scene load_steps=5 format=3 uid="uid://de6k6vo51os32"]
 
 [ext_resource type="Script" path="res://visual/file_reader.gd" id="1_8tq1f"]
-[ext_resource type="Texture2D" uid="uid://p2qtk5ccvwp1" path="res://shared/bordered.png" id="2_ufjp1"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_uikga"]
+[ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/TextBox.tres" id="4_sasgm"]
+
+[sub_resource type="Theme" id="Theme_e6cdw"]
+default_font = ExtResource("3_uikga")
+default_font_size = 36
 
 [node name="FileReader" type="Control"]
 custom_minimum_size = Vector2(400, 600)
@@ -13,19 +18,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8tq1f")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_ufjp1")
-patch_margin_left = 26
-patch_margin_top = 26
-patch_margin_right = 26
-patch_margin_bottom = 26
-
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -34,4 +26,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 2
+theme = SubResource("Theme_e6cdw")
+theme_override_styles/normal = ExtResource("4_sasgm")
 selection_enabled = true
