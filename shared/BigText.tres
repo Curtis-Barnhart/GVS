@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://b6yhu8vwprwt7"]
+
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="1_8wh2l"]
+
+[resource]
+default_font = ExtResource("1_8wh2l")
+default_font_size = 64
