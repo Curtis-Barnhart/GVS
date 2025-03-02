@@ -6,6 +6,7 @@ const Path = GVSClassLoader.gvm.filesystem.Path
 const File = GVSClassLoader.visual.file_nodes.File
 const Menu = GVSClassLoader.visual.buttons.CircleMenu
 const FileReader = GVSClassLoader.visual.FileReader
+const FileWriter = GVSClassLoader.visual.FileWriter
 const GPopup = GVSClassLoader.visual.popups.GVSPopup
 
 var _first_file := Path.new(["This is a file"])
@@ -20,10 +21,11 @@ func start() -> void:
     self._file_list.name = "FileList"
     
     # Connect file list to manager and add a file
-    var fname := self._first_file
     self._fs_man.created_file.connect(self._file_list.add_file)
     self._fs_man.removed_file.connect(self._file_list.remove_file)
-    self._fs_man.create_file(fname)
+    self._fs_man.create_file(self._first_file)
+    var file_written := self._fs_man.write_file(self._first_file, "hello world")
+    assert(file_written)
     var file_vis: File = self._file_list.get_file(self._first_file)
     assert(file_vis != null, "Could not find file in FileList that we just made.")
     
@@ -71,7 +73,7 @@ func menu_popup() -> void:
                 0:
                     self.file_read_popup()
                 1:
-                    self.file_read_popup()
+                    self.file_write_popup()
     )
 
 
@@ -86,9 +88,24 @@ func file_read_popup() -> void:
     popup.closing.connect(func () -> void: self._next_button.disabled = false)
 
 
+func file_write_popup() -> void:
+    var file_vis: File = self._file_list.get_file(self._first_file)
+    var writer := FileWriter.make_new()
+    var popup := GPopup.make_into_popup(writer, self._file_list)
+    popup.position = file_vis.get_viewport().get_screen_transform() \
+                    * file_vis.get_global_transform_with_canvas() \
+                    * Vector2.ZERO
+    writer.load_text(self._fs_man.read_file(self._first_file))
+    
+    writer.write.connect(
+        func (text: String) -> void:
+            var written: bool = self._fs_man.write_file(self._first_file, text)
+            assert(written)
+    )
+    writer.quit.connect(popup.close_popup)
+
+
 func finish() -> void:
-    self._file_list.get_file(self._first_file).disconnect_from_press(self.menu_popup)
-    self._next_button.pressed.disconnect(self.finish)
-    self.completed.emit(load("res://visualfs/narrator/lesson/completion.gd").new(
+    self.completed.emit(load("res://visualfs/narrator/lesson/files/file_01.gd").new(
         self._fs_man, self._next_button, self._text_display, self._viewport
     ))
