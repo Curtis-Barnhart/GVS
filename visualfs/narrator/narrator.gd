@@ -25,11 +25,11 @@ func setup(
 ) -> void:
     self._fs_man = fs_manager
     self._viewport = viewport
-    var first_checkpoint: Checkpoint = load("res://visualfs/narrator/lesson/files/file_0.gd").new(
-        self._fs_man, self._next_button, self._text, self._viewport
+    self.load_checkpoint(
+        load("res://visualfs/narrator/lesson/files/file_0.gd").new(
+            self._fs_man, self._next_button, self._text, self._viewport
+        )
     )
-    first_checkpoint.start()
-    self._cur_checkpt = first_checkpoint
 
 
 func load_checkpoint(c: Checkpoint) -> void:

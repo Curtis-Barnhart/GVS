@@ -5,6 +5,8 @@ const FileList = GVSClassLoader.visualfs.FileList
 const Path = GVSClassLoader.gvm.filesystem.Path
 const File = GVSClassLoader.visual.file_nodes.File
 const Menu = GVSClassLoader.visual.buttons.CircleMenu
+const FileReader = GVSClassLoader.visual.FileReader
+const GPopup = GVSClassLoader.visual.popups.GVSPopup
 
 var _first_file := Path.new(["This is a file"])
 var _file_list: FileList
@@ -27,7 +29,6 @@ func start() -> void:
     
     # Make sure continue button is disabled at start and only enables
     # after the user has read the file
-    self._next_button.disabled = true
     self._next_button.pressed.connect(self.finish)
     file_vis.connect_to_press(self.menu_popup)
     
@@ -68,14 +69,26 @@ func menu_popup() -> void:
         func (x: int) -> void:
             match x:
                 0:
-                    print("Selected 0")
+                    self.file_read_popup()
                 1:
-                    print("Selected 1")
+                    self.file_read_popup()
     )
 
 
+func file_read_popup() -> void:
+    var file_vis: File = self._file_list.get_file(self._first_file)
+    var reader := FileReader.make_new()
+    var popup := GPopup.make_into_popup(reader, self._file_list)
+    popup.position = file_vis.get_viewport().get_screen_transform() \
+                    * file_vis.get_global_transform_with_canvas() \
+                    * Vector2.ZERO
+    reader.load_text(self._fs_man.read_file(self._first_file))
+    popup.closing.connect(func () -> void: self._next_button.disabled = false)
+
+
 func finish() -> void:
-    #self._file_list.get_file(self._first_file).disconnect_from_press(self.menu_popup)
+    self._file_list.get_file(self._first_file).disconnect_from_press(self.menu_popup)
+    self._next_button.pressed.disconnect(self.finish)
     self.completed.emit(load("res://visualfs/narrator/lesson/completion.gd").new(
         self._fs_man, self._next_button, self._text_display, self._viewport
     ))
