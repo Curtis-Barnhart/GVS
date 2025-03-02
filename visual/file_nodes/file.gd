@@ -23,3 +23,7 @@ func _process(delta: float) -> void:
 
 func connect_to_press(functor: Callable) -> void:
     self._icon.pressed.connect(functor)
+
+
+func disconnect_from_press(functor: Callable) -> void:
+    self._icon.pressed.disconnect(functor)

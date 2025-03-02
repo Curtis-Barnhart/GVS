@@ -29,6 +29,7 @@ func setup(
         self._fs_man, self._next_button, self._text, self._viewport
     )
     first_checkpoint.start()
+    self._cur_checkpt = first_checkpoint
 
 
 func load_checkpoint(c: Checkpoint) -> void:
