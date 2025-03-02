@@ -4,8 +4,8 @@ const SelfScene = preload("res://visual/buttons/CircleMenu.tscn")
 const CircleMenu = GVSClassLoader.visual.buttons.CircleMenu
 
 var _children: Array
-var _rad_in: float = 60
-var _rad_out: float = 150
+var _rad_in: float = 100
+var _rad_out: float = 250
 var _selected: int = -1
 
 signal menu_closed(selection: int)
@@ -91,4 +91,4 @@ func _input(event: InputEvent) -> void:
         if new_select != self._selected:
             self._selected = new_select
             self.queue_redraw()
-    queue_redraw() # TODO: remove?
+    self.get_viewport().set_input_as_handled()
