@@ -18,9 +18,9 @@ func start() -> void:
     self._next_button.disabled = true
     (self._viewport.node_from_scene("FileList") as FileList) \
         .get_file(fname) \
-        .connect_to_press(func (): self._next_button.disabled = false)
+        .connect_to_press(func () -> void: self._next_button.disabled = false)
     
-    self._next_button.pressed.connect(func (): print("Button pressed!"))
+    self._next_button.pressed.connect(func () -> void: print("Button pressed!"))
     
     self._text_display.text = UtilString.make_article(
         [
@@ -38,3 +38,4 @@ func start() -> void:
             ]
         ]
     )
+    print(self._text_display)
