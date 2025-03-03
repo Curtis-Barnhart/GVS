@@ -9,7 +9,7 @@ const FileReader = GVSClassLoader.visual.FileReader
 const FileWriter = GVSClassLoader.visual.FileWriter
 const GPopup = GVSClassLoader.visual.popups.GVSPopup
 
-var _first_file := Path.new(["This is a file"])
+var _first_file := Path.new(["file0.txt"])
 var _file_list: FileList
 
 

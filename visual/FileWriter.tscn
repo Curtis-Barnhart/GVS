@@ -44,7 +44,7 @@ layout_mode = 2
 theme = ExtResource("6_kdcu1")
 theme_override_colors/font_color = Color(0.27451, 0.509804, 0.705882, 1)
 theme_override_styles/normal = ExtResource("7_3hnwp")
-text = "Write"
+text = "Quit"
 
 [node name="Write" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
