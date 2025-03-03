@@ -15,13 +15,12 @@ static func make_new() -> GVSPopup:
 
 static func make_into_popup(
     node: CanvasItem,
-    tree_access: Node,
     where: Vector2 = Vector2.ZERO
 ) -> GVSPopup:
     var p: GVSPopup = GVSPopup.make_new()
     p.add_to_scene(node)
     p.position = where
-    p.popup(tree_access)
+    p.popup()
     return p
 
 
@@ -40,8 +39,9 @@ func _gui_input(_event: InputEvent) -> void:
         self.close_popup()
 
 
-func popup(tree_access: Node) -> void:
-    tree_access.get_tree().get_root().add_child(self)
+func popup() -> void:
+    GVSGlobals.get_tree().get_root().add_child(self)
+    #tree_access.get_tree().get_root().add_child(self)
 
 
 func close_popup() -> void:
