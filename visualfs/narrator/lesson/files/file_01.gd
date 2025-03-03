@@ -62,7 +62,7 @@ func menu_popup() -> void:
 func file_read_popup() -> void:
     var file_vis: File = self._file_list.get_file(self._first_file)
     var reader := FileReader.make_new()
-    var popup := GPopup.make_into_popup(reader, self._file_list)
+    var popup := GPopup.make_into_popup(reader)
     popup.position = file_vis.get_viewport().get_screen_transform() \
                     * file_vis.get_global_transform_with_canvas() \
                     * Vector2.ZERO
@@ -72,7 +72,7 @@ func file_read_popup() -> void:
 func file_write_popup() -> void:
     var file_vis: File = self._file_list.get_file(self._first_file)
     var writer := FileWriter.make_new()
-    var popup := GPopup.make_into_popup(writer, self._file_list)
+    var popup := GPopup.make_into_popup(writer)
     popup.position = file_vis.get_viewport().get_screen_transform() \
                     * file_vis.get_global_transform_with_canvas() \
                     * Vector2.ZERO
@@ -90,6 +90,6 @@ func file_write_popup() -> void:
 
 
 func finish() -> void:
-    self.completed.emit(load("res://visualfs/narrator/lesson/completion.gd").new(
+    self.completed.emit(load("res://visualfs/narrator/lesson/files/file_02.gd").new(
         self._fs_man, self._next_button, self._text_display, self._viewport
     ))

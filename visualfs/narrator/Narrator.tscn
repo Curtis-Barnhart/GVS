@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://do7vmtvdv60x6" path="res://narrator/assets/continue.svg" id="1_gh6c7"]
 [ext_resource type="Script" path="res://visualfs/narrator/narrator.gd" id="1_km8bo"]
-[ext_resource type="Texture2D" uid="uid://ble8onr527ifk" path="res://icon.svg" id="3_jc5kt"]
+[ext_resource type="Texture2D" uid="uid://dlpsdwsxsptlt" path="res://icon.svg" id="3_jc5kt"]
 
 [node name="Narrator" type="Control"]
 layout_mode = 3
