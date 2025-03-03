@@ -9,17 +9,27 @@ const FileReader = GVSClassLoader.visual.FileReader
 const GPopup = GVSClassLoader.visual.popups.GVSPopup
 const FileWriter = GVSClassLoader.visual.FileWriter
 
-var _first_file := Path.new(["This is a file"])
 var _files := [
-    Path.new(["This is a file"]),
-    Path.new(["data.txt"]),
-    Path.new(["picture.png"]),
-    Path.new(["main.py"])
+    Path.new(["file0.txt"]),
+    Path.new(["file1.txt"]),
+    Path.new(["file2.txt"]),
+    Path.new(["file3.txt"])
 ]
 var _file_list: FileList
 
 
 func start() -> void:
+    self._text_display.text = UtilString.make_article(
+        [
+            "Multiple files",
+            [
+                "Write 'first' to file0.txt",
+                "'second' to file1.txt, 'third' to file2.txt,",
+                "and 'fourth' to file3.txt."
+            ],
+        ]
+    )
+    
     self._file_list = self._viewport.node_from_scene("FileList")
 
     for path: Path in self._files.slice(1):
@@ -29,15 +39,6 @@ func start() -> void:
     for path: Path in self._files:
         var vfile: File = self._file_list.get_file(path)
         vfile.connect_to_press(self.menu_popup_factory(path))
-
-    self._text_display.text = UtilString.make_article(
-        [
-            "Multiple files",
-            [
-                "Here are multiple files at once",
-            ],
-        ]
-    )
 
 
 func menu_popup_factory(file_path: Path) -> Callable:
@@ -90,8 +91,19 @@ func file_write_popup_factory(file_path: Path) -> Callable:
             func (text: String) -> void:
                 var written: bool = self._fs_man.write_file(file_path, text)
                 assert(written)
+                self.check_finished()
         )
         writer.quit.connect(popup.close_popup)
+
+
+func check_finished() -> void:
+    if (
+        self._fs_man.read_file(self._files[0]).strip_edges() == "first"
+        and self._fs_man.read_file(self._files[1]).strip_edges() == "second"
+        and self._fs_man.read_file(self._files[2]).strip_edges() == "third"
+        and self._fs_man.read_file(self._files[3]).strip_edges() == "fourth"
+    ):
+        self._next_button.disabled = false
 
 
 func finish() -> void:

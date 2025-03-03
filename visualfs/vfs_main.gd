@@ -15,8 +15,3 @@ const Narrator = GVSClassLoader.visualfs.narrator.Narrator
 func _ready() -> void:
     var fs_man: FSManager = FSManager.new()
     self.narrator.setup(fs_man, self.viewport)
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-    pass
