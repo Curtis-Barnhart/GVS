@@ -20,7 +20,7 @@ func start() -> void:
         [
             "Creating Files",
             [
-                "make a file",
+                "make a file called 'new_file'",
             ],
         ]
     )
