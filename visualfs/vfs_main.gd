@@ -3,7 +3,6 @@ extends HBoxContainer
 const FSManager = GVSClassLoader.gvm.filesystem.Manager
 const FileList = GVSClassLoader.visualfs.FileList
 const DragViewport = GVSClassLoader.visual.DragViewport.DragViewport
-const File = GVSClassLoader.visual.file_nodes.File
 const Path = GVSClassLoader.gvm.filesystem.Path
 const Narrator = GVSClassLoader.visualfs.narrator.Narrator
 

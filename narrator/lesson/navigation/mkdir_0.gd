@@ -1,6 +1,5 @@
 extends "res://narrator/lesson/checkpoint.gd"
 
-## Contained in parent class
 const Path = GVSClassLoader.gvm.filesystem.Path
 
 
@@ -50,7 +49,7 @@ func _on_directory_made(path: Path) -> void:
 
 func finished() -> void:
     self.completed.emit(
-        load("res://narrator/lesson/navigation/mkdir_1.gd").new(
+        preload("res://narrator/lesson/navigation/mkdir_1.gd").new(
             self.fs_man, self.text_screen, self.shell, self.next_button
         )
     )

@@ -1,8 +1,9 @@
 extends SubViewportContainer
 
+const CamType = preload("res://visual/DragViewport/camera_2d.gd")
 
 ## The camera for this viewport (there should only be one viewport)
-@onready var cam: Camera2D = $SubViewport/SubSceneRoot/Camera2D
+@onready var cam: CamType = $SubViewport/SubSceneRoot/Camera2D
 ## The camera's location before it starts getting dragged
 
 

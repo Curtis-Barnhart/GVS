@@ -2,7 +2,7 @@ extends Node2D
 
 const FileListScene = preload("res://visualfs/FileList.tscn")
 const Path = GVSClassLoader.gvm.filesystem.Path
-const File = GVSClassLoader.visual.file_nodes.File
+const File = GVSClassLoader.visual.file_nodes.BaseNode
 const FileList = GVSClassLoader.visualfs.FileList
 
 signal file_clicked(path: Path)
@@ -60,7 +60,7 @@ func add_file(path: Path) -> void:
     self._file_to_data[file] = self._all_data.back()
     self.add_child(file)
     
-    file.label.text = path.as_string(false) # TODO: this is the part to replace
+    file.setup(path.as_string(false))
     file.interp_movement(FileList._index_to_vec(self._all_data.size() - 1))
     
     file._icon.pressed.connect(func () -> void: self.file_clicked.emit(path))
@@ -74,7 +74,7 @@ func remove_file(path: Path) -> void:
     self._all_data.remove_at(index)
     self._name_to_data.erase(path.as_string())
     self._file_to_data.erase(path_file[1])
-    path_file[1].queue_free()
+    (path_file[1] as File).queue_free()
         
     for new_index in range(index, self._all_data.size()):
-        self._all_data[new_index][1].interp_movement(FileList._index_to_vec(new_index))
+        (self._all_data[new_index][1] as File).interp_movement(FileList._index_to_vec(new_index))

@@ -32,7 +32,7 @@ func run() -> int:
             for arg in arguments:
                 self.stdout.write("%s:\n" % arg)
                 if self.analyze_path(arg, f_hidden) == 1:
-                    self.failure = 1
+                    failure = 1
     
     return failure
 

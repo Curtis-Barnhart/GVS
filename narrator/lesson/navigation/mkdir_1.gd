@@ -41,7 +41,7 @@ func start() -> void:
 
 func finished() -> void:
     self.completed.emit(
-        load("res://narrator/lesson/navigation/mkdir_2.gd").new(
+        preload("res://narrator/lesson/navigation/mkdir_2.gd").new(
             self.fs_man, self.text_screen, self.shell, self.next_button
         )
     )

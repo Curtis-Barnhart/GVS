@@ -12,7 +12,7 @@ const down_arrow = preload("res://narrator/assets/down.svg")
 var expanded: bool = true
 var target_expanded: bool = true
 var expanding_time: float = 0
-@onready var min_size: float = $VBoxContainer/Toggle.size.y + 12
+@onready var min_size: float = ($VBoxContainer/Toggle as TextureButton).size.y + 12
 @onready var max_size: float = self.get_viewport_rect().end.y / 2
 @onready var label: RichTextLabel = $VBoxContainer/RichTextLabel
 @onready var next: Button = $VBoxContainer/Next
@@ -26,15 +26,10 @@ func setup(fs_man: FSManager, shell: Shell) -> void:
     self._fs_man = fs_man
     self._shell = shell
     self.load_checkpoint(
-        load("res://narrator/lesson/navigation/introduction_0.gd").new(
+        preload("res://narrator/lesson/navigation/introduction_0.gd").new(
             self._fs_man, self.label, self._shell, self.next
         )
     )
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-    pass
 
 
 func load_checkpoint(c: Checkpoint) -> void:

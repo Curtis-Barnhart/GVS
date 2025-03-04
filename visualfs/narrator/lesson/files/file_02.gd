@@ -3,13 +3,13 @@ extends "res://visualfs/narrator/lesson/checkpoint.gd"
 const UtilString = GVSClassLoader.shared.Strings
 const FileList = GVSClassLoader.visualfs.FileList
 const Path = GVSClassLoader.gvm.filesystem.Path
-const File = GVSClassLoader.visual.file_nodes.File
+const File = GVSClassLoader.visual.file_nodes.BaseNode
 const Menu = GVSClassLoader.visual.buttons.CircleMenu
 const FileReader = GVSClassLoader.visual.FileReader
 const GPopup = GVSClassLoader.visual.popups.GVSPopup
 const FileWriter = GVSClassLoader.visual.FileWriter
 
-var _files := [
+var _files: Array[Path] = [
     Path.new(["file0"]),
     Path.new(["file1"]),
     Path.new(["file2"]),
@@ -103,9 +103,11 @@ func check_finished() -> void:
 
 
 func finish() -> void:
-    self.completed.emit(load("res://visualfs/narrator/lesson/files/file_03.gd").new(
-        self._fs_man, self._next_button, self._text_display, self._viewport
-    ))
+    self.completed.emit(
+        preload("res://visualfs/narrator/lesson/files/file_03.gd").new(
+            self._fs_man, self._next_button, self._text_display, self._viewport
+        )
+    )
     assert(
         self.get_reference_count() == 1,
         "Not all references to file_02 removed before checkpoint exit."
