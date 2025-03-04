@@ -134,7 +134,6 @@ func menu_popup(file_path: Path) -> void:
 
 func delete_file_flow(path: Path) -> void:
     self._fs_man.remove_file(path)
-    self._next_button.disabled = false
 
 
 func create_file_flow(where: File) -> void:
