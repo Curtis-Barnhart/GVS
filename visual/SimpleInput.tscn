@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://cd2fva7cwd2u3"]
+
+[ext_resource type="Script" path="res://visual/simple_input.gd" id="1_vt3yq"]
+[ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/Button.tres" id="2_pl6y2"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_b2sq7"]
+[ext_resource type="Theme" uid="uid://b6yhu8vwprwt7" path="res://shared/BigText.tres" id="4_tey7h"]
+[ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/TextBox.tres" id="5_dtea2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3hgl2"]
+font = ExtResource("3_b2sq7")
+font_size = 36
+
+[node name="SimpleInput" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vt3yq")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_pl6y2")
+text = "lorem ipsum"
+label_settings = SubResource("LabelSettings_3hgl2")
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+theme = ExtResource("4_tey7h")
+theme_override_styles/normal = ExtResource("5_dtea2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Cancel" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme = ExtResource("4_tey7h")
+theme_override_styles/normal = ExtResource("2_pl6y2")
+text = "Cancel"
+
+[node name="Confirm" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme = ExtResource("4_tey7h")
+theme_override_styles/normal = ExtResource("2_pl6y2")
+text = "Confirm"
+
+[connection signal="text_submitted" from="LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="pressed" from="HBoxContainer/Cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="HBoxContainer/Confirm" to="." method="_on_confirm_pressed"]
