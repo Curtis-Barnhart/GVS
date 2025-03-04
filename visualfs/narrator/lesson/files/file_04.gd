@@ -10,17 +10,15 @@ const FileReader = GVSClassLoader.visual.FileReader
 const FileWriter = GVSClassLoader.visual.FileWriter
 const FCreateInput = GVSClassLoader.visual.SimpleInput
 
-const target_fname := "new_file"
-
 var _file_list: FileList
 
 
 func start() -> void:
     self._text_display.text = UtilString.make_article(
         [
-            "Creating Files",
+            "Deleting Files",
             [
-                "make a file",
+                "delete a file",
             ],
         ]
     )
@@ -34,6 +32,9 @@ func menu_popup(file_path: Path) -> void:
     var menu: Menu = Menu.make_new()
     var f0 := Sprite2D.new()
     var file_vis: File = self._file_list.get_file(file_path)
+    f0.texture = load("res://icon.svg")
+    menu.add_child(f0)
+    f0 = Sprite2D.new()
     f0.texture = load("res://icon.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
@@ -57,7 +58,14 @@ func menu_popup(file_path: Path) -> void:
                     self.file_write_popup(file_path)
                 2:
                     self.create_file_flow(file_vis)
+                3:
+                    self.delete_file_flow(file_path)
     )
+
+
+func delete_file_flow(path: Path) -> void:
+    self._fs_man.remove_file(path)
+    self._next_button.disabled = false
 
 
 func create_file_flow(where: File) -> void:
@@ -75,8 +83,6 @@ func create_file_flow(where: File) -> void:
     fname_input.user_entered.connect(
         func (msg: String) -> void:
             self._fs_man.create_file(Path.new([msg]))
-            if msg == target_fname:
-                self._next_button.disabled = false
             fname_popup.close_popup()
     )
 
@@ -109,10 +115,10 @@ func file_write_popup(path: Path) -> void:
 
 
 func finish() -> void:
-    self.completed.emit(load("res://visualfs/narrator/lesson/files/file_04.gd").new(
+    self.completed.emit(load("res://visualfs/narrator/lesson/files/file_05.gd").new(
         self._fs_man, self._next_button, self._text_display, self._viewport
     ))
     assert(
         self.get_reference_count() == 1,
-        "Not all references to file_03 removed before checkpoint exit."
+        "Not all references to file_04 removed before checkpoint exit."
     )

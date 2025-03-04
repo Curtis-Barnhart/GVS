@@ -8,7 +8,7 @@ const DragViewport = GVSClassLoader.visual.DragViewport.DragViewport
 var _fs_man: FSManager
 var _viewport: DragViewport
 var _cur_checkpt: Checkpoint
-@onready var _next_button: TextureButton = $VBoxContainer/TextureButton
+@onready var _next_button: Button = $VBoxContainer/TextureButton
 @onready var _text: RichTextLabel = $VBoxContainer/RichTextLabel
 
 

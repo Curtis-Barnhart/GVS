@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://dq8b8lpiitxh4"]
 
-[ext_resource type="Texture2D" uid="uid://do7vmtvdv60x6" path="res://narrator/assets/continue.svg" id="1_gh6c7"]
 [ext_resource type="Script" path="res://visualfs/narrator/narrator.gd" id="1_km8bo"]
-[ext_resource type="Texture2D" uid="uid://dlpsdwsxsptlt" path="res://icon.svg" id="3_jc5kt"]
+[ext_resource type="Theme" uid="uid://b6yhu8vwprwt7" path="res://shared/BigText.tres" id="2_bhvsl"]
+[ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/Button.tres" id="3_bsxgj"]
 
 [node name="Narrator" type="Control"]
 layout_mode = 3
@@ -27,8 +27,9 @@ size_flags_vertical = 3
 bbcode_enabled = true
 text = "[font_size=36][center]lorem ipsum[/center][/font_size]"
 
-[node name="TextureButton" type="TextureButton" parent="VBoxContainer"]
+[node name="TextureButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-texture_normal = ExtResource("1_gh6c7")
-texture_disabled = ExtResource("3_jc5kt")
+theme = ExtResource("2_bhvsl")
+theme_override_styles/normal = ExtResource("3_bsxgj")
+text = "Continue"

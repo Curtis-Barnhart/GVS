@@ -5,7 +5,7 @@ const Checkpoint = GVSClassLoader.visualfs.narrator.lesson.Checkpoint
 const DragViewport = GVSClassLoader.visual.DragViewport.DragViewport
 
 var _fs_man: FSManager
-var _next_button: TextureButton
+var _next_button: Button
 var _text_display: RichTextLabel
 var _viewport: DragViewport
 
@@ -19,7 +19,7 @@ signal completed(checkpoint: Checkpoint)
 
 func _init(
     fs_manager: FSManager,
-    next_button: TextureButton,
+    next_button: Button,
     text_label: RichTextLabel,
     viewport: DragViewport
 ) -> void:
