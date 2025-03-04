@@ -14,14 +14,14 @@ const MathUtil = ClassLoader.shared.Math
 ## and also would allow for mouse interaction more easily if we wanted in the future.
 @onready var area: Area2D = $Area2D
 ## height - used to calculate how far below me to put subdirs visually
-@onready var height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y + 120
+@onready var height: float = ($Area2D/CollisionShape2D as CollisionShape2D).shape.get_rect().size.y + 120
 ## width - used to calculate how far apart to print subobjects
 ## The width is whichever is wider - the folder icon or the name label
 var width: float
 ## Icon height gives the exact height of the icon (technically the area2d)
 ## which we use for drawing paths. The height variable has additional room
 ## for spacing, which icon_height does not
-@onready var icon_height: float = $Area2D/CollisionShape2D.shape.get_rect().size.y
+@onready var icon_height: float = ($Area2D/CollisionShape2D as CollisionShape2D).shape.get_rect().size.y
 ## cumulative width of all my subobjects
 var sub_width: float = 0
 ## total width of myself - max of myself (my level) or my subobjects'
@@ -83,8 +83,8 @@ func arrange_subnodes() -> void:
 ##
 ## @param total_width_d: the change in my own width
 func total_width_notifier(total_width_d: float) -> void:
-    var parent := self.get_parent()
-    if is_instance_of(parent, Directory_C):
+    if is_instance_of(self.get_parent(), Directory_C):
+        var parent: Directory_C = self.get_parent()
         var parent_total_width_d: float = parent.modify_subwidth(total_width_d)
         if parent_total_width_d != 0:
             parent.total_width_notifier(parent_total_width_d)
@@ -115,7 +115,7 @@ func setup(label_str: String) -> void:
     self.label.text = label_str
     var label_size := JetBrainsFont.get_string_size(label_str, HORIZONTAL_ALIGNMENT_LEFT, -1, 36).x
     self.width = max(
-        $Area2D/CollisionShape2D.shape.get_rect().size.x,
+        ($Area2D/CollisionShape2D as CollisionShape2D).shape.get_rect().size.x,
         label_size
     ) + 40
     self.total_width = self.width
@@ -129,8 +129,8 @@ func _ready() -> void:
 
 ## Draws my connection to my parent (and highlights it if applicable).
 func _draw() -> void:
-    var parent := self.get_parent()
-    if is_instance_of(parent, Directory_C):
+    if is_instance_of(self.get_parent(), Directory_C):
+        var parent: Directory_C = self.get_parent()
         var lcolor: Color
         if self.path_glow:
             lcolor = Color.CRIMSON

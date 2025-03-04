@@ -1,6 +1,5 @@
 extends "res://narrator/lesson/checkpoint.gd"
 
-
 func start() -> void:
     self.text_screen.text = Checkpoint.make_article([
         "Welcome!",
@@ -38,7 +37,7 @@ func start() -> void:
 
 func finished() -> void:
     self.completed.emit(
-        load("res://narrator/lesson/navigation/introduction_1.gd").new(
+        preload("res://narrator/lesson/navigation/introduction_1.gd").new(
             self.fs_man, self.text_screen, self.shell, self.next_button
         )
     )

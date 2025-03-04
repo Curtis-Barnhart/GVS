@@ -1,4 +1,4 @@
-extends Node2D
+extends "res://visual/file_nodes/base_node.gd"
 
 
 # Called when the node enters the scene tree for the first time.

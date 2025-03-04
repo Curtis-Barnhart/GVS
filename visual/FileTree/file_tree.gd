@@ -63,7 +63,7 @@ func highlight_path(origin: Path, path: Path) -> void:
 ## @param path: the path to the directory to get directions to.
 ## @return: the vector pointing from me to the directory specified by `path`.
 func node_rel_pos_from_path(path: Path) -> Vector2:
-    return self.node_rel_pos(self.all_nodes[path.as_string()])
+    return self.node_rel_pos(self.all_nodes[path.as_string()] as Directory_C)
 
 
 ## Gets the vector from myself to a directory in my tree.
@@ -100,8 +100,8 @@ static func make_new() -> FileTree_C:
 func setup(fs_manager: FSManager) -> void:
     self.fs_man = fs_manager
     self.all_nodes["/"] = Directory_C.make_new()
-    self.add_child(self.all_nodes["/"])
-    self.all_nodes["/"].setup("/")
+    self.add_child(self.all_nodes["/"] as Node)
+    (self.all_nodes["/"] as Directory_C).setup("/")
     self.change_cwd(Path.new([]), Path.new([]))
     
     fs_manager.created_dir.connect(self.create_dir)

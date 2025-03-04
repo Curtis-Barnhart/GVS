@@ -79,12 +79,12 @@ func _input(event: InputEvent) -> void:
             self.menu_closed.emit(self._selected)
     elif (event is InputEventMouseMotion):
         var new_select: int = -1
-        if Vector2.ZERO.distance_to(event.position - self.position) < self._rad_in:
+        if Vector2.ZERO.distance_to((event as InputEventMouseMotion).position - self.position) < self._rad_in:
             if new_select != self._selected:
                 self._selected = new_select
                 self.queue_redraw()
             return
-        var angle: float = Vector2(100, 0).angle_to(event.position - self.position)
+        var angle: float = Vector2(100, 0).angle_to((event as InputEventMouseMotion).position - self.position)
         if angle < 0:
             angle += 2*PI
         new_select = floor(angle / (2*PI / len(self._children)))

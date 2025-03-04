@@ -23,9 +23,9 @@ var interp_t: float = 0
 
 ## Label to display the node's name
 ## This will almost certainly be changed in the future to look better
-@onready var label: Label = $Label
+@onready var _label: Label = $Label
 ## Sprite to display an icon and receive user clicks
-@onready var icon: TextureButton = $Icon
+@onready var _icon: TextureButton = $Icon
 const JetBrainsFont: Font = preload("res://shared/JetBrainsMonoNerdFontMono-Regular.ttf")
 
 
@@ -39,14 +39,13 @@ func interp_movement(dest: Vector2) -> void:
     self.interp_t = 2
 
 
-## Will the icon respond to clicks (with signal user_clicked)
-func is_click_listening() -> bool:
-    return self.icon.mouse_filter != Control.MouseFilter.MOUSE_FILTER_IGNORE
-
-
 ## Instantiates a new BaseNode
 static func make_new() -> BaseNode:
     return BaseNodeScene.instantiate()
+
+
+func _ready() -> void:
+    self.total_width_changed.emit(self._icon.size.x)
 
 
 ## Correctly calculates my own size and positions my name label accordingly.
@@ -54,27 +53,19 @@ static func make_new() -> BaseNode:
 ##
 ## @param label_str: the name to assign this directory.
 func setup(label_str: String) -> void:
-    self.label.text = label_str
+    self._label.text = label_str
     var label_size := JetBrainsFont.get_string_size(
         label_str,
         HORIZONTAL_ALIGNMENT_CENTER,
         -1,
         LABEL_FONT_SIZE
-    )
-    self.width = max(
-        $Area2D/CollisionShape2D.shape.get_rect().size.x,
+    ).x
+    self.self_width = max(
+        self._icon.size.x,
         label_size
     ) + 40
-    self.total_width = self.width
-    # I swapped out the lines below and just wanna make sure it still works
-    self.label.position += Vector2.LEFT * label_size / 2
-    #self.label.position.x = -label_size / 2
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-    # We have to make sure the texture is centered
-    pass
+    self.total_width = self.self_width
+    self._label.position += Vector2.LEFT * label_size / 2
 
 
 ## Interpolates my position if I am in the middle of being moved.
