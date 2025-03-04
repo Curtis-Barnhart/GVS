@@ -19,11 +19,3 @@ static func make_new() -> File:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
     super._process(delta)
-
-
-func connect_to_press(functor: Callable) -> void:
-    self._icon.pressed.connect(functor)
-
-
-func disconnect_from_press(functor: Callable) -> void:
-    self._icon.pressed.disconnect(functor)

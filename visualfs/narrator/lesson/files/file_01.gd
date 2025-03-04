@@ -9,7 +9,7 @@ const FileReader = GVSClassLoader.visual.FileReader
 const GPopup = GVSClassLoader.visual.popups.GVSPopup
 const FileWriter = GVSClassLoader.visual.FileWriter
 
-var _first_file := Path.new(["file0.txt"])
+var _first_file := Path.new(["file0"])
 var _file_list: FileList
 
 
@@ -22,7 +22,7 @@ func start() -> void:
     # Make sure continue button is disabled at start and only enables
     # after the user has read the file
     self._next_button.pressed.connect(self.finish)
-    file_vis.connect_to_press(self.menu_popup)
+    self._file_list.file_clicked.connect(self.menu_popup)
     
     self._text_display.text = UtilString.make_article(
         [
@@ -34,8 +34,8 @@ func start() -> void:
     )
 
 
-func menu_popup() -> void:
-    var file_vis: File = self._file_list.get_file(self._first_file)
+func menu_popup(path: Path) -> void:
+    var file_vis: File = self._file_list.get_file(path)
 
     var menu: Menu = Menu.make_new()
     var f0 := Sprite2D.new()
@@ -53,35 +53,35 @@ func menu_popup() -> void:
         func (x: int) -> void:
             match x:
                 0:
-                    self.file_read_popup()
+                    self.file_read_popup(path)
                 1:
-                    self.file_write_popup()
+                    self.file_write_popup(path)
     )
 
 
-func file_read_popup() -> void:
-    var file_vis: File = self._file_list.get_file(self._first_file)
+func file_read_popup(path: Path) -> void:
+    var file_vis: File = self._file_list.get_file(path)
     var reader := FileReader.make_new()
     var popup := GPopup.make_into_popup(reader)
     popup.position = file_vis.get_viewport().get_screen_transform() \
                     * file_vis.get_global_transform_with_canvas() \
                     * Vector2.ZERO
-    reader.load_text(self._fs_man.read_file(self._first_file))
+    reader.load_text(self._fs_man.read_file(path))
 
 
-func file_write_popup() -> void:
-    var file_vis: File = self._file_list.get_file(self._first_file)
+func file_write_popup(path: Path) -> void:
+    var file_vis: File = self._file_list.get_file(path)
     var writer := FileWriter.make_new()
     var popup := GPopup.make_into_popup(writer)
     popup.position = file_vis.get_viewport().get_screen_transform() \
                     * file_vis.get_global_transform_with_canvas() \
                     * Vector2.ZERO
-    writer.load_text(self._fs_man.read_file(self._first_file))
+    writer.load_text(self._fs_man.read_file(path))
     
     writer.write.connect(
         func (text: String) -> void:
-            var old_text: String = self._fs_man.read_file(self._first_file)
-            var written: bool = self._fs_man.write_file(self._first_file, text)
+            var old_text: String = self._fs_man.read_file(path)
+            var written: bool = self._fs_man.write_file(path, text)
             assert(written)
             if old_text != text:
                 self._next_button.disabled = false
@@ -93,3 +93,7 @@ func finish() -> void:
     self.completed.emit(load("res://visualfs/narrator/lesson/files/file_02.gd").new(
         self._fs_man, self._next_button, self._text_display, self._viewport
     ))
+    assert(
+        self.get_reference_count() == 1,
+        "Not all references to file_01 removed before checkpoint exit."
+    )

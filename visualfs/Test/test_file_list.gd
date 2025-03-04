@@ -32,8 +32,3 @@ func _ready() -> void:
             index = randi() % nums.size()
             self.f_list.remove_file(Path.new([str(nums[index])]))
             nums.remove_at(index)
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-    pass
