@@ -9,7 +9,7 @@ const FileReader = GVSClassLoader.visual.FileReader
 const FileWriter = GVSClassLoader.visual.FileWriter
 const GPopup = GVSClassLoader.visual.popups.GVSPopup
 
-var _first_file := Path.new(["file0.txt"])
+var _first_file := Path.new(["file0"])
 var _file_list: FileList
 
 
@@ -25,14 +25,14 @@ func start() -> void:
     self._fs_man.removed_file.connect(self._file_list.remove_file)
     self._fs_man.create_file(self._first_file)
     var file_written := self._fs_man.write_file(self._first_file, "hello world")
-    assert(file_written)
+    assert(file_written, "Could not write to the file we just created.")
     var file_vis: File = self._file_list.get_file(self._first_file)
     assert(file_vis != null, "Could not find file in FileList that we just made.")
     
     # Make sure continue button is disabled at start and only enables
     # after the user has read the file
     self._next_button.pressed.connect(self.finish)
-    file_vis.connect_to_press(self.menu_popup)
+    self._file_list.file_clicked.connect(self.menu_popup)
     
     self._text_display.text = UtilString.make_article(
         [
@@ -52,8 +52,8 @@ func start() -> void:
     )
 
 
-func menu_popup() -> void:
-    var file_vis: File = self._file_list.get_file(self._first_file)
+func menu_popup(path: Path) -> void:
+    var file_vis: File = self._file_list.get_file(path)
 
     var menu: Menu = Menu.make_new()
     var f0 := Sprite2D.new()
@@ -71,35 +71,35 @@ func menu_popup() -> void:
         func (x: int) -> void:
             match x:
                 0:
-                    self.file_read_popup()
+                    self.file_read_popup(path)
                 1:
-                    self.file_write_popup()
+                    self.file_write_popup(path)
     )
 
 
-func file_read_popup() -> void:
-    var file_vis: File = self._file_list.get_file(self._first_file)
+func file_read_popup(path: Path) -> void:
+    var file_vis: File = self._file_list.get_file(path)
     var reader := FileReader.make_new()
     var popup := GPopup.make_into_popup(reader)
     popup.position = file_vis.get_viewport().get_screen_transform() \
                     * file_vis.get_global_transform_with_canvas() \
                     * Vector2.ZERO
-    reader.load_text(self._fs_man.read_file(self._first_file))
+    reader.load_text(self._fs_man.read_file(path))
     popup.closing.connect(func () -> void: self._next_button.disabled = false)
 
 
-func file_write_popup() -> void:
-    var file_vis: File = self._file_list.get_file(self._first_file)
+func file_write_popup(path: Path) -> void:
+    var file_vis: File = self._file_list.get_file(path)
     var writer := FileWriter.make_new()
     var popup := GPopup.make_into_popup(writer)
     popup.position = file_vis.get_viewport().get_screen_transform() \
                     * file_vis.get_global_transform_with_canvas() \
                     * Vector2.ZERO
-    writer.load_text(self._fs_man.read_file(self._first_file))
+    writer.load_text(self._fs_man.read_file(path))
     
     writer.write.connect(
         func (text: String) -> void:
-            var written: bool = self._fs_man.write_file(self._first_file, text)
+            var written: bool = self._fs_man.write_file(path, text)
             assert(written)
     )
     writer.quit.connect(popup.close_popup)
@@ -109,3 +109,7 @@ func finish() -> void:
     self.completed.emit(load("res://visualfs/narrator/lesson/files/file_01.gd").new(
         self._fs_man, self._next_button, self._text_display, self._viewport
     ))
+    assert(
+        self.get_reference_count() == 1,
+        "Not all references to file_00 removed before checkpoint exit."
+    )
