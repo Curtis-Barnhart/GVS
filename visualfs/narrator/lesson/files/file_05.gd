@@ -14,9 +14,7 @@ var _file_list: FileList
 var _current_target: Path
 
 
-func start() -> void:
-    self._next_button.disabled = true
-    
+func start() -> void:    
     self._file_list = self._viewport.node_from_scene("FileList")
     self._file_list.file_clicked.connect(self.menu_popup)
     self._next_button.pressed.connect(self.finish)
