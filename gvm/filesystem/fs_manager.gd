@@ -126,6 +126,9 @@ func create_file(p: Path_C) -> bool:
     return true
 
 
+# if the read/write file interface ever changes,
+# be sure to update(?) the warning surpression in fs_file
+# that warns that the private var _contents is never used.
 func write_file(p: Path_C, text: String) -> bool:
     var file: File = self._get_file(p)
     if file != null:

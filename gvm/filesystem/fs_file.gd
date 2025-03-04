@@ -4,6 +4,8 @@ const Directory = GVSClassLoader.gvm.filesystem.Directory
 const Path = GVSClassLoader.gvm.filesystem.Path
 
 var _name: String
+# We don't use contents here but the file manager will
+@warning_ignore("unused_private_class_variable")
 var _contents: String
 var _parent: Directory
 

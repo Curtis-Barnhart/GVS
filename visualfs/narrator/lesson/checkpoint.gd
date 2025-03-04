@@ -12,6 +12,8 @@ var _viewport: DragViewport
 ## The completed signal is how we tell the narrator we are done.
 ## We also have to pass back the next checkpoint to load.
 ## After this signal is sent, we will be freed from memory.
+# Subclasses will use the signal
+@warning_ignore("unused_signal")
 signal completed(checkpoint: Checkpoint)
 
 
