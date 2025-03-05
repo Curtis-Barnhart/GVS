@@ -16,10 +16,10 @@ func _input(event: InputEvent) -> void:
         and event.is_pressed()
         and self.get_viewport().gui_get_focus_owner() == self
     ):
-        if event.keycode == KEY_ENTER:
+        if (event as InputEventKey).keycode == KEY_ENTER:
             self.user_entered.emit()
             get_viewport().set_input_as_handled()
-        elif event.keycode == KEY_TAB:
+        elif (event as InputEventKey).keycode == KEY_TAB:
             self.focus_released.emit()
             get_viewport().set_input_as_handled()
 
