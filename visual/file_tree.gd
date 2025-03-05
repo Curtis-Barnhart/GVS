@@ -65,9 +65,8 @@ func highlight_path(origin: Path, path: Path) -> void:
 ## @param old_p: Path to the former cwd. Must be in simplest form.
 # TODO: Consider not using the private variables here
 func change_cwd(new_p: Path, old_p: Path) -> void:
-    (self._all_nodes[old_p.as_string()] as TNode)._icon.texture_normal = dir_text
-    var new_cwd: TNode = self._all_nodes[new_p.as_string()]
-    new_cwd._icon.texture_normal = cwd_text
+    (self._all_nodes[old_p.as_string()] as TNode).change_icon(dir_text)
+    (self._all_nodes[new_p.as_string()] as TNode).change_icon(cwd_text)
 
 
 ## create_dir creates a directory in the visual graph

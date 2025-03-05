@@ -1,10 +1,59 @@
-[gd_scene load_steps=6 format=3 uid="uid://cd2fva7cwd2u3"]
+[gd_scene load_steps=8 format=3 uid="uid://cd2fva7cwd2u3"]
 
 [ext_resource type="Script" path="res://visual/simple_input.gd" id="1_vt3yq"]
-[ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/Button.tres" id="2_pl6y2"]
 [ext_resource type="LabelSettings" uid="uid://cn1j7kil7gylr" path="res://shared/LabelStyle.tres" id="3_hmxg1"]
 [ext_resource type="Theme" uid="uid://b6yhu8vwprwt7" path="res://shared/BigText.tres" id="4_tey7h"]
-[ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/TextBox.tres" id="5_dtea2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ljjgl"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.219608, 0.219608, 0.219608, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t0rry"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.219608, 0.219608, 0.219608, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 1)
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_alt3c"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.219608, 0.219608, 0.219608, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 1)
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_top = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qghxu"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.219608, 0.219608, 0.219608, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0, 0, 0, 1)
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_top = 5.0
 
 [node name="SimpleInput" type="VBoxContainer"]
 anchors_preset = 15
@@ -16,14 +65,14 @@ script = ExtResource("1_vt3yq")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
-theme_override_styles/normal = ExtResource("2_pl6y2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ljjgl")
 text = "lorem ipsum"
 label_settings = ExtResource("3_hmxg1")
 
 [node name="LineEdit" type="LineEdit" parent="."]
 layout_mode = 2
 theme = ExtResource("4_tey7h")
-theme_override_styles/normal = ExtResource("5_dtea2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_t0rry")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -32,14 +81,14 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 2
 theme = ExtResource("4_tey7h")
-theme_override_styles/normal = ExtResource("2_pl6y2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_alt3c")
 text = "Cancel"
 
 [node name="Confirm" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 theme = ExtResource("4_tey7h")
-theme_override_styles/normal = ExtResource("2_pl6y2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_qghxu")
 text = "Confirm"
 
 [connection signal="text_submitted" from="LineEdit" to="." method="_on_line_edit_text_submitted"]

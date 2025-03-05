@@ -13,7 +13,7 @@ static func make_new() -> TNode:
 
 
 func total_width() -> float:
-    return max(self._self_width, self._sub_width) + WIDTH
+    return max(self._self_width + WIDTH, self._sub_width)
 
 
 ## Adds a subdirectory to this directory.
@@ -56,7 +56,7 @@ func _on_subwidth_change(delta: float) -> void:
 ## Arrange the positions of my children directories so they are evenly spaced
 ## (taking into account their own children, so that no one's children overlap).
 func arrange_subnodes() -> void:
-    var offset := -self.total_width()/2 + WIDTH/2
+    var offset := -self.total_width()/2
     # TODO: someday update this to check for files as well
     for sd: TNode in self.get_children() \
                   .filter(func (c: Node) -> bool: return is_instance_of(c, TNode)):
@@ -67,6 +67,11 @@ func arrange_subnodes() -> void:
 
 ## Draws my connection to my parent (and highlights it if applicable).
 func _draw() -> void:
+    if OS.is_debug_build():
+        self.draw_rect(Rect2(
+            -self.total_width()/2, 0,
+            self.total_width(), 50
+        ), Color.RED, false)
     var offset := -self.total_width()/2
     if is_instance_of(self.get_parent(), TNode):
         var parent: TNode = self.get_parent()
