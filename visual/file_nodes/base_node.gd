@@ -46,6 +46,12 @@ func icon_size() -> Vector2:
     return self._icon.size
 
 
+func change_icon(text: Texture2D) -> void:
+    self._icon.texture_normal = text
+    self._icon.reset_size()
+    self._icon.position = -self._icon.size / 2
+
+
 func _ready() -> void:
     pass
 
