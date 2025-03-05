@@ -13,7 +13,18 @@ static func make_new() -> TNode:
 
 
 func total_width() -> float:
-    return max(self._self_width + WIDTH, self._sub_width)
+    return max(self.self_width(), self._sub_width)
+
+
+func change_icon(text: Texture2D) -> void:
+    var old_width: float = self.total_width()
+    
+    self._icon.texture_normal = text
+    self._icon.reset_size()
+    self._icon.position = -self._icon.size / 2
+    
+    if self.total_width() != old_width:
+        self.total_width_changed.emit(self.total_width() - old_width)
 
 
 ## Adds a subdirectory to this directory.
@@ -40,9 +51,14 @@ func remove_subnode(subnode: TNode) -> void:
     assert(subnode.get_parent() == self,
         "Subnode to be removed was not a child of this node."
     )
-    self.total_width_changed.emit(-subnode.total_width())
+    var old_width: float = self.total_width()
+    self._sub_width -= subnode.total_width()
+    var width_delta: float = total_width() - old_width
+    if width_delta != 0:
+        self.total_width_changed.emit(width_delta)
     self.remove_child(subnode)
     subnode.total_width_changed.disconnect(self._on_subwidth_change)
+    self.arrange_subnodes()
 
 
 func _on_subwidth_change(delta: float) -> void:
@@ -51,12 +67,13 @@ func _on_subwidth_change(delta: float) -> void:
     if old_total != self.total_width():
         self.total_width_changed.emit(self.total_width() - old_total)
     self.arrange_subnodes()
+    #print("New total width: ", self.total_width())
 
 
 ## Arrange the positions of my children directories so they are evenly spaced
 ## (taking into account their own children, so that no one's children overlap).
 func arrange_subnodes() -> void:
-    var offset := -self.total_width()/2
+    var offset := -self._sub_width/2
     # TODO: someday update this to check for files as well
     for sd: TNode in self.get_children() \
                   .filter(func (c: Node) -> bool: return is_instance_of(c, TNode)):
@@ -67,12 +84,13 @@ func arrange_subnodes() -> void:
 
 ## Draws my connection to my parent (and highlights it if applicable).
 func _draw() -> void:
-    if OS.is_debug_build():
-        self.draw_rect(Rect2(
-            -self.total_width()/2, 0,
-            self.total_width(), 50
-        ), Color.RED, false)
-    var offset := -self.total_width()/2
+    self.draw_rect(Rect2(
+        -self.self_width()/2, 0, self.self_width(), 20
+    ), Color.AQUA, false)
+    self.draw_rect(Rect2(
+        -self.total_width()/2, 0, self.total_width(), 20
+    ), Color.ALICE_BLUE, false)
+    
     if is_instance_of(self.get_parent(), TNode):
         var parent: TNode = self.get_parent()
         var lcolor: Color

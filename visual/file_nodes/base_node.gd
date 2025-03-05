@@ -10,9 +10,6 @@ const LABEL_FONT_SIZE: int = 36
 const HEIGHT = 250
 const WIDTH = 40
 
-## The width of this node, including the label width
-var _self_width: float
-
 ## starting position before interpolating movement.
 var _start_pos: Vector2 = Vector2.ZERO
 ## destination position while interpolating movement.
@@ -46,33 +43,34 @@ func icon_size() -> Vector2:
     return self._icon.size
 
 
-func change_icon(text: Texture2D) -> void:
-    self._icon.texture_normal = text
-    self._icon.reset_size()
-    self._icon.position = -self._icon.size / 2
-
-
-func _ready() -> void:
-    pass
-
-
-## Correctly calculates my own size and positions my name label accordingly.
-## This should be called after the node has entered the scene.
-##
-## @param label_str: the name to assign this directory.
-func setup(label_str: String) -> void:
-    self._label.text = label_str
-    var label_size := JetBrainsFont.get_string_size(
-        label_str,
+func _prerendered_label_width() -> float:
+    return JetBrainsFont.get_string_size(
+        self._label.text,
         HORIZONTAL_ALIGNMENT_CENTER,
         -1,
         LABEL_FONT_SIZE
     ).x
-    self._self_width = max(
-        self._icon.size.x,
-        label_size
-    )
-    self.total_width_changed.emit(self._self_width + WIDTH)
+
+
+func self_width() -> float:
+    return max(self._prerendered_label_width(), self._icon.size.x) + WIDTH
+
+
+func _ready() -> void:
+    self._icon.position = -self._icon.size / 2
+
+
+## Correctly calculates my own size and positions my name label accordingly.
+## This should be called after the node has entered the scene,
+## and should be used to set the label for the first time.
+##
+## @param label_str: the name to assign this directory.
+func setup(label_str: String) -> void:
+    self._label.text = label_str
+    var label_size: float = self._prerendered_label_width()
+    self.total_width_changed.emit(max(
+        self._icon.size.x, label_size
+    ) + WIDTH)
     self._label.position += Vector2.LEFT * label_size / 2
 
 
