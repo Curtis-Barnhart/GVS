@@ -22,8 +22,8 @@ GVSGlobals="*res://gvs_globals.gd"
 [debug]
 
 gdscript/warnings/untyped_declaration=2
-gdscript/warnings/unsafe_property_access=1
-gdscript/warnings/unsafe_method_access=1
+gdscript/warnings/unsafe_property_access=2
+gdscript/warnings/unsafe_method_access=2
 gdscript/warnings/unsafe_call_argument=2
 gdscript/warnings/static_called_on_instance=2
 gdscript/warnings/int_as_enum_without_cast=2
