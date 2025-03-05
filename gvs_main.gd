@@ -5,7 +5,7 @@
 extends HBoxContainer
 
 const ClassLoader = preload("res://gvs_class_loader.gd")
-const FileTree = ClassLoader.visual.FileTree.FileTree
+const FileTree = ClassLoader.visual.FileTree2
 const DragViewport = ClassLoader.visual.DragViewport.DragViewport
 const Shell = ClassLoader.gvm.Shell
 const FSManager = ClassLoader.gvm.filesystem.Manager
@@ -27,7 +27,10 @@ func _ready() -> void:
     
     var file_tree: FileTree = FileTree.make_new()
     self.drag_viewport.add_to_scene(file_tree)
-    file_tree.setup(file_manager)
+    file_manager.created_dir.connect(file_tree.create_node_dir)
+    file_manager.created_file.connect(file_tree.create_node_file)
+    file_manager.removed_dir.connect(file_tree.remove_node)
+    file_manager.removed_file.connect(file_tree.remove_node)
     
     self.gvshell.setup(file_manager)
     ($Right/Narrator as Narrator).setup(file_manager, self.gvshell)
