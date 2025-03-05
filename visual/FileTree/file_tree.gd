@@ -137,7 +137,6 @@ func remove_dir(p: Path) -> void:
     parent.arrange_subnodes()
     dir_node.queue_free()
     self.all_nodes.erase(p.as_string())
-    
 
 
 # Called when the node enters the scene tree for the first time.

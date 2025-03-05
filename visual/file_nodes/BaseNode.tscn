@@ -13,14 +13,12 @@ script = ExtResource("1_a3jqj")
 
 [node name="Label" type="Label" parent="."]
 z_index = 2
-offset_left = -86.0
 offset_top = 50.0
-offset_right = 87.0
+offset_right = 173.0
 offset_bottom = 98.0
 text = "dir name"
 label_settings = SubResource("LabelSettings_vkuxl")
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="Icon" type="TextureButton" parent="."]
 anchors_preset = 8
@@ -28,10 +26,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -38.0
-offset_top = -52.0
-offset_right = 44.0
-offset_bottom = 54.0
+offset_left = -41.0
+offset_top = -53.0
+offset_right = 41.0
+offset_bottom = 53.0
 grow_horizontal = 2
 grow_vertical = 2
 texture_normal = ExtResource("3_vvs5o")

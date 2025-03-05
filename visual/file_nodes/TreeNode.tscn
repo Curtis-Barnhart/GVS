@@ -1,6 +1,35 @@
-[gd_scene load_steps=2 format=3 uid="uid://b2ysxe8bjq6v8"]
+[gd_scene load_steps=5 format=3 uid="uid://b2ysxe8bjq6v8"]
 
 [ext_resource type="Script" path="res://visual/file_nodes/tree_node.gd" id="1_5s3dq"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="2_np7l5"]
+[ext_resource type="Texture2D" uid="uid://dxrcip84faw8d" path="res://visual/assets/file.svg" id="3_sav17"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_2jdu0"]
+font = ExtResource("2_np7l5")
+font_size = 36
 
 [node name="TreeNode" type="Node2D"]
 script = ExtResource("1_5s3dq")
+
+[node name="Label" type="Label" parent="."]
+z_index = 2
+offset_top = 50.0
+offset_right = 173.0
+offset_bottom = 98.0
+text = "dir name"
+label_settings = SubResource("LabelSettings_2jdu0")
+vertical_alignment = 1
+
+[node name="Icon" type="TextureButton" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -41.0
+offset_top = -53.0
+offset_right = 41.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("3_sav17")

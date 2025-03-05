@@ -7,22 +7,20 @@ const MathUtil = GVSClassLoader.shared.Math
 signal total_width_changed(width_delta: float)
 
 const LABEL_FONT_SIZE: int = 36
-const WIDTH_PAD: float = 80
-const HEIGHT_PAD: float = 160
+const HEIGHT = 250
+const WIDTH = 40
 
-var self_width: float
-var self_height: float
-var total_width: float
+## The width of this node, including the label width
+var _self_width: float
 
 ## starting position before interpolating movement.
-var start_pos: Vector2 = Vector2.ZERO
+var _start_pos: Vector2 = Vector2.ZERO
 ## destination position while interpolating movement.
-var dest_pos: Vector2 = Vector2.ZERO
+var _dest_pos: Vector2 = Vector2.ZERO
 ## amount of time left to interpolate. 2 is t=0 and 0 is t=1
-var interp_t: float = 0
+var _interp_t: float = 0
 
 ## Label to display the node's name
-## This will almost certainly be changed in the future to look better
 @onready var _label: Label = $Label
 ## Sprite to display an icon and receive user clicks
 @onready var _icon: TextureButton = $Icon
@@ -34,9 +32,9 @@ const JetBrainsFont: Font = preload("res://shared/JetBrainsMonoNerdFontMono-Regu
 ##
 ## @param dest: location to move to.
 func interp_movement(dest: Vector2) -> void:
-    self.start_pos = self.position
-    self.dest_pos = dest
-    self.interp_t = 2
+    self._start_pos = self.position
+    self._dest_pos = dest
+    self._interp_t = 2
 
 
 ## Instantiates a new BaseNode
@@ -44,8 +42,12 @@ static func make_new() -> BaseNode:
     return BaseNodeScene.instantiate()
 
 
+func icon_size() -> Vector2:
+    return self._icon.size
+
+
 func _ready() -> void:
-    self.total_width_changed.emit(self._icon.size.x)
+    pass
 
 
 ## Correctly calculates my own size and positions my name label accordingly.
@@ -60,11 +62,11 @@ func setup(label_str: String) -> void:
         -1,
         LABEL_FONT_SIZE
     ).x
-    self.self_width = max(
+    self._self_width = max(
         self._icon.size.x,
         label_size
-    ) + 40
-    self.total_width = self.self_width
+    )
+    self.total_width_changed.emit(self._self_width + WIDTH)
     self._label.position += Vector2.LEFT * label_size / 2
 
 
@@ -72,11 +74,11 @@ func setup(label_str: String) -> void:
 ##
 ## @param delta: the time passed since the last frame.
 func _process(delta: float) -> void:
-    if self.interp_t > 0:
-        self.interp_t -= delta
+    if self._interp_t > 0:
+        self._interp_t -= delta
         self.position = MathUtil.log_interp_v(
-            self.start_pos,
-            self.dest_pos,
-            (1 - (self.interp_t/2))
+            self._start_pos,
+            self._dest_pos,
+            (1 - (self._interp_t/2))
         )
         self.queue_redraw()
