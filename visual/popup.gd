@@ -1,7 +1,7 @@
 extends Control
 
-const SelfScene = preload("res://visual/popups/Popup.tscn")
-const GVSPopup = GVSClassLoader.visual.popups.GVSPopup
+const SelfScene = preload("res://visual/Popup.tscn")
+const GVSPopup = GVSClassLoader.visual.GVSPopup
 
 signal click_outside
 signal closing
@@ -41,7 +41,6 @@ func _gui_input(_event: InputEvent) -> void:
 
 func popup() -> void:
     GVSGlobals.get_tree().get_root().add_child(self)
-    #tree_access.get_tree().get_root().add_child(self)
 
 
 func close_popup() -> void:
