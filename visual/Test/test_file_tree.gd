@@ -2,7 +2,7 @@ extends Control
 
 const FManager = GVSClassLoader.gvm.filesystem.Manager
 const Path = GVSClassLoader.gvm.filesystem.Path
-const FileTree = GVSClassLoader.visual.FileTree2
+const FileTree = GVSClassLoader.visual.FileTree
 const DragViewport = GVSClassLoader.visual.DragViewport.DragViewport
 const TreeNode = GVSClassLoader.visual.file_nodes.TreeNode
 

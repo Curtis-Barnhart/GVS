@@ -5,7 +5,7 @@
 extends HBoxContainer
 
 const ClassLoader = preload("res://gvs_class_loader.gd")
-const FileTree = ClassLoader.visual.FileTree2
+const FileTree = ClassLoader.visual.FileTree
 const DragViewport = ClassLoader.visual.DragViewport.DragViewport
 const Shell = ClassLoader.gvm.Shell
 const FSManager = ClassLoader.gvm.filesystem.Manager
