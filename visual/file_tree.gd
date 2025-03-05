@@ -1,7 +1,7 @@
 extends Node2D
 
 const SelfScene = preload("res://visual/FileTree.tscn")
-const FileTree = GVSClassLoader.visual.FileTree2
+const FileTree = GVSClassLoader.visual.FileTree
 const Path = GVSClassLoader.gvm.filesystem.Path
 const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 
