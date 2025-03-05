@@ -61,7 +61,6 @@ func highlight_path(origin: Path, path: Path) -> void:
 
 
 ## Changes whatever visual artifact denotes the cwd.
-## Also moves the camera to center on the new cwd
 ##
 ## @param new_p: The path to the new cwd. Must be in simplest form.
 ## @param old_p: Path to the former cwd. Must be in simplest form.
