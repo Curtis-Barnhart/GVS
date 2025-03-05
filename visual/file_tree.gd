@@ -125,6 +125,5 @@ func _ready() -> void:
     self.change_cwd(Path.new([]), Path.new([]))
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-    pass
+func node_rel_pos_from_path(p: Path) -> Vector2:
+    return self._all_nodes.get(p.as_string()).global_position - self.global_position
