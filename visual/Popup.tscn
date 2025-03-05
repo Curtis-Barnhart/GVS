@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cug4k5sfe3hcq"]
 
-[ext_resource type="Script" path="res://visual/popups/popup.gd" id="1_uq5kf"]
+[ext_resource type="Script" path="res://visual/popup.gd" id="1_uq5kf"]
 
 [node name="Popup" type="Control"]
 layout_mode = 3

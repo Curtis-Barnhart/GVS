@@ -7,7 +7,7 @@ const File = GVSClassLoader.visual.file_nodes.BaseNode
 const Menu = GVSClassLoader.visual.buttons.CircleMenu
 const FileReader = GVSClassLoader.visual.FileReader
 const FileWriter = GVSClassLoader.visual.FileWriter
-const GPopup = GVSClassLoader.visual.popups.GVSPopup
+const GPopup = GVSClassLoader.visual.GVSPopup
 
 var _first_file := Path.new(["file0"])
 var _file_list: FileList
