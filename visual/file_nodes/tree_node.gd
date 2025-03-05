@@ -84,13 +84,6 @@ func arrange_subnodes() -> void:
 
 ## Draws my connection to my parent (and highlights it if applicable).
 func _draw() -> void:
-    self.draw_rect(Rect2(
-        -self.self_width()/2, 0, self.self_width(), 20
-    ), Color.AQUA, false)
-    self.draw_rect(Rect2(
-        -self.total_width()/2, 0, self.total_width(), 20
-    ), Color.ALICE_BLUE, false)
-    
     if is_instance_of(self.get_parent(), TNode):
         var parent: TNode = self.get_parent()
         var lcolor: Color
