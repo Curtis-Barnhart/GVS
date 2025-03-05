@@ -14,9 +14,8 @@ script = ExtResource("1_5s3dq")
 [node name="Label" type="Label" parent="."]
 z_index = 2
 offset_top = 50.0
-offset_right = 173.0
+offset_right = 1.0
 offset_bottom = 98.0
-text = "dir name"
 label_settings = SubResource("LabelSettings_2jdu0")
 vertical_alignment = 1
 

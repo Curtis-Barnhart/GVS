@@ -9,6 +9,8 @@ const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 const dir_text: Texture2D = preload("res://visual/assets/directory.svg")
 ## Texture for the current working directory
 const cwd_text: Texture2D = preload("res://visual/assets/cwd.svg")
+## Texture for a file
+const file_texture = preload("res://visual/assets/file.svg")
 
 ## Map from strings of paths to the TreeNode objects
 var _all_nodes: Dictionary = {}
@@ -69,13 +71,14 @@ func change_cwd(new_p: Path, old_p: Path) -> void:
     (self._all_nodes[new_p.as_string()] as TNode).change_icon(cwd_text)
 
 
-## create_dir creates a directory in the visual graph
+## create_dir creates a node in the visual graph
 ## and ensures all other elements have their position adjusted accordingly.
 ##
-## @param p: Path to the directory to create.
+## @param p: Path to the node to create.
 ##      p's parent directory (p.base()) must be a valid path in this graph,
 ##      and also must be a simplified absolute path.
-func create_node(p: Path) -> void:
+## @param texture: Texture to give to the node
+func create_node(p: Path, texture: Texture2D) -> void:
     var parent: TNode = self._all_nodes.get(p.base().as_string())
     assert(parent != null,
         "Attempted TNode creation with nonexistent parent"
@@ -83,6 +86,15 @@ func create_node(p: Path) -> void:
     var child := TNode.make_new()
     parent.add_subnode(child, p.last())
     self._all_nodes[p.as_string()] = child
+    child.change_icon(texture)
+
+
+func create_node_dir(p: Path) -> void:
+    self.create_node(p, dir_text)
+
+
+func create_node_file(p: Path) -> void:
+    self.create_node(p, file_texture)
 
 
 ## remove_dir removes a directory from the visual graph
