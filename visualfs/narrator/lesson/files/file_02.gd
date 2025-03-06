@@ -13,7 +13,6 @@ var _files: Array[Path] = [
     Path.new(["file0"]),
     Path.new(["file1"]),
     Path.new(["file2"]),
-    Path.new(["file3"])
 ]
 var _file_list: FileList
 
@@ -21,11 +20,25 @@ var _file_list: FileList
 func start() -> void:
     self._text_display.text = UtilString.make_article(
         [
-            "Multiple files",
+            "Multiple Files",
             [
-                "Write 'first' to file0.txt",
-                "'second' to file1.txt, 'third' to file2.txt,",
-                "and 'fourth' to file3.txt."
+                "Of course, there's more than just one file on your computer.",
+                "At the time of writing, my computer has...",
+                "at least 925,241 files on it!",
+            ],
+            [
+                "But how do we distinguish between different files?",
+                "One of the first things that comes to mind is that",
+                "we could just give them different names.",
+                "If we enforce that names must be unique",
+                "(no two files can have the same name),",
+                "then it will always be clear",
+                "which file we are talking about when we use its name.",
+            ],
+            [
+                "To complete this section,",
+                "write 'first' to file0.txt",
+                "'second' to file1.txt, and 'third' to file2.txt,",
             ],
         ]
     )
@@ -44,10 +57,10 @@ func menu_popup(file_path: Path) -> void:
     var menu: Menu = Menu.make_new()
     var f0 := Sprite2D.new()
     var file_vis: File = self._file_list.get_file(file_path)
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_read.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_write.svg")
     menu.add_child(f0)
     menu.position = file_vis.get_viewport().get_screen_transform() \
                     * file_vis.get_global_transform_with_canvas() \
@@ -97,7 +110,6 @@ func check_finished() -> void:
         self._fs_man.read_file(self._files[0]).strip_edges() == "first"
         and self._fs_man.read_file(self._files[1]).strip_edges() == "second"
         and self._fs_man.read_file(self._files[2]).strip_edges() == "third"
-        and self._fs_man.read_file(self._files[3]).strip_edges() == "fourth"
     ):
         self._next_button.disabled = false
 

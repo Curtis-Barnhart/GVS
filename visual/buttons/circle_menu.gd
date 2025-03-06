@@ -35,6 +35,13 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
+    draw_circle(
+        Vector2.ZERO,
+        (self._rad_out - self._rad_in) / 2 + self._rad_in,
+        Color.DIM_GRAY.darkened(.25), # TODO: Goofy hack, fix later
+        false,
+        (self._rad_out - self._rad_in)
+    )
     draw_circle(Vector2.ZERO, self._rad_in, Color.STEEL_BLUE, false, 6)
     draw_circle(Vector2.ZERO, self._rad_out, Color.STEEL_BLUE, false, 6)
     var segment_width: float = 2*PI / len(self._children)
