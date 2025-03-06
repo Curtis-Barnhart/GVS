@@ -20,8 +20,20 @@ func start() -> void:
         [
             "Creating Files",
             [
-                "make a file called 'new_file'",
+                "You as a user can create file too.",
+                "To create a new file,",
+                "click on any existing file's action menu.",
+                "Then select the create file action,",
+                "indicated by an icon of a file with a green plus sign.",
+                "You will be asked to enter a name for the new file -",
+                "the name cannot be the same as any existing files,",
+                "or else it won't be created.",
+                "A file will be ocmpletely empty when it is first created.",
             ],
+            [
+                "To complete this section,",
+                "create a new file called 'new_file'.",
+            ]
         ]
     )
     
@@ -34,13 +46,13 @@ func menu_popup(file_path: Path) -> void:
     var menu: Menu = Menu.make_new()
     var f0 := Sprite2D.new()
     var file_vis: File = self._file_list.get_file(file_path)
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_read.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_write.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_new.svg")
     menu.add_child(f0)
 
     menu.position = file_vis.get_viewport().get_screen_transform() \

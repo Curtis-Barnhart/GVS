@@ -28,8 +28,20 @@ func start() -> void:
         [
             "Writing to a File",
             [
-                "Here's how you write to a file",
+                "It would be rather silly if you could only read a file though.",
+                "You can also replace the contents of a file,",
+                "which is called [color=steel blue]writing[/color] to it.",
             ],
+            [
+                "To complete this section, write any changes to the file.",
+                "To write to a file, click on it to open its action menu.",
+                "Select the action to write to the file,",
+                "represented by an image of a file and a pencil.",
+                "Click the screen that pops up,",
+                "and you will be able to write text into it.",
+                "When you are done, click the 'write' button",
+                "to write (or save) your changes to the file.",
+            ]
         ]
     )
 
@@ -39,10 +51,10 @@ func menu_popup(path: Path) -> void:
 
     var menu: Menu = Menu.make_new()
     var f0 := Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_read.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_write.svg")
     menu.add_child(f0)
     menu.position = file_vis.get_viewport().get_screen_transform() \
                     * file_vis.get_global_transform_with_canvas() \

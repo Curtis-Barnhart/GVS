@@ -25,10 +25,14 @@ func start() -> void:
     
     self._text_display.text = UtilString.make_article(
         [
-            "Can you find a file?",
+            "Finding Files",
             [
-                "Find the file '%s'." % self._current_target.as_string(false),
-                "Delete it when you find it to show you've found."
+                "Now we're going to explain some shortcomings",
+                "of just using names to identify files.",
+                "To demonstrate this,",
+                "please locate the file",
+                "%s." % self._current_target.as_string(false),
+                "Delete the file to show that you've located it."
             ],
         ]
     )
@@ -43,13 +47,13 @@ func more_files(deleted: Path) -> void:
     self.set_current_target()
     self._fs_man.removed_file.disconnect(self.more_files)
     self._fs_man.removed_file.connect(self.even_more_files)
-    
     self._text_display.text = UtilString.make_article(
         [
-            "Can you find a file?",
+            "Finding Files",
             [
-                "Find the file '%s'." % self._current_target.as_string(false),
-                "Delete it when you find it to show you've found."
+                "Not bad... but what happens when add a few more files?",
+                "Find the file '%s'" % self._current_target.as_string(false),
+                "and delete it to show you've found."
             ],
         ]
     )
@@ -69,10 +73,11 @@ func even_more_files(deleted: Path) -> void:
     
     self._text_display.text = UtilString.make_article(
         [
-            "Can you find a file?",
+            "Finding Files",
             [
+                "One last challenge (this one is optional)...",
                 "Find the file '%s'." % self._current_target.as_string(false),
-                "Delete it when you find it to show you've found."
+                "and delet it to show you've found."
             ],
         ]
     )
@@ -87,9 +92,9 @@ func found_everything(deleted: Path) -> void:
     
     self._text_display.text = UtilString.make_article(
         [
-            "Can you find a file?",
+            "Finding Files",
             [
-                "Lol nice job."
+                "Good job lol."
             ],
         ]
     )
@@ -99,16 +104,16 @@ func menu_popup(file_path: Path) -> void:
     var menu: Menu = Menu.make_new()
     var f0 := Sprite2D.new()
     var file_vis: File = self._file_list.get_file(file_path)
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_read.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_write.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_new.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_delete.svg")
     menu.add_child(f0)
 
     menu.position = file_vis.get_viewport().get_screen_transform() \

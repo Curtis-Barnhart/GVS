@@ -47,6 +47,21 @@ func start() -> void:
                 "The answer to all of these questions is [color=steel blue]files[/color].",
                 "Files are storage containers where your computer puts anything",
                 "it needs to remember for a long amount of time.",
+            ],
+            [
+                "To complete this section,",
+                "all you need to do is [color=steel blue]read[/color],",
+                "or look at, the contents of a file,",
+                "represented by the little icon on the left side of the screen.",
+                "First, click on the icon to open its action menu.",
+                "Then, select the action to read the file,",
+                "represented by an image of a file and an eye.",
+            ],
+            [
+                "On selecting this action,",
+                "the file contents will be displayed.",
+                "Continue by clicking anywhere outside of this display,",
+                "and then click the continue button below.",
             ]
         ]
     )
@@ -57,10 +72,10 @@ func menu_popup(path: Path) -> void:
 
     var menu: Menu = Menu.make_new()
     var f0 := Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_read.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_write.svg")
     menu.add_child(f0)
     menu.position = file_vis.get_viewport().get_screen_transform() \
                     * file_vis.get_global_transform_with_canvas() \

@@ -18,7 +18,22 @@ func start() -> void:
         [
             "Deleting Files",
             [
-                "delete a file",
+                "Just like you can make new files,",
+                "you can also delete them.",
+                "When a file is deleted,",
+                "its contents are essentially lost forever",
+                "so you need to be certain you don't accidentally delete",
+                "the wrong file when you are working with very important",
+                "files on your computer.",
+            ],
+            [
+                "To complete this section,",
+                "delete any file from the currently existing files.",
+                "To delete a file,",
+                "click on any existing file's action menu.",
+                "Then select the delete file action,",
+                "indicated by an icon of a file with red x.",
+                "The file you opened the menu on will be deleted.",
             ],
         ]
     )
@@ -32,16 +47,16 @@ func menu_popup(file_path: Path) -> void:
     var menu: Menu = Menu.make_new()
     var f0 := Sprite2D.new()
     var file_vis: File = self._file_list.get_file(file_path)
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_read.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_write.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_new.svg")
     menu.add_child(f0)
     f0 = Sprite2D.new()
-    f0.texture = load("res://icon.svg")
+    f0.texture = load("res://visual/assets/file_delete.svg")
     menu.add_child(f0)
 
     menu.position = file_vis.get_viewport().get_screen_transform() \
