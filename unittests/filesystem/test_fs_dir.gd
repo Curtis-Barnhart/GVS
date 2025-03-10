@@ -67,24 +67,24 @@ func test_get_path() -> void:
 
 func test_local_dir() -> void:
     # Tests on root node
-    assert_eq((self.map["root"] as Dir).local_dir("two"), self.map["two"])
-    assert_eq((self.map["root"] as Dir).local_dir("three"), self.map["three"])
+    assert_eq((self.map["root"] as Dir).local_dir("two"), (self.map["two"] as Dir))
+    assert_eq((self.map["root"] as Dir).local_dir("three"), (self.map["three"] as Dir))
     assert_eq((self.map["root"] as Dir).local_dir("four"), null)
     assert_eq((self.map["root"] as Dir).local_dir("three/four"), null)
     assert_eq((self.map["root"] as Dir).local_dir(""), null)
-    assert_eq((self.map["root"] as Dir).local_dir("."), self.map["root"])
-    assert_eq((self.map["root"] as Dir).local_dir(".."), self.map["root"])
+    assert_eq((self.map["root"] as Dir).local_dir("."), (self.map["root"] as Dir))
+    assert_eq((self.map["root"] as Dir).local_dir(".."), (self.map["root"] as Dir))
 
     # Tests for /three
     assert_eq((self.map["three"] as Dir).local_dir("two"), null)
     assert_eq((self.map["three"] as Dir).local_dir(""), null)
     assert_eq((self.map["three"] as Dir).local_dir("three"), null)
-    assert_eq((self.map["three"] as Dir).local_dir("four"), self.map["four"])
+    assert_eq((self.map["three"] as Dir).local_dir("four"), (self.map["four"] as Dir))
     assert_eq((self.map["three"] as Dir).local_dir("../three"), null)
     assert_eq((self.map["three"] as Dir).local_dir("file1"), null)
     assert_eq((self.map["three"] as Dir).local_dir("file2"), null)
-    assert_eq((self.map["three"] as Dir).local_dir("."), self.map["three"])
-    assert_eq((self.map["three"] as Dir).local_dir(".."), self.map["root"])
+    assert_eq((self.map["three"] as Dir).local_dir("."), (self.map["three"] as Dir))
+    assert_eq((self.map["three"] as Dir).local_dir(".."), (self.map["root"] as Dir))
 
 
 func test_local_file() -> void:
@@ -105,8 +105,8 @@ func test_local_file() -> void:
     assert_eq((self.map["three"] as Dir).local_file("three"), null)
     assert_eq((self.map["three"] as Dir).local_file("four"), null)
     assert_eq((self.map["three"] as Dir).local_file("../three"), null)
-    assert_eq((self.map["three"] as Dir).local_file("file1"), self.map["file1"])
-    assert_eq((self.map["three"] as Dir).local_file("file2"), self.map["file2"])
+    assert_eq((self.map["three"] as Dir).local_file("file1"), (self.map["file1"] as File))
+    assert_eq((self.map["three"] as Dir).local_file("file2"), (self.map["file2"] as File))
     assert_eq((self.map["three"] as Dir).local_file("file3"), null)
     assert_eq((self.map["three"] as Dir).local_file("four/file3"), null)
     assert_eq((self.map["three"] as Dir).local_file("."), null)
@@ -114,27 +114,27 @@ func test_local_file() -> void:
 
 
 func test_get_dir() -> void:
-    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["two"])), self.map["two"])
-    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["three"])), self.map["three"])
-    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["three", "four"])), self.map["four"])
-    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["four"])), self.map["four"])
-    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["..", "two"])), self.map["two"])
-    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["..", "three"])), self.map["three"])
-    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["four", ".."])), self.map["three"])
+    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["two"])), (self.map["two"] as Dir))
+    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["three"])), (self.map["three"] as Dir))
+    assert_eq((self.map["root"] as Dir).get_dir(Path.new(["three", "four"])), (self.map["four"] as Dir))
+    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["four"])), (self.map["four"] as Dir))
+    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["..", "two"])), (self.map["two"] as Dir))
+    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["..", "three"])), (self.map["three"] as Dir))
+    assert_eq((self.map["three"] as Dir).get_dir(Path.new(["four", ".."])), (self.map["three"] as Dir))
     assert_eq((self.map["three"] as Dir).get_dir(Path.new(["four", "file3"])), null)
     assert_eq((self.map["root"] as Dir).get_dir(Path.new(["four"])), null)
 
 
 func test_get_file() -> void:
-    assert_eq((self.map["two"] as Dir).get_file(Path.new(["file0"])), self.map["file0"])
-    assert_eq((self.map["three"] as Dir).get_file(Path.new(["file1"])), self.map["file1"])
-    assert_eq((self.map["three"] as Dir).get_file(Path.new(["file2"])), self.map["file2"])
-    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "file3"])), self.map["file3"])
-    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "file4"])), self.map["file4"])
-    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "file5"])), self.map["file5"])
-    assert_eq((self.map["three"] as Dir).get_file(Path.new(["..", "two", "file0"])), self.map["file0"])
+    assert_eq((self.map["two"] as Dir).get_file(Path.new(["file0"])), (self.map["file0"] as File))
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["file1"])), (self.map["file1"] as File))
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["file2"])), (self.map["file2"] as File))
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "file3"])), (self.map["file3"] as File))
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "file4"])), (self.map["file4"] as File))
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "file5"])), (self.map["file5"] as File))
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["..", "two", "file0"])), (self.map["file0"] as File))
     assert_eq((self.map["three"] as Dir).get_file(Path.new(["four", "..", "file3"])), null)
-    assert_eq((self.map["three"] as Dir).get_file(Path.new(["..", "three", "file1"])), self.map["file1"])
+    assert_eq((self.map["three"] as Dir).get_file(Path.new(["..", "three", "file1"])), (self.map["file1"] as File))
     assert_eq((self.map["root"] as Dir).get_file(Path.new(["file0"])), null)
     assert_eq((self.map["root"] as Dir).get_file(Path.new(["two"])), null)
     assert_eq((self.map["root"] as Dir).get_file(Path.new(["three"])), null)
