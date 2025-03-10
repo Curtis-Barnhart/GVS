@@ -3,7 +3,7 @@ extends GutTest
 const Path = GVSClassLoader.gvm.filesystem.Path
 
 
-func test_degen():
+func test_degen() -> void:
     assert_true(Path.new([]).degen(),
         "Path.degen did not return true on empty path."
     )
@@ -17,7 +17,7 @@ func test_degen():
     )
 
 
-func test_head():
+func test_head() -> void:
     assert_eq(Path.new(["hello", "world"]).head(), "hello",
         "Path.head did not return the first element of the path of length 2."
     )
@@ -31,7 +31,7 @@ func test_head():
     )
 
 
-func test_tail():
+func test_tail() -> void:
     assert_eq(Path.new(["hello", "there", "world"]).tail().as_string(), "/there/world",
         "Path.tail did not return the last 2 elements of a path of length 3."
     )
@@ -45,7 +45,7 @@ func test_tail():
     )
 
 
-func test_base():
+func test_base() -> void:
     assert_eq(Path.new(["hello", "there", "world"]).base().as_string(), "/hello/there",
         "Path.base did not return the first 2 elements of a path of length 3."
     )
@@ -59,7 +59,7 @@ func test_base():
     )
 
 
-func test_last():
+func test_last() -> void:
     assert_eq(Path.new(["hello", "there", "world"]).last(), "world",
         "Path.last did not return the last elements of the path of length 3."
     )
@@ -73,7 +73,7 @@ func test_last():
     )
 
 
-func test_compose():
+func test_compose() -> void:
     assert_eq(Path.ROOT.compose(Path.ROOT).as_string(), "/",
         "Two empty paths composed did not result in an empty path."
     )
@@ -90,7 +90,7 @@ func test_compose():
     )
 
 
-func test_extend():
+func test_extend() -> void:
     assert_eq(Path.ROOT.extend("").as_string(), "/",
         "An empty path extended by nothing did not result in an empty path."
     )
@@ -107,7 +107,7 @@ func test_extend():
     )
 
 
-func test_as_string():
+func test_as_string() -> void:
     assert_eq(Path.ROOT.as_string(), "/")
     assert_eq(Path.ROOT.as_string(false), "")
     assert_eq(Path.new(["hello"]).as_string(), "/hello")
@@ -116,7 +116,7 @@ func test_as_string():
     assert_eq(Path.new(["hello", "there", "world"]).as_string(false), "hello/there/world")
 
 
-func test_as_cwd():
+func test_as_cwd() -> void:
     assert_eq(Path.ROOT.as_cwd("hello/world").as_string(), "/hello/world",
         "Path.as_cwd failed on relative path from root directory."
     )
