@@ -126,3 +126,7 @@ func _ready() -> void:
 
 func node_rel_pos_from_path(p: Path) -> Vector2:
     return self._all_nodes.get(p.as_string()).global_position - self.global_position
+
+
+func get_file(p: Path) -> TNode:
+    return self._all_nodes[p.as_string()]
