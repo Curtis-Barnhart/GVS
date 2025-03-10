@@ -354,7 +354,33 @@ func test_remove_file_bad() -> void:
     )
 
 
+func test_remove_recursive_success() -> void:
+    self.assert_true(
+        self._man.remove_recursive(Path.new(["three"])),
+        "Directory '/three' should be removed successfully."
+    )
+    self.assert_false(
+        self._man.contains_dir(Path.new(["three"])),
+        "'/three' should no longer exist."
+    )
 
+
+func test_remove_recursive_failure() -> void:
+    self.assert_false(
+        self._man.remove_recursive(Path.ROOT),
+        "Attempting to remove root directory should fail."
+    )
+    self.assert_false(
+        self._man.remove_recursive(Path.new(["three", "unknown"])),
+        "Attempting to remove nonexistent directory '/three/unknown' should fail."
+    )
+    # Ensure that existing directories were not mistakenly removed
+    self.assert_true(
+        self._man.contains_dir(Path.new(["three"]))
+    )
+    self.assert_true(
+        self._man.contains_file(Path.new(["three", "file1"]))
+    )
 
 
 # This test forces the order to be the same, which is not strictly required.
@@ -363,7 +389,7 @@ func test_read_dirs_in_dir() -> void:
     self.assert_eq(
         self._man \
             .read_dirs_in_dir(Path.new([])) \
-            .map(func(p: Path) -> void: return p.as_string()),
+            .map(func(p: Path) -> String: return p.as_string()),
         ["/two", "/three", "/.", "/.."],
         "Root directory should contain '.', '..', 'two', and 'three'."
     )
@@ -371,7 +397,7 @@ func test_read_dirs_in_dir() -> void:
     self.assert_eq(
         self._man \
             .read_dirs_in_dir(Path.new(["three"])) \
-            .map(func(p: Path) -> void: return p.as_string()),
+            .map(func(p: Path) -> String: return p.as_string()),
         ["/three/four", "/three/.", "/three/.."],
         "Directory '/three' should contain '.', '..', and 'four'."
     )
@@ -379,7 +405,7 @@ func test_read_dirs_in_dir() -> void:
     self.assert_eq(
         self._man \
             .read_dirs_in_dir(Path.new(["three", "four"])) \
-            .map(func(p: Path) -> void: return p.as_string()),
+            .map(func(p: Path) -> String: return p.as_string()),
         ["/three/four/.", "/three/four/.."],
         "Directory '/three/four' should only contain '.' and '..'."
     )
@@ -389,7 +415,7 @@ func test_read_files_in_dir() -> void:
     self.assert_eq(
         self._man \
             .read_files_in_dir(Path.new(["two"])) \
-            .map(func(p: Path) -> void: return p.as_string()),
+            .map(func(p: Path) -> String: return p.as_string()),
         ["/two/file0"],
         "Directory '/two' should contain 'file0'."
     )
@@ -397,7 +423,7 @@ func test_read_files_in_dir() -> void:
     self.assert_eq(
         self._man \
             .read_files_in_dir(Path.new(["three"])) \
-            .map(func(p: Path) -> void: return p.as_string()),
+            .map(func(p: Path) -> String: return p.as_string()),
         ["/three/file1", "/three/file2"],
         "Directory '/three' should contain 'file1' and 'file2'."
     )
@@ -405,7 +431,7 @@ func test_read_files_in_dir() -> void:
     self.assert_eq(
         self._man \
             .read_files_in_dir(Path.new(["three", "four"])) \
-            .map(func(p: Path) -> void: return p.as_string()),
+            .map(func(p: Path) -> String: return p.as_string()),
         ["/three/four/file3", "/three/four/file4", "/three/four/file5"],
         "Directory '/three/four' should contain 'file3', 'file4', and 'file5'."
     )
