@@ -14,7 +14,7 @@ var _man: Manager
 #      file0    file1 file2       four
 #                             .----.^------.
 #                           file3 file4 file5
-func before_each():
+func before_each() -> void:
     self._man = Manager.new()
     self._man.create_dir(Path.new(["two"]))
     self._man.create_dir(Path.new(["three"]))
@@ -27,14 +27,13 @@ func before_each():
     self._man.create_file(Path.new(["three", "four",  "file5"]))
 
 
-func test_contains_dir():
+func test_contains_dir() -> void:
     self.assert_true(self._man.contains_dir(Path.new([])))
     self.assert_true(self._man.contains_dir(Path.new(["two"])))
     self.assert_true(self._man.contains_dir(Path.new(["three"])))
     self.assert_true(self._man.contains_dir(Path.new(["three", "four"])))
 
     self.assert_false(self._man.contains_dir(Path.new(["four"])))
-
     self.assert_false(self._man.contains_dir(Path.new(["two", "file0"])))
     self.assert_false(self._man.contains_dir(Path.new(["three", "file1"])))
     self.assert_false(self._man.contains_dir(Path.new(["three", "file2"])))
@@ -43,7 +42,7 @@ func test_contains_dir():
     self.assert_false(self._man.contains_dir(Path.new(["three", "four",  "file5"])))
 
 
-func test_contains_file():
+func test_contains_file() -> void:
     self.assert_false(self._man.contains_file(Path.new([])))
     self.assert_false(self._man.contains_file(Path.new(["two"])))
     self.assert_false(self._man.contains_file(Path.new(["three"])))
@@ -64,7 +63,7 @@ func test_contains_file():
     self.assert_false(self._man.contains_file(Path.new(["file5"])))
 
 
-func test_create_dir():
+func test_create_dir() -> void:
     var dir_count: int = 0
     self.watch_signals(self._man)
     var swatch: SignalWatcher = self._signal_watcher
@@ -107,7 +106,7 @@ func test_create_dir():
     self.assert_true(self._man.contains_dir(Path.new(["new_dir", "new_dir"])))
 
 
-func test_create_dir_bad():
+func test_create_dir_bad() -> void:
     self.watch_signals(self._man)
     var swatch: SignalWatcher = self._signal_watcher
     
@@ -139,7 +138,7 @@ func test_create_dir_bad():
     self.assert_false(self._man.contains_dir(Path.new(["three", "four", "five", "six", "seven"])))
 
 
-func test_remove_dir():
+func test_remove_dir() -> void:
     self.assert_true(self._man.create_dir(Path.new(["new_dir"])))
     self.assert_true(self._man.create_dir(Path.new(["new_dir", "new_dir"])))
 
@@ -172,7 +171,7 @@ func test_remove_dir():
     self.assert_false(self._man.contains_dir(Path.new(["new_dir"])))
 
 
-func test_remove_dir_bad():
+func test_remove_dir_bad() -> void:
     self.assert_true(self._man.create_dir(Path.new(["nested"])))
     self.assert_true(self._man.create_dir(Path.new(["nested", "nested"])))
 
@@ -210,7 +209,7 @@ func test_remove_dir_bad():
     )
 
 
-func test_create_file():
+func test_create_file() -> void:
     var file_count: int = 0
     self.watch_signals(self._man)
     var swatch: SignalWatcher = self._signal_watcher
@@ -241,7 +240,7 @@ func test_create_file():
     self.assert_true(self._man.contains_file(Path.new(["new_file"])))
 
 
-func test_create_file_bad():
+func test_create_file_bad() -> void:
     self.watch_signals(self._man)
     var swatch: SignalWatcher = self._signal_watcher
 
@@ -271,7 +270,7 @@ func test_create_file_bad():
     )
 
 
-func test_remove_file():
+func test_remove_file() -> void:
     self.watch_signals(self._man)
     var swatch: SignalWatcher = self._signal_watcher
     var file_count: int = 0
@@ -325,7 +324,7 @@ func test_remove_file():
     self.assert_false(self._man.contains_file(Path.new(["three", "four", "file3"])))
 
 
-func test_remove_file_bad():
+func test_remove_file_bad() -> void:
     self.watch_signals(self._man)
     var swatch: SignalWatcher = self._signal_watcher
 
@@ -357,109 +356,121 @@ func test_remove_file_bad():
 
 # This test forces the order to be the same, which is not strictly required.
 # Maybe make the test compare without order later when I have the time?
-func test_read_dirs_in_dir():
+func test_read_dirs_in_dir() -> void:
     self.assert_eq(
-        self._man.read_dirs_in_dir(Path.new([])).map(func(p): return p.as_string()),
+        self._man \
+            .read_dirs_in_dir(Path.new([])) \
+            .map(func(p: Path) -> void: return p.as_string()),
         ["/two", "/three", "/.", "/.."],
         "Root directory should contain '.', '..', 'two', and 'three'."
     )
     
     self.assert_eq(
-        _man.read_dirs_in_dir(Path.new(["three"])).map(func(p): return p.as_string()),
+        self._man \
+            .read_dirs_in_dir(Path.new(["three"])) \
+            .map(func(p: Path) -> void: return p.as_string()),
         ["/three/four", "/three/.", "/three/.."],
         "Directory '/three' should contain '.', '..', and 'four'."
     )
     
     self.assert_eq(
-        _man.read_dirs_in_dir(Path.new(["three", "four"])).map(func(p): return p.as_string()),
+        self._man \
+            .read_dirs_in_dir(Path.new(["three", "four"])) \
+            .map(func(p: Path) -> void: return p.as_string()),
         ["/three/four/.", "/three/four/.."],
         "Directory '/three/four' should only contain '.' and '..'."
     )
 
 
-func test_read_files_in_dir():
+func test_read_files_in_dir() -> void:
     self.assert_eq(
-        _man.read_files_in_dir(Path.new(["two"])).map(func(p): return p.as_string()),
+        self._man \
+            .read_files_in_dir(Path.new(["two"])) \
+            .map(func(p: Path) -> void: return p.as_string()),
         ["/two/file0"],
         "Directory '/two' should contain 'file0'."
     )
     
     self.assert_eq(
-        _man.read_files_in_dir(Path.new(["three"])).map(func(p): return p.as_string()),
+        self._man \
+            .read_files_in_dir(Path.new(["three"])) \
+            .map(func(p: Path) -> void: return p.as_string()),
         ["/three/file1", "/three/file2"],
         "Directory '/three' should contain 'file1' and 'file2'."
     )
     
     self.assert_eq(
-        _man.read_files_in_dir(Path.new(["three", "four"])).map(func(p): return p.as_string()),
+        self._man \
+            .read_files_in_dir(Path.new(["three", "four"])) \
+            .map(func(p: Path) -> void: return p.as_string()),
         ["/three/four/file3", "/three/four/file4", "/three/four/file5"],
         "Directory '/three/four' should contain 'file3', 'file4', and 'file5'."
     )
 
 
-func test_reduce_path():
+func test_reduce_path() -> void:
     self.assert_eq(
-        _man.reduce_path(Path.new([".", "two", "..", "three"])).as_string(),
+        self._man.reduce_path(Path.new([".", "two", "..", "three"])).as_string(),
         "/three",
         "Path '/./two/../three' should reduce to '/three'."
     )
     
     self.assert_eq(
-        _man.reduce_path(Path.new(["three", "four", ".."])).as_string(),
+        self._man.reduce_path(Path.new(["three", "four", ".."])).as_string(),
         "/three",
         "Path '/three/four/..' should reduce to '/three'."
     )
     
     self.assert_eq(
-        _man.reduce_path(Path.new(["three", "four", ".", ".", "."])).as_string(),
+        self._man.reduce_path(Path.new(["three", "four", ".", ".", "."])).as_string(),
         "/three/four",
         "Path '/three/four/././.' should reduce to '/three/four'."
     )
 
     self.assert_eq(
-        _man.reduce_path(Path.new(["..", "..", ".."])).as_string(),
+        self._man.reduce_path(Path.new(["..", "..", ".."])).as_string(),
         "/",
         "Path '/../../..' should reduce to '/'."
     )
 
 
-func test_reduce_path_bad():
+func test_reduce_path_bad() -> void:
     self.assert_null(
-        _man.reduce_path(Path.new(["unknown"])),
+        self._man.reduce_path(Path.new(["unknown"])),
         "Nonexistent path '/unknown' should return null."
     )
     
     self.assert_null(
-        _man.reduce_path(Path.new(["three/unknown/.."])),
+        self._man.reduce_path(Path.new(["three/unknown/.."])),
         "Nonexistent path '/three/unknown/..' should return null."
     )
         
     self.assert_null(
-        _man.reduce_path(Path.new(["three", "file1", ".."])),
+        self._man.reduce_path(Path.new(["three", "file1", ".."])),
         "Path '/three/file1/..' should return null since file1 is not a directory."
     )
     
     self.assert_null(
-        _man.reduce_path(Path.new(["three", "file2", "..", "file1"])),
+        self._man.reduce_path(Path.new(["three", "file2", "..", "file1"])),
         "Path '/three/file2/../file1' should return null since file2 is not a directory."
     )
 
 
-func test_real_ancestry():
+func test_real_ancestry() -> void:
     self.assert_eq(
-        _man.real_ancestry(Path.new(["three", "four", "unknown"])).as_string(),
+        self._man.real_ancestry(Path.new(["three", "four", "unknown"])).as_string(),
         "/three/four",
         "Nonexistent path '/three/four/unknown' should resolve to '/three/four'."
     )
     
     self.assert_eq(
-        _man.real_ancestry(Path.new(["two", "file0", "ghost"])).as_string(),
+        self._man.real_ancestry(Path.new(["two", "file0", "ghost"])).as_string(),
         "/two/file0",
         "Nonexistent path '/two/file0/ghost' should resolve to '/two/file0'."
     )
     
     self.assert_eq(
-        _man.real_ancestry(Path.new(["nowhere", "random"])).as_string(),
+        self._man.real_ancestry(Path.new(["nowhere", "random"])).as_string(),
         "/",
         "Nonexistent path '/nowhere/random' should resolve to '/'."
     )
