@@ -1,4 +1,4 @@
-extends HBoxContainer
+extends HSplitContainer
 
 const FSManager = GVSClassLoader.gvm.filesystem.Manager
 const FileList = GVSClassLoader.visualfs.FileList

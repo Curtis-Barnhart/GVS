@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://pb5jip50o1vp" path="res://visual/DragViewport/DragViewport.tscn" id="2_0t8lm"]
 [ext_resource type="PackedScene" uid="uid://dq8b8lpiitxh4" path="res://visualfs/narrator/Narrator.tscn" id="3_nfywm"]
 
-[node name="VfsMain" type="HBoxContainer"]
+[node name="VfsMain" type="HSplitContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
