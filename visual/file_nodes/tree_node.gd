@@ -6,6 +6,7 @@ const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 
 var _sub_width: float = 0
 var _path_glow: bool = false
+var _collapsed: bool = false
 
 
 static func make_new() -> TNode:
@@ -13,6 +14,8 @@ static func make_new() -> TNode:
 
 
 func total_width() -> float:
+    if self._collapsed:
+        return self.self_width()
     return max(self.self_width(), self._sub_width)
 
 
@@ -75,8 +78,9 @@ func _on_subwidth_change(delta: float) -> void:
 func arrange_subnodes() -> void:
     var offset := -self._sub_width/2
     # TODO: someday update this to check for files as well
-    for sd: TNode in self.get_children() \
-                  .filter(func (c: Node) -> bool: return is_instance_of(c, TNode)):
+    for sd: TNode in self.get_children().filter(
+        func (c: Node) -> bool: return is_instance_of(c, TNode)
+    ):
         sd.interp_movement(Vector2(offset + (sd.total_width() / 2), HEIGHT))
         offset += sd.total_width()
     self.queue_redraw()
@@ -109,3 +113,37 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
     super._process(delta)
+
+
+func collapse() -> void:
+    if not self._collapsed:
+        var old_width: float = self.total_width()
+        self._collapsed = true
+        var delta_width: float = self.total_width() - old_width
+        if delta_width != 0:
+            self.total_width_changed.emit(delta_width)
+        for child: BaseNode in self.get_children().filter(
+            func (c: Node) -> void: return is_instance_of(c, BaseNode)
+        ):
+            child.interp_movement(Vector2.ZERO)
+        
+        await GVSGlobals.wait(2)
+        for child: BaseNode in self.get_children().filter(
+            func (c: Node) -> void: return is_instance_of(c, BaseNode)
+        ):
+            child.visible = false
+
+
+func uncollapse() -> void:
+    if self._collapsed:
+        var old_width: float = self.total_width()
+        self._collapsed = false
+        var delta_width: float = self.total_width() - old_width
+        if delta_width != 0:
+            self.total_width_changed.emit(delta_width)
+        for child: TNode in self.get_children().filter(
+            func (c: Node) -> void: return is_instance_of(c, TNode)
+        ):
+            child.visible = true
+            child.arrange_subnodes()
+        self.arrange_subnodes()
