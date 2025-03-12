@@ -50,6 +50,9 @@ func highlight_path(origin: Path, path: Path) -> void:
         elif next_hop == ".":
             pass
         else:
+            # TODO: This breaks when encoutering . and ..
+            # because we don't hold a reference to the fsmanager that can
+            # properly reduce complex paths for us
             node_to_highlight = self._all_nodes[origin.extend(next_hop).as_string()]
             node_to_highlight._path_glow = true
             node_to_highlight.z_index = 1
@@ -68,6 +71,30 @@ func highlight_path(origin: Path, path: Path) -> void:
 func change_cwd(new_p: Path, old_p: Path) -> void:
     (self._all_nodes[old_p.as_string()] as TNode).change_icon(dir_text)
     (self._all_nodes[new_p.as_string()] as TNode).change_icon(cwd_text)
+
+
+func is_dir_collapsed(p: Path) -> bool:
+    var dir: TNode = self._all_nodes.get(p.as_string())
+    assert(dir != null,
+        "Could not find dir to query collpsedness."
+    )
+    return dir._collapsed
+
+
+func collapse_dir(p: Path) -> void:
+    var dir: TNode = self._all_nodes.get(p.as_string())
+    assert(dir != null,
+        "Could not find dir to collapse."
+    )
+    dir.collapse()
+    
+    
+func uncollapse_dir(p: Path) -> void:
+    var dir: TNode = self._all_nodes.get(p.as_string())
+    assert(dir != null,
+        "Could not find dir to uncollapse."
+    )
+    dir.uncollapse()
 
 
 ## create_dir creates a node in the visual graph
