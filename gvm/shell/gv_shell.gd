@@ -174,9 +174,6 @@ func _on_prompt_text_changed() -> void:
 ## Checks if the user is currently typing a valid pathname.
 ## If so, broadcasts it.
 func _on_prompt_caret_changed() -> void:
-    # get_word_under_caret works if the caret is in the middle of or at the
-    # start of a word, but does not work if we're at the end of one,
-    # which is unfortunately where you are while you type.
     var caret_string: String = self.prompt.get_word_under_caret()
     if caret_string == "":
         # Get most recent previous non space character
