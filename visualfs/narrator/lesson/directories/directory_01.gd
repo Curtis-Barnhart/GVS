@@ -18,7 +18,6 @@ func start() -> void:
     self._file_tree = self._viewport.node_from_scene("FileTree")
     self._file_tree.file_clicked.connect(self.directory_clicked)
     self._next_button.pressed.connect(self.finish)
-    self._next_button.disabled = true
     
     self._text_display.text = UtilString.make_article(
         [

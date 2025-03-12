@@ -18,7 +18,6 @@ func start() -> void:
     self._file_tree = self._viewport.node_from_scene("FileTree")
     self._file_tree.file_clicked.connect(self.file_clicked)
     self._next_button.pressed.connect(self.finish)
-    self._next_button.disabled = true
     
     self._text_display.text = UtilString.make_article(
         [
@@ -78,7 +77,7 @@ func start() -> void:
             ],
             [
                 "/file0"
-            ]
+            ],
         ]
     )
 
@@ -98,5 +97,5 @@ func finish() -> void:
     )
     assert(
         self.get_reference_count() == 1,
-        "Not all references to file_05 removed before checkpoint exit."
+        "Not all references to directory_03 removed before checkpoint exit."
     )
