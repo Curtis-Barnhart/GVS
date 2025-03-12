@@ -15,7 +15,6 @@ var _file_tree: FileTree
 
 
 func start() -> void:            
-    # Create file tree object in drag viewport connected to the fs_manager
     self._file_tree = self._viewport.node_from_scene("FileTree")
     self._file_tree.file_clicked.connect(self.directory_clicked)
     self._next_button.pressed.connect(self.finish)
