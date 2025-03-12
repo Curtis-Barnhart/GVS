@@ -70,14 +70,12 @@ func _on_subwidth_change(delta: float) -> void:
     if old_total != self.total_width():
         self.total_width_changed.emit(self.total_width() - old_total)
     self.arrange_subnodes()
-    #print("New total width: ", self.total_width())
 
 
 ## Arrange the positions of my children directories so they are evenly spaced
 ## (taking into account their own children, so that no one's children overlap).
 func arrange_subnodes() -> void:
     var offset := -self._sub_width/2
-    # TODO: someday update this to check for files as well
     for sd: TNode in self.get_children().filter(
         func (c: Node) -> bool: return is_instance_of(c, TNode)
     ):
@@ -115,6 +113,23 @@ func _process(delta: float) -> void:
     super._process(delta)
 
 
+func condense_subnodes_recur() -> void:
+    for child: TNode in self.get_children().filter(
+        func (c: Node) -> bool: return is_instance_of(c, TNode)
+    ):
+        child.interp_movement(Vector2.ZERO)
+        child.condense_subnodes_recur()
+
+
+func arrange_subnodes_recur() -> void:
+    if not self._collapsed:
+        self.arrange_subnodes()
+        for child: TNode in self.get_children().filter(
+            func (c: Node) -> bool: return is_instance_of(c, TNode)
+        ):
+            child.arrange_subnodes_recur()
+
+
 func collapse() -> void:
     if not self._collapsed:
         var old_width: float = self.total_width()
@@ -122,16 +137,18 @@ func collapse() -> void:
         var delta_width: float = self.total_width() - old_width
         if delta_width != 0:
             self.total_width_changed.emit(delta_width)
-        for child: BaseNode in self.get_children().filter(
-            func (c: Node) -> void: return is_instance_of(c, BaseNode)
-        ):
-            child.interp_movement(Vector2.ZERO)
         
-        await GVSGlobals.wait(2)
-        for child: BaseNode in self.get_children().filter(
-            func (c: Node) -> void: return is_instance_of(c, BaseNode)
-        ):
-            child.visible = false
+        self.condense_subnodes_recur()
+                
+        var temp_timer: SceneTreeTimer = self.get_tree().create_timer(2)
+        temp_timer.timeout.connect(
+            func () -> void:
+                if self._collapsed:
+                    for child: TNode in self.get_children().filter(
+                        func (c: Node) -> bool: return is_instance_of(c, BaseNode)
+                    ):
+                        child.visible = false
+        )
 
 
 func uncollapse() -> void:
@@ -141,9 +158,9 @@ func uncollapse() -> void:
         var delta_width: float = self.total_width() - old_width
         if delta_width != 0:
             self.total_width_changed.emit(delta_width)
+        
         for child: TNode in self.get_children().filter(
-            func (c: Node) -> void: return is_instance_of(c, TNode)
+            func (c: Node) -> bool: return is_instance_of(c, TNode)
         ):
             child.visible = true
-            child.arrange_subnodes()
-        self.arrange_subnodes()
+        self.arrange_subnodes_recur()

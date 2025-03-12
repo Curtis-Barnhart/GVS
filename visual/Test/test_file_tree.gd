@@ -64,6 +64,14 @@ func menu_settings_dir(menu: Menu, file_path: Path) -> void:
     f0.texture = load("res://visual/assets/file_new.svg")
     menu.add_child(f0)
     
+    f0 = Sprite2D.new()
+    if self.ft.is_dir_collapsed(file_path):
+        f0.texture = load("res://icon.svg")
+        menu.add_child(f0)    
+    else:
+        f0.texture = load("res://icon.svg")
+        menu.add_child(f0)    
+    
     menu.menu_closed.connect(
         func (x: int) -> void:
             match x:
@@ -73,6 +81,8 @@ func menu_settings_dir(menu: Menu, file_path: Path) -> void:
                     self.delete_dir_flow(file_path)
                 2:
                     self.create_file_flow(file_path)
+                3:
+                    self.toggle_dir_collapse(file_path)
     )
 
 
@@ -90,6 +100,13 @@ func menu_popup(file_path: Path) -> void:
                     * file_vis.get_global_transform_with_canvas() \
                     * Vector2.ZERO
     menu.popup(file_vis)
+
+
+func toggle_dir_collapse(p: Path) -> void:
+    if self.ft.is_dir_collapsed(p):
+        self.ft.uncollapse_dir(p)
+    else:
+        self.ft.collapse_dir(p)
 
 
 func delete_file_flow(path: Path) -> void:
