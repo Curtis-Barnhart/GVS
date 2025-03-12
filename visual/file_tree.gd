@@ -12,7 +12,8 @@ const dir_text: Texture2D = preload("res://visual/assets/directory.svg")
 ## Texture for the current working directory
 const cwd_text: Texture2D = preload("res://visual/assets/cwd.svg")
 ## Texture for a file
-const file_texture = preload("res://visual/assets/file.svg")
+const file_texture := preload("res://visual/assets/file.svg")
+const opened_dir_text := preload("res://visual/assets/directory_open.svg")
 
 ## Map from strings of paths to the TreeNode objects
 var _all_nodes: Dictionary = {}
@@ -86,6 +87,7 @@ func collapse_dir(p: Path) -> void:
     assert(dir != null,
         "Could not find dir to collapse."
     )
+    dir.change_icon(dir_text)
     dir.collapse()
     
     
@@ -94,6 +96,7 @@ func uncollapse_dir(p: Path) -> void:
     assert(dir != null,
         "Could not find dir to uncollapse."
     )
+    dir.change_icon(opened_dir_text)
     dir.uncollapse()
 
 
@@ -117,7 +120,7 @@ func create_node(p: Path, texture: Texture2D) -> void:
 
 
 func create_node_dir(p: Path) -> void:
-    self.create_node(p, dir_text)
+    self.create_node(p, opened_dir_text)
 
 
 func create_node_file(p: Path) -> void:
