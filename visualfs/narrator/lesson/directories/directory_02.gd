@@ -15,7 +15,6 @@ var _file_tree: FileTree
 
 
 func start() -> void:            
-    # Create file tree object in drag viewport connected to the fs_manager
     self._file_tree = self._viewport.node_from_scene("FileTree")
     self._file_tree.file_clicked.connect(self.directory_clicked)
     self._next_button.pressed.connect(self.finish)
@@ -70,7 +69,7 @@ func file_clicked(file_path: Path) -> void:
 func finish() -> void:
     self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/completion.gd").new(
+        preload("res://visualfs/narrator/lesson/directories/directory_03.gd").new(
             self._fs_man, self._next_button, self._text_display, self._viewport
         )
     )

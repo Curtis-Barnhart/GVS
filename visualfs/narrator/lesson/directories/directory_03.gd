@@ -15,7 +15,6 @@ var _file_tree: FileTree
 
 
 func start() -> void:            
-    # Create file tree object in drag viewport connected to the fs_manager
     self._file_tree = self._viewport.node_from_scene("FileTree")
     self._file_tree.file_clicked.connect(self.file_clicked)
     self._next_button.pressed.connect(self.finish)
@@ -23,33 +22,70 @@ func start() -> void:
     
     self._text_display.text = UtilString.make_article(
         [
-            "Finding Files... the Smart Way",
+            "What is a Path?",
             [
-                "Okay, you've done this a few times now,",
-                "so this next time, you'll work a little bit more on your own.",
-                "Your starting position is the same this time,",
-                "and the route to your destination is to go to",
-                "'directory0', then 'subdirectory1', and lastly to 'file0'.",
-                "This section will be completed as soon as you select",
-                "your destination file.",
+                "This way of identifying files by providing a route",
+                "to them is pretty handy!",
+                "If you had a thousand files to search through,",
+                "instead of looking if each one of them",
+                "had the name of the file you were looking for,",
+                "you could just follow the route exactly to the right one.",
             ],
+            [
+                "This type of 'route' we use to identify files",
+                "is called a [color=steel blue]Path[/color] -",
+                "which makes a lot of sense",
+                "considering the navigation analogy we've been using.",
+                "A Path is written using the forward slash character",
+                "[color=steel blue]/[/color] to indicate that the",
+                "'next turn' is coming up - that the next word",
+                "is going to be the next step of the route to a file.",
+                "If I wanted to tell you to find the file which is located by going",
+                "to 'directory0', then 'subdirectory1', and lastly to 'file0',",
+                "I could just give you the path '/directory0/subdirectory1/file0',",
+                "and you would have all the information you need to find it.",
+            ],
+            [
+                "The intermediary places which are not themselves files",
+                "but contain routing information to other files",
+                "are called 'directories',",
+                "like the directory in a mall which tells you where",
+                "all the stores inside can be located.",
+                "A path doesn't have to end at a file -",
+                "it could end at a directory as well, like",
+                "'/directory0/subdirectory1'.",
+            ],
+            [
+                "One nice thing about the structure of files and directories",
+                "is that files can only be listed in a single directory,",
+                "which means that there is only ever one valid path to",
+                "that exact file",
+                "(this is technically a lie,",
+                "but explaining how is beyond the scope of these lessons).",
+            ],
+            [
+                "To get a little more practice with finding files",
+                "and working with paths in,",
+                "let's have you identify a few more files and directories",
+                "based solely on their paths.",
+                "During this section, you won't need to click on each",
+                "turn along the way - you can just click on the final file",
+                "or directory to locate it.",
+                "However, if you find it helpful to build the path up piece by piece,",
+                "feel free to do so.",
+                "Click on the file or directory indicated by the paths",
+                "to complete this section:"
+            ],
+            [
+                "/file0"
+            ]
         ]
     )
-    
-    self._fs_man.create_dir(Path.new(["directory0", "subdirectory0"]))
-    self._fs_man.create_dir(Path.new(["directory0", "subdirectory1"]))
-    await GVSGlobals.wait(2)
-    self._fs_man.create_file(Path.new(["directory0", "subdirectory0", "file0"]))
-    self._fs_man.create_file(Path.new(["directory0", "subdirectory0", "file1"]))
-    self._fs_man.create_file(Path.new(["directory0", "subdirectory1", "file0"]))
-    self._fs_man.create_file(Path.new(["directory0", "subdirectory1", "file1"]))
-    await GVSGlobals.wait(2)
 
 
 func file_clicked(file_path: Path) -> void:
-    if file_path.as_string() == "/directory0/subdirectory1/file0":
-        self._file_tree.file_clicked.disconnect(self.file_clicked)
-        self._file_tree.highlight_path(Path.ROOT, file_path)
+    self._file_tree.highlight_path(Path.ROOT, file_path)
+    if file_path.as_string() == "/file0":
         self._next_button.disabled = false
 
 
