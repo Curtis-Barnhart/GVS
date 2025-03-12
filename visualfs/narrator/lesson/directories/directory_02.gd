@@ -25,7 +25,13 @@ func start() -> void:
         [
             "Finding Files... the Smart Way",
             [
-                "to, say, Blenders in the Grass"
+                "Okay, you've done this a few times now,",
+                "so this next time, you'll work a little bit more on your own.",
+                "Your starting position is the same this time,",
+                "and the route to your destination is to go to",
+                "'directory0', then 'subdirectory1', and lastly to 'file0'.",
+                "This section will be completed as soon as you select",
+                "your destination file.",
             ],
         ]
     )
