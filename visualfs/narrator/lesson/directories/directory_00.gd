@@ -15,9 +15,21 @@ var _file_tree: FileTree
 
 
 func start() -> void:    
+    await self.remove_old_files()
     self._viewport.node_from_scene("FileList").queue_free()
-    for old_file: Path in self._fs_man.read_files_in_dir(Path.ROOT):
-        self._fs_man.remove_file(old_file)
+    await GVSGlobals.wait(0.5)
+    
+    # Create file tree object in drag viewport connected to the fs_manager
+    self._file_tree = FileTree.make_new()
+    self._file_tree.name = "FileTree"
+    self._viewport.add_to_scene(self._file_tree)
+    self._fs_man.created_dir.connect(self._file_tree.create_node_dir)
+    self._fs_man.created_file.connect(self._file_tree.create_node_file)
+    self._fs_man.removed_dir.connect(self._file_tree.remove_node)
+    self._fs_man.removed_file.connect(self._file_tree.remove_node)
+    self._file_tree.file_clicked.connect(self.file_clicked)
+    self._next_button.pressed.connect(self.finish)
+    self._next_button.disabled = true
     
     self._text_display.text = UtilString.make_article(
         [
@@ -30,113 +42,74 @@ func start() -> void:
                 "even when we are surrounded by a multitude of information.",
             ],
             [
-                "I'm going to make about a hundred different files,",
-                "and I'm going to ask you to delete a certain one",
-                "just like in the last section.",
-                "This time, however, we're going to use a system of directions",
-                "that will help you locate it with ease.",
-                "Each next direction will get you closer to the file,",
-                "just like each next direction on a GPS",
-                "takes you closer to your destination when you travel."
+                "This system of organization is similar to finding your way",
+                "using directions given by a maps app on your phone.",
+                "When you use a maps app on your phone to get directions",
+                "to, say, Blenders in the Grass,",
+                "your phone doesn't just tell you,",
+                "\"Ah, sure thing, just head to 1046-F Coast Village Road,\"",
+                "and leave the rest up to you!",
+                "Instead, it gives you a series of instructions -",
+                "\"First, turn right onto Cold Springs.",
+                "Next, take a left on Sycamore Canyon...\"",
+                "By only telling you the very next road you need to turn on,",
+                "it greatly simplifies the process of finding Blenders.",
             ],
             [
-                "You should notice that there are other icons",
-                "besides just the file icons now.",
-                "These other icons "
+                "In the same way, this new system of organization",
+                "enables you to easily find files by only looking for",
+                "the 'next turn' at any given moment.",
+                "By following each next 'direction',",
+                "you don't need to have the file's location memorized,",
+                "and can instead sequentially get closer and closer",
+                "to its final location."
+            ],
+            [
+                "We will start with a simple example,",
+                "where there is only a single 'turn' to take.",
+                "In this section, you will see a solid blue icon labelled '/'",
+                "that represents your 'starting point'.",
+                "You'll also notice blue lines connecting it to several files.",
+                "You can think of these blue lines as 'roads' - they connect",
+                "the different 'places' in your computer and allow you to",
+                "navigate between them.",
+                "Click on your 'next turn' (in this case, your destination),",
+                "which is a file called 'file2'.",
+                "When you click on it, you'll see the blue line turn red.",
+                "This will be helpful when your 'route' contains multiple turns,",
+                "and will let you see the entire route you've taken so far.",
+                "You can complete this section once you've selected 'file2'."
             ],
         ]
     )
+    await GVSGlobals.wait(0.5)
+    self._fs_man.create_file(Path.new(["file0"]))
+    self._fs_man.create_file(Path.new(["file1"]))
+    self._fs_man.create_file(Path.new(["file2"]))
 
 
-func menu_popup(file_path: Path) -> void:
-    var menu: Menu = Menu.make_new()
-    var f0 := Sprite2D.new()
-    var file_vis: File = self._file_tree.get_file(file_path)
-    f0.texture = load("res://visual/assets/file_read.svg")
-    menu.add_child(f0)
-    f0 = Sprite2D.new()
-    f0.texture = load("res://visual/assets/file_write.svg")
-    menu.add_child(f0)
-    f0 = Sprite2D.new()
-    f0.texture = load("res://visual/assets/file_new.svg")
-    menu.add_child(f0)
-    f0 = Sprite2D.new()
-    f0.texture = load("res://visual/assets/file_delete.svg")
-    menu.add_child(f0)
-
-    menu.position = file_vis.get_viewport().get_screen_transform() \
-                    * file_vis.get_global_transform_with_canvas() \
-                    * Vector2.ZERO
-    menu.popup(file_vis)
-
-    menu.menu_closed.connect(
-        func (x: int) -> void:
-            match x:
-                0:
-                    self.file_read_popup(file_path)
-                1:
-                    self.file_write_popup(file_path)
-                2:
-                    self.create_file_flow(file_vis)
-                3:
-                    self.delete_file_flow(file_path)
-    )
+func file_clicked(file_path: Path) -> void:
+    if file_path.as_string() == "/file2":
+        self._file_tree.file_clicked.disconnect(self.file_clicked)
+        self._file_tree.highlight_path(Path.ROOT, file_path)
+        self._next_button.disabled = false
 
 
-func delete_file_flow(path: Path) -> void:
-    self._fs_man.remove_file(path)
-
-
-func create_file_flow(where: File) -> void:
-    # Popup file creation menu
-    var fname_input := FCreateInput.make_new()
-    var fname_popup := GPopup.make_into_popup(
-        fname_input,
-        where.get_viewport().get_screen_transform() \
-            * where.get_global_transform_with_canvas() \
-            * Vector2.ZERO
-    )
-    fname_input.setup("What do you want to name the file?")
+func remove_old_files() -> void:
+    var old_files: Array = self._fs_man.read_files_in_dir(Path.ROOT)
+    old_files.reverse()
     
-    fname_input.user_cancelled.connect(fname_popup.close_popup)
-    fname_input.user_entered.connect(
-        func (msg: String) -> void:
-            self._fs_man.create_file(Path.new([msg]))
-            fname_popup.close_popup()
-    )
-
-
-func file_read_popup(path: Path) -> void:
-    var file_vis: File = self._file_tree.get_file(path)
-    var reader := FileReader.make_new()
-    var popup := GPopup.make_into_popup(reader)
-    popup.position = file_vis.get_viewport().get_screen_transform() \
-                    * file_vis.get_global_transform_with_canvas() \
-                    * Vector2.ZERO
-    reader.load_text(self._fs_man.read_file(path))
-
-
-func file_write_popup(path: Path) -> void:
-    var file_vis: File = self._file_tree.get_file(path)
-    var writer := FileWriter.make_new()
-    var popup := GPopup.make_into_popup(writer)
-    popup.position = file_vis.get_viewport().get_screen_transform() \
-                    * file_vis.get_global_transform_with_canvas() \
-                    * Vector2.ZERO
-    writer.load_text(self._fs_man.read_file(path))
-    
-    writer.write.connect(
-        func (text: String) -> void:
-            var written: bool = self._fs_man.write_file(path, text)
-            assert(written)
-    )
-    writer.quit.connect(popup.close_popup)
+    var t: float = 0.25
+    for old_file: Path in old_files:
+        self._fs_man.remove_file(old_file)
+        await GVSGlobals.wait(t)
+        t = max(0.95 * t, 1.0/16)
 
 
 func finish() -> void:
-    self._next_button.text = "Continue"
+    self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/completion.gd").new(
+        preload("res://visualfs/narrator/lesson/directories/directory_01.gd").new(
             self._fs_man, self._next_button, self._text_display, self._viewport
         )
     )
@@ -144,24 +117,3 @@ func finish() -> void:
         self.get_reference_count() == 1,
         "Not all references to file_05 removed before checkpoint exit."
     )
-
-
-# Fake file generation
-const prefixes := ["report", "document", "image", "backup", "log", "summary", "presentation", "data", "audio", "video"]
-const suffixes := ["v1", "final", "draft", "backup", "edited", "compressed"]
-const extensions := ["txt", "pdf", "png", "jpg", "mp3", "mp4", "zip", "docx", "csv", "json"]
-
-
-func generate_fake_filename() -> String:
-    var prefix: String = prefixes[randi() % prefixes.size()]
-    var middle: String = str(randi() % 1000) if randf() < 0.5 else suffixes[randi() % suffixes.size()]
-    var extension: String = extensions[randi() % extensions.size()]
-    return prefix + "_" + middle + "." + extension
-
-
-func make_fake_files(count: int) -> void:
-    var t: float = 0.25
-    for _x in range(count):
-        self._fs_man.create_file(Path.new([self.generate_fake_filename()]))
-        await GVSGlobals.wait(t)
-        t = max(0.95*t, 1.0/16)

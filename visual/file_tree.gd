@@ -5,6 +5,8 @@ const FileTree = GVSClassLoader.visual.FileTree
 const Path = GVSClassLoader.gvm.filesystem.Path
 const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 
+signal file_clicked(path: Path)
+
 ## Texture for a normal directory
 const dir_text: Texture2D = preload("res://visual/assets/directory.svg")
 ## Texture for the current working directory
@@ -14,8 +16,6 @@ const file_texture = preload("res://visual/assets/file.svg")
 
 ## Map from strings of paths to the TreeNode objects
 var _all_nodes: Dictionary = {}
-## Path to the cwd
-var _cwd: Path = Path.ROOT
 ## Origin of the last highlighted path
 var _hl_origin: Path = Path.ROOT
 ## Last highlighted path (so we can unhighlight it when we want to highlight a new one)
@@ -86,6 +86,7 @@ func create_node(p: Path, texture: Texture2D) -> void:
     parent.add_subnode(child, p.last())
     self._all_nodes[p.as_string()] = child
     child.change_icon(texture)
+    child._icon.pressed.connect(func () -> void: self.file_clicked.emit(p))
 
 
 func create_node_dir(p: Path) -> void:
@@ -121,7 +122,8 @@ func _ready() -> void:
     self._all_nodes["/"] = TNode.make_new()
     self.add_child(self._all_nodes["/"] as Node)
     (self._all_nodes["/"] as TNode).setup("/")
-    self.change_cwd(Path.new([]), Path.new([]))
+    self.change_cwd(Path.ROOT, Path.ROOT)
+    (self._all_nodes["/"] as TNode)._icon.pressed.connect(func () -> void: self.file_clicked.emit(Path.ROOT))
 
 
 func node_rel_pos_from_path(p: Path) -> Vector2:
