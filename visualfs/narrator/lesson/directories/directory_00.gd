@@ -29,7 +29,6 @@ func start() -> void:
     self._fs_man.removed_file.connect(self._file_tree.remove_node)
     self._file_tree.file_clicked.connect(self.file_clicked)
     self._next_button.pressed.connect(self.finish)
-    self._next_button.disabled = true
     
     self._text_display.text = UtilString.make_article(
         [

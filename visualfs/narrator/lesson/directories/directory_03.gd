@@ -5,12 +5,20 @@ const FileTree = GVSClassLoader.visual.FileTree
 const Path = GVSClassLoader.gvm.filesystem.Path
 
 var _file_tree: FileTree
+var _targets: PackedStringArray = [
+    "/file0",
+    "/directory0/subdirectory1",
+    "/directory1/file0",
+    "/directory0/subdirectory0/file1"
+]
+var _target_index: int = 0
 
 
 func start() -> void:            
     self._file_tree = self._viewport.node_from_scene("FileTree")
     self._file_tree.file_clicked.connect(self.file_clicked)
     self._next_button.pressed.connect(self.finish)
+    self._next_button.disabled = true
     
     self._text_display.text = UtilString.make_article(
         [
@@ -77,8 +85,18 @@ func start() -> void:
 
 func file_clicked(file_path: Path) -> void:
     self._file_tree.highlight_path(Path.ROOT, file_path)
-    if file_path.as_string() == "/file0":
-        self._next_button.disabled = false
+    if (
+        self._target_index < self._targets.size()
+        and file_path.as_string() == self._targets[self._target_index]
+    ):
+        self._target_index += 1
+        if self._target_index == self._targets.size():
+            self._next_button.disabled = false
+        else:
+            self._text_display.text += UtilString.make_paragraphs(
+                [[self._targets[self._target_index]]]
+            )
+            # TODO: scroll here
 
 
 func finish() -> void:
