@@ -9,20 +9,20 @@ var _file_tree: FileTree
 
 func start() -> void:            
     self._file_tree = self._viewport.node_from_scene("FileTree")
-    self._file_tree.file_clicked.connect(self.node_clicked)
+    self._file_tree.file_clicked.connect(self.file_clicked)
     self._next_button.pressed.connect(self.finish)
     
     self._text_display.text = UtilString.make_article(
         [
-            "Relative Paths",
+            "User writes out paths",
             [
-                ""
+                "/file0"
             ],
         ]
     )
 
 
-func node_clicked(file_path: Path) -> void:
+func file_clicked(file_path: Path) -> void:
     self._file_tree.highlight_path(Path.ROOT, file_path)
     if file_path.as_string() == "/file0":
         self._next_button.disabled = false
@@ -31,7 +31,7 @@ func node_clicked(file_path: Path) -> void:
 func finish() -> void:
     self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/completion.gd").new(
+        preload("res://visualfs/narrator/lesson/directories/directory_05.gd").new(
             self._fs_man, self._next_button, self._text_display, self._viewport
         )
     )
