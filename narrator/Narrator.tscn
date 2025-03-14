@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://duxuodebilbwf"]
 
-[ext_resource type="Script" path="res://narrator/narrator.gd" id="1_ne5f2"]
+[ext_resource type="Script" uid="uid://c8v500xqrsycd" path="res://narrator/narrator.gd" id="1_ne5f2"]
 [ext_resource type="Texture2D" uid="uid://p2qtk5ccvwp1" path="res://shared/bordered.png" id="2_j8vlk"]
 [ext_resource type="Texture2D" uid="uid://do7vmtvdv60x6" path="res://narrator/assets/continue.svg" id="4_gj3sb"]
 

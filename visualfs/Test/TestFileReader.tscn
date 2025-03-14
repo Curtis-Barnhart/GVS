@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ctj7go02gy20v"]
 
-[ext_resource type="Script" path="res://visualfs/Test/test_file_reader.gd" id="1_ehpyr"]
+[ext_resource type="Script" uid="uid://c5665hj81xnvc" path="res://visualfs/Test/test_file_reader.gd" id="1_ehpyr"]
 [ext_resource type="PackedScene" uid="uid://pb5jip50o1vp" path="res://visual/DragViewport/DragViewport.tscn" id="3_gnhf4"]
 
 [node name="TestFileReader" type="Control"]

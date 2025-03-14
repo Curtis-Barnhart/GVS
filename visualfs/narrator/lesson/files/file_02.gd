@@ -52,7 +52,6 @@ func start() -> void:
     for path: Path in self._files.slice(1):
         self._fs_man.create_file(path)
         await GVSGlobals.wait(1)
-    
 
 
 func menu_popup(file_path: Path) -> void:

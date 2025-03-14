@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cdbsrhs5wv47x"]
 
-[ext_resource type="Script" path="res://visualfs/Test/test_file_list.gd" id="1_i6nv7"]
+[ext_resource type="Script" uid="uid://darsbhlc5xop1" path="res://visualfs/Test/test_file_list.gd" id="1_i6nv7"]
 [ext_resource type="PackedScene" uid="uid://crttens68gwmi" path="res://visualfs/FileList.tscn" id="2_eftrh"]
 
 [node name="TestFileList" type="Node2D"]

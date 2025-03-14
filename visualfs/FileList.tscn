@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://crttens68gwmi"]
 
-[ext_resource type="Script" path="res://visualfs/file_list.gd" id="1_ghwiq"]
+[ext_resource type="Script" uid="uid://dd7gvnefttubg" path="res://visualfs/file_list.gd" id="1_ghwiq"]
 
 [node name="FileList" type="Node2D"]
 script = ExtResource("1_ghwiq")

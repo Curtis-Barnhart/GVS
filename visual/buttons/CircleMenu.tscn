@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bbunind7pu871"]
 
-[ext_resource type="Script" path="res://visual/buttons/circle_menu.gd" id="1_ag7fp"]
+[ext_resource type="Script" uid="uid://b1kgk20viu8b7" path="res://visual/buttons/circle_menu.gd" id="1_ag7fp"]
 
 [node name="CircleMenu" type="Node2D"]
 script = ExtResource("1_ag7fp")

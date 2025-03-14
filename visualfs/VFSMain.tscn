@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://400vyh7u13la"]
 
-[ext_resource type="Script" path="res://visualfs/vfs_main.gd" id="1_ifaxc"]
+[ext_resource type="Script" uid="uid://c1h4pxy3ft0n6" path="res://visualfs/vfs_main.gd" id="1_ifaxc"]
 [ext_resource type="PackedScene" uid="uid://pb5jip50o1vp" path="res://visual/DragViewport/DragViewport.tscn" id="2_0t8lm"]
 [ext_resource type="PackedScene" uid="uid://dq8b8lpiitxh4" path="res://visualfs/narrator/Narrator.tscn" id="3_nfywm"]
 
