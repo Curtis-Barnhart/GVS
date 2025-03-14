@@ -28,7 +28,14 @@ func start() -> void:
             [
                 "Now, to make sure you really got the hang of this,",
                 "let's try some exercises in the reverse direction -",
-                "I'll give you "
+                "I'll highlight some paths for you,",
+                "and you can type out their paths in the text entry box below.",
+                "Press the enter key when you have finished typing out a path.",
+                "If it is not the correct path, nothing will happen when you",
+                "press the enter key, and you will able to modify the path",
+                "you are typing and try again.",
+                "If it is the correct path, then the text you typed will disappear",
+                "and a new path will be highlighted for you to label."
             ],
         ]
     )
