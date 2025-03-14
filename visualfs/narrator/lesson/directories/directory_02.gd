@@ -61,9 +61,7 @@ func file_clicked(file_path: Path) -> void:
 func finish() -> void:
     self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/directories/directory_03.gd").new(
-            self._fs_man, self._next_button, self._text_display, self._viewport
-        )
+        preload("res://visualfs/narrator/lesson/directories/directory_03.gd").new()
     )
     assert(
         self.get_reference_count() == 1,

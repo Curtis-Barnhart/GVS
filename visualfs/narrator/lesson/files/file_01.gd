@@ -103,9 +103,7 @@ func file_write_popup(path: Path) -> void:
 
 func finish() -> void:
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/files/file_02.gd").new(
-            self._fs_man, self._next_button, self._text_display, self._viewport
-        )
+        preload("res://visualfs/narrator/lesson/files/file_02.gd").new()
     )
     assert(
         self.get_reference_count() == 1,
