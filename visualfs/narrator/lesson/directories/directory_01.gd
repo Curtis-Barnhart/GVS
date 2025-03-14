@@ -16,22 +16,24 @@ func start() -> void:
         [
             "Finding Files... the Smart Way",
             [
-                "Let's consider a more complicated example,",
+                "Let's consider a more complicated example -",
                 "one with another road in between you and your goal.",
                 "This time, the first 'road' you'll need to take",
                 "is called 'directory1'.",
-                "'directory1' isn't a file - just like a highway or intersection",
-                "it isn't a destination in and of itself,",
-                "these intermediary places don't hold information like files do -",
-                "they simply exist to help route you between different files.",
+                "'directory1' isn't a file - just like an intersection",
+                "isn't itself a destination,",
+                "directory1 only exists to help you",
+                "find your way to other files.",
             ],
             [
                 "After you click on 'directory1',",
-                "you should see the red line update to show your 'route' so far.",
+                "you should see the blue line to it turn red.",
+                "This red line will help you track where you route goes so far.",
                 "The next turn you'll make will be your destination,",
                 "which is 'file1'.",
                 "After you click on 'file1',",
-                "you should see your 'route' update again,",
+                "you should see the next blue line turn red again",
+                "to reflect the change in your route,",
                 "and you'll be able to complete this section.",
             ],
         ]
@@ -68,5 +70,5 @@ func finish() -> void:
     )
     assert(
         self.get_reference_count() == 1,
-        "Not all references to file_05 removed before checkpoint exit."
+        "Not all references to directory_01 removed before checkpoint exit."
     )

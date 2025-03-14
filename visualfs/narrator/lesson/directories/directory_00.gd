@@ -42,8 +42,8 @@ func start() -> void:
             ],
             [
                 "This system of organization is similar to finding your way",
-                "using directions given by a maps app on your phone.",
-                "When you use a maps app on your phone to get directions",
+                "using directions given by a map on your phone.",
+                "When you use a map on your phone to get directions",
                 "to, say, Blenders in the Grass,",
                 "your phone doesn't just tell you,",
                 "\"Ah, sure thing, just head to 1046-F Coast Village Road,\"",
@@ -55,7 +55,7 @@ func start() -> void:
                 "it greatly simplifies the process of finding Blenders.",
             ],
             [
-                "In the same way, this new system of organization",
+                "In the same way, this new system of file organization",
                 "enables you to easily find files by only looking for",
                 "the 'next turn' at any given moment.",
                 "By following each next 'direction',",

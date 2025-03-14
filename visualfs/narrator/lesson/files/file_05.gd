@@ -53,7 +53,7 @@ func more_files(deleted: Path) -> void:
             [
                 "Not bad... but what happens when add a few more files?",
                 "Find the file '%s'" % self._current_target.as_string(false),
-                "and delete it to show you've found."
+                "and delete it to show that you've found it."
             ],
         ]
     )
@@ -77,7 +77,14 @@ func even_more_files(deleted: Path) -> void:
             [
                 "One last challenge (this one is optional)...",
                 "Find the file '%s'." % self._current_target.as_string(false),
-                "and delet it to show you've found."
+                "and delete it to show that you've found it.",
+                "If these seems like an unreasonable task...",
+                "then you're understanding the point of the lesson!",
+                "Trying to find a single file can feel like",
+                "searching for a needle in a haystack.",
+                "You can click the continue button to skip this part",
+                "if you aren't feeling particularly stubborn,",
+                "and we'll move on to examine a better way of organizing files.",
             ],
         ]
     )

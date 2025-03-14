@@ -27,18 +27,19 @@ func start() -> void:
                 "at least 925,241 files on it!",
             ],
             [
-                "But how do we distinguish between different files?",
-                "One of the first things that comes to mind is that",
-                "we could just give them different names.",
-                "If we enforce that names must be unique",
+                "But how do we tell different files apart?",
+                "The easiest way is to just give them different names.",
+                "As long as we make sure their names are unique",
                 "(no two files can have the same name),",
                 "then it will always be clear",
                 "which file we are talking about when we use its name.",
             ],
             [
-                "To complete this section,",
-                "write 'first' to file0.txt",
-                "'second' to file1.txt, and 'third' to file2.txt,",
+                "To complete this section, write 'first' to file0,",
+                "'second' to file1, and 'third' to file2.",
+                "If these files contained any other text to start with,",
+                "you must delete that text first so that the files will contain",
+                "only the words 'first', 'second', or 'third'.",
             ],
         ]
     )
@@ -107,9 +108,21 @@ func file_write_popup(path: Path) -> void:
 
 func check_finished() -> void:
     if (
-        self._fs_man.read_file(self._files[0]).strip_edges() == "first"
-        and self._fs_man.read_file(self._files[1]).strip_edges() == "second"
-        and self._fs_man.read_file(self._files[2]).strip_edges() == "third"
+        self._fs_man
+            .read_file(self._files[0])
+            .strip_edges()
+            .to_lower()
+            == "first"
+        and self._fs_man
+                .read_file(self._files[1])
+                .strip_edges()
+                .to_lower()
+                == "second"
+        and self._fs_man
+                .read_file(self._files[2])
+                .strip_edges()
+                .to_lower()
+                == "third"
     ):
         self._next_button.disabled = false
 

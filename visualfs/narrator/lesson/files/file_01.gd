@@ -28,12 +28,15 @@ func start() -> void:
         [
             "Writing to a File",
             [
-                "It would be rather silly if you could only read a file though.",
+                "It wouldn't be very useful if the only thing you could",
+                "do with a file was read it.",
+                "Thankfully there's more!",
                 "You can also replace the contents of a file,",
                 "which is called [color=steel blue]writing[/color] to it.",
             ],
             [
-                "To complete this section, write any changes to the file.",
+                "To complete this section, write some text to the file",
+                "(it can be whatever you want, as long as you make a change).",
                 "To write to a file, click on it to open its action menu.",
                 "Select the action to write to the file,",
                 "represented by an image of a file and a pencil.",
