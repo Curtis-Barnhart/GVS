@@ -36,7 +36,7 @@ theme_override_fonts/font = ExtResource("2_ed7qu")
 theme_override_font_sizes/font_size = 36
 theme_override_styles/normal = ExtResource("3_j3ksi")
 
-[node name="TextureButton" type="Button" parent="VBoxContainer"]
+[node name="Button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_bhvsl")

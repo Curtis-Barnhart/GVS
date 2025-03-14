@@ -11,7 +11,7 @@ var _cur_checkpt: Checkpoint
 # The NarratorLineEdit class will use this variable, even if we don't
 @warning_ignore("unused_variable")
 @onready var _line_edit: LineEdit = $VBoxContainer/LineEdit
-@onready var _next_button: Button = $VBoxContainer/TextureButton
+@onready var _next_button: Button = $VBoxContainer/Button
 @onready var _text: RichTextLabel = $VBoxContainer/RichTextLabel
 
 
