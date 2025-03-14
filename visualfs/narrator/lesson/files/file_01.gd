@@ -14,6 +14,7 @@ var _file_list: FileList
 
 
 func start() -> void:
+    self._next_button.text = "1"
     self._file_list = self._viewport.node_from_scene("FileList")
     
     var file_vis: File = self._file_list.get_file(self._first_file)

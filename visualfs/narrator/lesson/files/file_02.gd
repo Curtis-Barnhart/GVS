@@ -18,6 +18,7 @@ var _file_list: FileList
 
 
 func start() -> void:
+    self._next_button.set_text("123487")
     self._text_display.text = UtilString.make_article(
         [
             "Multiple Files",
