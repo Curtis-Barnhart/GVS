@@ -27,9 +27,9 @@ func start() -> void:
     self._fs_man.created_file.connect(self._file_tree.create_node_file)
     self._fs_man.removed_dir.connect(self._file_tree.remove_node)
     self._fs_man.removed_file.connect(self._file_tree.remove_node)
-    self._file_tree.file_clicked.connect(self.file_clicked)
-    self._next_button.pressed.connect(self.finish)
-    
+    self._next_button.disabled = false
+    self._next_button.pressed.connect(self.section2)
+
     self._text_display.text = UtilString.make_article(
         [
             "Finding Files... the Smart Way",
@@ -52,7 +52,7 @@ func start() -> void:
                 "\"First, turn right onto Cold Springs.",
                 "Next, take a left on Sycamore Canyon...\"",
                 "By only telling you the very next road you need to turn on,",
-                "it greatly simplifies the process of finding Blenders.",
+                "it makes finding Blenders simple.",
             ],
             [
                 "In the same way, this new system of file organization",
@@ -60,9 +60,25 @@ func start() -> void:
                 "the 'next turn' at any given moment.",
                 "By following each next 'direction',",
                 "you don't need to have the file's location memorized,",
-                "and can instead sequentially get closer and closer",
+                "and can instead follow instruction that bring you closer and closer",
                 "to its final location."
             ],
+        ]
+    )
+    await GVSGlobals.wait(0.5)
+    self._fs_man.create_file(Path.new(["file0"]))
+    self._fs_man.create_file(Path.new(["file1"]))
+    self._fs_man.create_file(Path.new(["file2"]))
+
+
+func section2() -> void:
+    self._next_button.pressed.disconnect(self.section2)
+    self._next_button.pressed.connect(self.finish)
+    self._next_button.disabled = true
+    self._file_tree.file_clicked.connect(self.file_clicked)
+    self._text_display.text = UtilString.make_article(
+        [
+            "Finding Files... the Smart Way",
             [
                 "We will start with a simple example,",
                 "where there is only a single 'turn' to take.",
@@ -81,10 +97,6 @@ func start() -> void:
             ],
         ]
     )
-    await GVSGlobals.wait(0.5)
-    self._fs_man.create_file(Path.new(["file0"]))
-    self._fs_man.create_file(Path.new(["file1"]))
-    self._fs_man.create_file(Path.new(["file2"]))
 
 
 func file_clicked(file_path: Path) -> void:
