@@ -14,7 +14,7 @@ func start() -> void:
     
     self._text_display.text = UtilString.make_article(
         [
-            "Relative Paths",
+            "User writes Relative Paths",
             [
                 ""
             ],
@@ -31,9 +31,9 @@ func node_clicked(file_path: Path) -> void:
 func finish() -> void:
     self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/directories/directory_06.gd").new()
+        preload("res://visualfs/narrator/lesson/directories/directory_07.gd").new()
     )
     assert(
         self.get_reference_count() == 1,
-        "Not all references to directory_05 removed before checkpoint exit."
+        "Not all references to directory_06 removed before checkpoint exit."
     )

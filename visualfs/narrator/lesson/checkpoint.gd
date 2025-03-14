@@ -8,6 +8,8 @@ var _fs_man: FSManager
 var _next_button: Button
 var _text_display: RichTextLabel
 var _viewport: DragViewport
+var _line_edit: LineEdit
+
 
 ## The completed signal is how we tell the narrator we are done.
 ## We also have to pass back the next checkpoint to load.
@@ -17,16 +19,18 @@ var _viewport: DragViewport
 signal completed(checkpoint: Checkpoint)
 
 
-func _init(
+func setup(
     fs_manager: FSManager,
     next_button: Button,
     text_label: RichTextLabel,
-    viewport: DragViewport
+    viewport: DragViewport,
+    line_edit: LineEdit
 ) -> void:
     self._fs_man = fs_manager
     self._next_button = next_button
     self._text_display = text_label
     self._viewport = viewport
+    self._line_edit = line_edit
 
 
 ## Function to start a lesson.

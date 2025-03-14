@@ -29,7 +29,6 @@ func start() -> void:
     self._fs_man.removed_file.connect(self._file_tree.remove_node)
     self._file_tree.file_clicked.connect(self.file_clicked)
     self._next_button.pressed.connect(self.finish)
-    self._next_button.disabled = true
     
     self._text_display.text = UtilString.make_article(
         [
@@ -43,8 +42,8 @@ func start() -> void:
             ],
             [
                 "This system of organization is similar to finding your way",
-                "using directions given by a maps app on your phone.",
-                "When you use a maps app on your phone to get directions",
+                "using directions given by a map on your phone.",
+                "When you use a map on your phone to get directions",
                 "to, say, Blenders in the Grass,",
                 "your phone doesn't just tell you,",
                 "\"Ah, sure thing, just head to 1046-F Coast Village Road,\"",
@@ -56,7 +55,7 @@ func start() -> void:
                 "it greatly simplifies the process of finding Blenders.",
             ],
             [
-                "In the same way, this new system of organization",
+                "In the same way, this new system of file organization",
                 "enables you to easily find files by only looking for",
                 "the 'next turn' at any given moment.",
                 "By following each next 'direction',",
@@ -109,9 +108,7 @@ func remove_old_files() -> void:
 func finish() -> void:
     self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/directories/directory_01.gd").new(
-            self._fs_man, self._next_button, self._text_display, self._viewport
-        )
+        preload("res://visualfs/narrator/lesson/directories/directory_01.gd").new()
     )
     assert(
         self.get_reference_count() == 1,

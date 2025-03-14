@@ -5,6 +5,14 @@ const FileTree = GVSClassLoader.visual.FileTree
 const Path = GVSClassLoader.gvm.filesystem.Path
 
 var _file_tree: FileTree
+var _targets: PackedStringArray = [
+    "/file0",
+    "/directory0/subdirectory1",
+    "/directory1/file0",
+    "/directory0/subdirectory0/file1",
+    "/"
+]
+var _target_index: int = 0
 
 
 func start() -> void:            
@@ -73,20 +81,31 @@ func start() -> void:
             ],
         ]
     )
+    
+    self._text_display.scroll_following = true
 
 
 func file_clicked(file_path: Path) -> void:
     self._file_tree.highlight_path(Path.ROOT, file_path)
-    if file_path.as_string() == "/file0":
-        self._next_button.disabled = false
+    if (
+        self._target_index < self._targets.size()
+        and file_path.as_string() == self._targets[self._target_index]
+    ):
+        self._target_index += 1
+        if self._target_index == self._targets.size():
+            self._next_button.disabled = false
+            self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
+        else:
+            self._text_display.text += UtilString.make_paragraphs(
+                [[self._targets[self._target_index]]]
+            )
+            # TODO: scroll here
 
 
 func finish() -> void:
-    self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
+    self._text_display.scroll_following = false
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/completion.gd").new(
-            self._fs_man, self._next_button, self._text_display, self._viewport
-        )
+        preload("res://visualfs/narrator/lesson/directories/directory_04.gd").new()
     )
     assert(
         self.get_reference_count() == 1,

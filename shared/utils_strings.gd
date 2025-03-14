@@ -63,7 +63,12 @@ static func extract_word(s: String, index: int) -> String:
 ## @param text: data structure with strings to format.
 ## @return: formatted string with BBCode markup.
 static func make_article(text: Array) -> String:
-    #print(text.slice(1).map(func (sentence: Array[String]) -> String: return ))
     return "[font=res://shared/JetBrainsMonoNerdFontMono-Regular.ttf][font_size=48][center][color=steel blue]%s[/color][/center][/font_size][font_size=36]\n\n    " % text[0] + \
         "\n\n    ".join(text.slice(1).map(func (sent: Array) -> String: return " ".join(sent))) + \
-        "[/font_size][/font]"
+        "\n\n    [/font_size][/font]"
+
+
+static func make_paragraphs(text: Array) -> String:
+    return "[font=res://shared/JetBrainsMonoNerdFontMono-Regular.ttf][font_size=36]" + \
+        "\n\n    ".join(text.map(func (sent: Array) -> String: return " ".join(sent))) + \
+        "\n\n    [/font_size][/font]"

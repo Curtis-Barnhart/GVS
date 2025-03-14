@@ -16,13 +16,13 @@ func start() -> void:
         [
             "Finding Files... the Smart Way",
             [
-                "Okay, you've done this a few times now,",
-                "so this next time, you'll work a little bit more on your own.",
-                "Your starting position is the same this time,",
-                "and the route to your destination is to go to",
+                "Since you've done this a few times now,",
+                "this next time you'll work a little bit more on your own.",
+                "Your starting location is the same as before.",
+                "To reach your destination, first go to",
                 "'directory0', then 'subdirectory1', and lastly to 'file0'.",
                 "This section will be completed as soon as you select",
-                "your destination file.",
+                "your destination.",
             ],
         ]
     )
@@ -61,9 +61,7 @@ func file_clicked(file_path: Path) -> void:
 func finish() -> void:
     self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/directories/directory_03.gd").new(
-            self._fs_man, self._next_button, self._text_display, self._viewport
-        )
+        preload("res://visualfs/narrator/lesson/directories/directory_03.gd").new()
     )
     assert(
         self.get_reference_count() == 1,
