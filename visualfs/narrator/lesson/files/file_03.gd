@@ -20,15 +20,15 @@ func start() -> void:
         [
             "Creating Files",
             [
-                "You as a user can create file too.",
+                "You can create files too!",
                 "To create a new file,",
-                "click on any existing file's action menu.",
+                "click on any existing file to open its action menu.",
                 "Then select the create file action,",
-                "indicated by an icon of a file with a green plus sign.",
+                "represented by an icon of a file with a green plus sign.",
                 "You will be asked to enter a name for the new file -",
                 "the name cannot be the same as any existing files,",
                 "or else it won't be created.",
-                "A file will be ocmpletely empty when it is first created.",
+                "A file will be completely empty when it is first created.",
             ],
             [
                 "To complete this section,",
