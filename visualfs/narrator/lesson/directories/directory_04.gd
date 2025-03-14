@@ -5,35 +5,53 @@ const FileTree = GVSClassLoader.visual.FileTree
 const Path = GVSClassLoader.gvm.filesystem.Path
 
 var _file_tree: FileTree
+var _targets: Array[Path] = [
+    Path.new(["directory0", "subdirectory1"]),
+    Path.new(["directory1"]),
+    Path.new(["directory0", "subdirectory1", "file1"]),
+    Path.new(["directory1", "file1"]),
+    Path.new(["file2"])
+]
+var _target_index: int = 0
 
 
 func start() -> void:            
     self._file_tree = self._viewport.node_from_scene("FileTree")
-    self._file_tree.file_clicked.connect(self.file_clicked)
+    self._line_edit.visible = true
+    self._line_edit.text_submitted.connect(self.user_entered)
     self._next_button.pressed.connect(self.finish)
+    self._file_tree.highlight_path(Path.ROOT, self._targets[0])
     
     self._text_display.text = UtilString.make_article(
         [
             "User writes out paths",
             [
-                "/file0"
+                "Now, to make sure you really got the hang of this,",
+                "let's try some exercises in the reverse direction -",
+                "I'll give you "
             ],
         ]
     )
 
 
-func file_clicked(file_path: Path) -> void:
-    self._file_tree.highlight_path(Path.ROOT, file_path)
-    if file_path.as_string() == "/file0":
-        self._next_button.disabled = false
+func user_entered(text: String) -> void:
+    if (
+        self._target_index < self._targets.size()
+        and text.strip_edges() == self._targets[self._target_index].as_string()
+    ):
+        self._line_edit.clear()
+        self._target_index += 1
+        if self._target_index == self._targets.size():
+            self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
+            self._line_edit.visible = false
+            self._next_button.disabled = false
+        else:
+            self._file_tree.highlight_path(Path.ROOT, self._targets[self._target_index])
 
 
 func finish() -> void:
-    self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/directories/directory_05.gd").new(
-            self._fs_man, self._next_button, self._text_display, self._viewport
-        )
+        preload("res://visualfs/narrator/lesson/directories/directory_05.gd").new()
     )
     assert(
         self.get_reference_count() == 1,
