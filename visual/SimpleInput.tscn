@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://cd2fva7cwd2u3"]
 
-[ext_resource type="Script" path="res://visual/simple_input.gd" id="1_vt3yq"]
+[ext_resource type="Script" uid="uid://c6tt8hrlr2rxt" path="res://visual/simple_input.gd" id="1_vt3yq"]
 [ext_resource type="LabelSettings" uid="uid://cn1j7kil7gylr" path="res://shared/LabelStyle.tres" id="3_hmxg1"]
 [ext_resource type="Theme" uid="uid://b6yhu8vwprwt7" path="res://shared/BigText.tres" id="4_tey7h"]
 

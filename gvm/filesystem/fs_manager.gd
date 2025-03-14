@@ -129,8 +129,8 @@ func write_file(p: Path, text: String) -> bool:
     return false
 
 
-# I have been troubled as to whether this should handle files not existing
-# differently. Unfortunately, Godot does not support nullable values.
+## I have been troubled as to whether this should handle files not existing
+## differently. Unfortunately, Godot does not support nullable values.
 func read_file(p: Path) -> String:
     var file: File = self._get_file(p)
     if file != null:
