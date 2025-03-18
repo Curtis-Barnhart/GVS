@@ -455,6 +455,12 @@ func test_reduce_path() -> void:
         "/three/four",
         "Path '/three/four/././.' should reduce to '/three/four'."
     )
+    
+    self.assert_eq(
+        self._man.reduce_path(Path.new(["three", "four", "file3"])).as_string(),
+        "/three/four/file3",
+        "Path '/three/four/file3' should reduce to '/three/four/file3'"
+    )
 
     self.assert_eq(
         self._man.reduce_path(Path.new(["..", "..", ".."])).as_string(),
