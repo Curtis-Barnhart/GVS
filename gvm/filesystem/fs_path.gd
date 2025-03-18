@@ -11,9 +11,9 @@ var _segments: PackedStringArray
 
 
 ## @param segments: the segments of this path (the parts of the path that would
-##      be separated by "/"s).
+##      be separated by "/"s). It is assumed that these segments are
+##      well behaving (nonempty, etc).
 func _init(segments: PackedStringArray) -> void:
-    # at some point should we filter this for empty strings?
     self._segments = segments
 
 
@@ -58,7 +58,11 @@ func compose(other: Path) -> Path:
     return Path.new(self._segments + other._segments)
 
 
+## Appends a single segment to a path.
+##
+## @param name: segment to append to a path.
 ## @return: New Path with the given name appended to the end of this path.
+##      If name is "", returns original path.
 func extend(name: String) -> Path:
     if name == "":
         return self
