@@ -14,7 +14,6 @@ const FSManager = GVSClassLoader.gvm.filesystem.Manager
 ## path is guaranteed to be in simplest form
 signal created_dir(path: Path)
 signal created_file(path: Path)
-## path is guaranteed to be in simplest form
 signal removed_dir(path: Path)
 signal removed_file(path: Path)
 
@@ -30,7 +29,7 @@ func _init() -> void:
     self._root.parent = self._root
 
 
-# Removes cyclic reference in self.root to itself so that it can be freed
+# Removes cyclic reference in self._root to itself so that it can be freed
 func _notification(what: int) -> void:
     if what == NOTIFICATION_PREDELETE:
         # This would be self._root.parent but for this bug(?):
@@ -40,6 +39,8 @@ func _notification(what: int) -> void:
         # I am genuinely not sure what the intended behavior is,
         # but my best guess says that this is a relatively
         # safe/stable thing to do
+        # Maybe it's so that you can't create a hanging pointer
+        # in the destructor?
         _root.parent = null
 
 
@@ -138,14 +139,6 @@ func read_file(p: Path) -> String:
     return ""
 
 
-#func move(p: Path) -> bool:
-    #return false
-
-
-#func copy(p: Path) -> bool:
-    #return false
-
-
 ## Remove a single empty directory that is not the root directory.
 ##
 ## @param p: Non null path to the directory to remove.
@@ -240,16 +233,17 @@ func read_all_in_dir(p: Path) -> Array:
 
 ## Take a path, which may contain "." and ".." and return an absolute path
 ## pointing to the same location.
-## Right now, works only for directories and not files.
-## We would need self._get_file to be implemented to have it work for files.
 ##
 ## @param p: Non null path to simplify.
 ## @return: simplified Path if found, null if path did not exist.
 func reduce_path(p: Path) -> Path:
-    var loc: Directory = self._get_dir(p)
-    if loc == null:
-        return null
-    return loc.get_path()
+    var loc_dir: Directory = self._get_dir(p)
+    if loc_dir != null:
+        return loc_dir.get_path()
+    var loc_file: File = self._get_file(p)
+    if loc_file != null:
+        return loc_file.get_path()
+    return null
     
 
 ## Better contains that tells you what type of thing a path points to is.
