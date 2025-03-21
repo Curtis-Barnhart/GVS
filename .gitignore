@@ -16,3 +16,6 @@ mono_crash.*.json
 
 # Godot Unit Testing (GUT) library source is in here
 addons
+
+# Exports go in here whenever I need one
+bin
