@@ -89,3 +89,20 @@ func as_cwd(s: String) -> Path:
         return Path.new(s.split("/", false))
     else:
         return self.compose(Path.new(s.split("/", false)))
+
+
+## The number of segments in a path.
+## If the path is not in simplest terms, gives the number of segments
+## in the unsimplified path.
+##
+## @return: The number of segments in this path.
+func size() -> int:
+    return self._segments.size()
+
+
+#func common_with(p: Path) -> Path:
+    #var mine: Array = Array(self._segments)
+    #var theirs: Array = Array(p._segments)
+    #return Path.new(PackedStringArray(
+        #Array.
+    #))

@@ -15,7 +15,7 @@ var _targets: Array[Path] = [
 var _target_index: int = 0
 
 
-func start() -> void:            
+func start(needs_context: bool) -> void:            
     self._file_tree = self._viewport.node_from_scene("FileTree")
     self._line_edit.visible = true
     self._line_edit.text_submitted.connect(self.user_entered)
@@ -41,6 +41,8 @@ func start() -> void:
     )
 
 
+# TODO: It could be cool if it could analyze the path they wrote
+# and explain why it doesn't work
 func user_entered(text: String) -> void:
     if (
         self._target_index < self._targets.size()

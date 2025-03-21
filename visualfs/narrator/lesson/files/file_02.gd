@@ -17,8 +17,7 @@ var _files: Array[Path] = [
 var _file_list: FileList
 
 
-func start() -> void:
-    self._next_button.set_text("123487")
+func start(needs_context: bool) -> void:
     self._text_display.text = UtilString.make_article(
         [
             "Multiple Files",

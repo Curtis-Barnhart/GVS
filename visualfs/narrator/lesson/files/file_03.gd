@@ -15,7 +15,7 @@ const target_fname := "new_file"
 var _file_list: FileList
 
 
-func start() -> void:
+func start(needs_context: bool) -> void:
     self._text_display.text = UtilString.make_article(
         [
             "Creating Files",

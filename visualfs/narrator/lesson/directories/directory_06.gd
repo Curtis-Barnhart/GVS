@@ -7,7 +7,7 @@ const Path = GVSClassLoader.gvm.filesystem.Path
 var _file_tree: FileTree
 
 
-func start() -> void:            
+func start(needs_context: bool) -> void:            
     self._file_tree = self._viewport.node_from_scene("FileTree")
     self._file_tree.file_clicked.connect(self.node_clicked)
     self._next_button.pressed.connect(self.finish)

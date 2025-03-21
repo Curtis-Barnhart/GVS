@@ -259,7 +259,9 @@ func contains_type(p: Path) -> FSManager.filetype:
 
 
 ## If you have a nonexistant path, give it here and you'll get back the longest
-## matching existing path (in simplest form)
+## matching existing path (in simplest form).
+##
+## TODO: This is currently O(n^2) and could be O(n)...
 ##
 ## @param p: path to shorten until it is real.
 ## @return: closest real version of that path.
@@ -267,3 +269,10 @@ func real_ancestry(p: Path) -> Path:
     while not self.contains_path(p):
         p = p.base()
     return p
+
+
+#func relative_to(dst: Path, src: Path) -> Path:
+    #dst = self.reduce_path(dst)
+    #src = self.reduce_path(src)
+    #if dst == null or src == null:
+        #return null
