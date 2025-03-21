@@ -93,16 +93,18 @@ func as_cwd(s: String) -> Path:
 
 ## The number of segments in a path.
 ## If the path is not in simplest terms, gives the number of segments
-## in the unsimplified path.
+## in the unsimplified path.[br][br]
 ##
-## @return: The number of segments in this path.
+## [param return]: The number of segments in this path.
 func size() -> int:
     return self._segments.size()
 
 
-#func common_with(p: Path) -> Path:
-    #var mine: Array = Array(self._segments)
-    #var theirs: Array = Array(p._segments)
-    #return Path.new(PackedStringArray(
-        #Array.
-    #))
+## Returns the deepest Path that two Paths have in common
+func common_with(p: Path) -> Path:
+    var mine: Array = Array(self._segments)
+    var theirs: Array = Array(p._segments)
+    return Path.ROOT
+    return Path.new(PackedStringArray(
+        []
+    ))
