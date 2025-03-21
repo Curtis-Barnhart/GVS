@@ -8,8 +8,6 @@ const Narrator = GVSClassLoader.visualfs.narrator.Narrator
 var _fs_man: FSManager
 var _viewport: DragViewport
 var _cur_checkpt: Checkpoint
-# The NarratorLineEdit class will use this variable, even if we don't
-@warning_ignore("unused_variable")
 @onready var _line_edit: LineEdit = $VBoxContainer/LineEdit
 @onready var _next_button: Button = $VBoxContainer/Button
 @onready var _text: RichTextLabel = $VBoxContainer/RichTextLabel
@@ -22,11 +20,12 @@ func setup(
     self._fs_man = fs_manager
     self._viewport = viewport
     self.load_checkpoint(
-        (preload("res://visualfs/narrator/lesson/files/file_00.gd").new() as Checkpoint)
+        preload("res://visualfs/narrator/lesson/directories/directory_05.gd").new(),
+        true
     )
 
 
-func load_checkpoint(c: Checkpoint) -> void:
+func load_checkpoint(c: Checkpoint, needs_context: bool = false) -> void:
     # have to hold a reference so it's not deleted from memory while it waits lol
     self._cur_checkpt = c
     self._next_button.disabled = false
@@ -37,5 +36,5 @@ func load_checkpoint(c: Checkpoint) -> void:
         self._viewport,
         self._line_edit
     )
-    c.start()
+    c.start(needs_context)
     c.completed.connect(self.load_checkpoint)

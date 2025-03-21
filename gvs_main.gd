@@ -36,7 +36,7 @@ func _ready() -> void:
     ($Right/Narrator as Narrator).setup(file_manager, self.gvshell)
     self.gvshell.cwd_changed.connect(
         func (path: Path, _old_path: Path) -> void:
-        self.drag_viewport.move_cam_to(file_tree.node_rel_pos_from_path(path))
+            self.drag_viewport.move_cam_to(file_tree.node_rel_pos_from_path(path))
     )
     self.gvshell.cwd_changed.connect(file_tree.change_cwd)
     self.gvshell.previewing_path.connect(file_tree.highlight_path)

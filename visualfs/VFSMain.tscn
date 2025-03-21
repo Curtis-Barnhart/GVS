@@ -28,15 +28,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ifaxc")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_d3xci")
-
-[node name="DragViewport" parent="PanelContainer" instance=ExtResource("2_0t8lm")]
-layout_mode = 2
-size_flags_horizontal = 3
-
 [node name="PanelContainer2" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
@@ -44,5 +35,14 @@ size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_d3xci")
 
 [node name="Narrator" parent="PanelContainer2" instance=ExtResource("3_nfywm")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_d3xci")
+
+[node name="DragViewport" parent="PanelContainer" instance=ExtResource("2_0t8lm")]
 layout_mode = 2
 size_flags_horizontal = 3

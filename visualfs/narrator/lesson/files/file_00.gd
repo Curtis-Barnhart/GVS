@@ -13,7 +13,7 @@ var _first_file := Path.new(["file0"])
 var _file_list: FileList
 
 
-func start() -> void:
+func start(needs_context: bool) -> void:
     # Create a new file list (and manager) and add it to the drag viewport
     # so that we can retrieve it and its children later.
     self._file_list = FileList.make_new()

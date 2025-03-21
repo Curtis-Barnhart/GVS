@@ -13,7 +13,7 @@ const FCreateInput = GVSClassLoader.visual.SimpleInput
 var _file_list: FileList
 
 
-func start() -> void:
+func start(needs_context: bool) -> void:
     self._text_display.text = UtilString.make_article(
         [
             "Deleting Files",

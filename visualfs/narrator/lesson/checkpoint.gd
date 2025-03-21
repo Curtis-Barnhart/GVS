@@ -33,7 +33,11 @@ func setup(
     self._line_edit = line_edit
 
 
+func build_context() -> void:
+    assert(false, "Someone forgot to define the build_context method...")
+
+
 ## Function to start a lesson.
-func start() -> void:
+func start(needs_context: bool) -> void:
     assert(false, "Checkpoint is an ABC that shouldn't have been instantiated.")
     return

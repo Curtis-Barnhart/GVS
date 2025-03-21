@@ -16,7 +16,7 @@ var _target_index: int = 0
 var _path_label := Label.new()
 
 
-func start() -> void:            
+func start(needs_context: bool) -> void:            
     self._text_display.text = UtilString.make_article(
         [
             "What is a Path?",
@@ -115,9 +115,9 @@ func section3() -> void:
     self._path_label.add_theme_font_override("font", load("res://shared/JetBrainsMonoNerdFontMono-Regular.ttf") as Font)
     self._path_label.add_theme_font_size_override("font_size", 48)
     self._path_label.add_theme_stylebox_override("normal", load("res://shared/TextBox.tres") as StyleBox)
+    # TODO: At some point this will have to be done based on the size of the font
     self._path_label.size.x = 1000
     self._path_label.position = Vector2(-500, -160)
-    self._path_label.text = "Hello world!"
     self._path_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     self._viewport.add_to_scene(self._path_label)
 
@@ -142,7 +142,6 @@ func file_clicked(file_path: Path) -> void:
             self._text_display.text += UtilString.make_paragraphs(
                 [[self._targets[self._target_index]]]
             )
-            # TODO: scroll here
 
 
 func finish() -> void:

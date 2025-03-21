@@ -64,11 +64,10 @@ func highlight_path(origin: Path, path: Path) -> void:
     self.queue_redraw()
 
 
-## Changes whatever visual artifact denotes the cwd.
+## Changes whatever visual artifact denotes the cwd.[br][br]
 ##
-## @param new_p: The path to the new cwd. Must be in simplest form.
-## @param old_p: Path to the former cwd. Must be in simplest form.
-# TODO: Consider not using the private variables here
+## [param new_p]: The path to the new cwd. Must be in simplest form.[br]
+## [param old_p]: Path to the former cwd. Must be in simplest form.
 func change_cwd(new_p: Path, old_p: Path) -> void:
     (self._all_nodes[old_p.as_string()] as TNode).change_icon(dir_text)
     (self._all_nodes[new_p.as_string()] as TNode).change_icon(cwd_text)
