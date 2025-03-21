@@ -100,11 +100,19 @@ func size() -> int:
     return self._segments.size()
 
 
-## Returns the deepest Path that two Paths have in common
+## Returns the deepest Path that two Paths have in common starting from root.
+## Assumes Paths are not in simplest form and returns a path
+## that is not neccessarily in simplest form.[br][br]
+##
+## [param p]: Other path to find the common parent with this one.[br]
+## [param return]: Deepest common parent path between self and [code]p[/code].
 func common_with(p: Path) -> Path:
     var mine: Array = Array(self._segments)
     var theirs: Array = Array(p._segments)
-    return Path.ROOT
     return Path.new(PackedStringArray(
-        []
+        GStreams.Zip([mine, theirs]) \
+                .take_while(func (pair: Array) -> bool:
+                                return pair[0] == pair[1]) \
+                .as_array()
     ))
+    # TODO: please write a test for this
