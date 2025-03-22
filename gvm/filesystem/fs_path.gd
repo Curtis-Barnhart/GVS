@@ -111,8 +111,11 @@ func common_with(p: Path) -> Path:
     var theirs: Array = Array(p._segments)
     return Path.new(PackedStringArray(
         GStreams.Zip([mine, theirs]) \
-                .take_while(func (pair: Array) -> bool:
-                                return pair[0] == pair[1]) \
+                .take_while(func (pair: Array) -> bool: return pair[0] == pair[1]) \
+                .map(func (pair: Array) -> String: return pair[0]) \
                 .as_array()
     ))
-    # TODO: please write a test for this
+
+
+func slice(begin: int, end: int = 0x7fffffff) -> Path:
+    return Path.new(self._segments.slice(begin, end))

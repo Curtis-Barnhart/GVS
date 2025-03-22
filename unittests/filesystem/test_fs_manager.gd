@@ -493,19 +493,62 @@ func test_reduce_path_bad() -> void:
 
 func test_real_ancestry() -> void:
     self.assert_eq(
+        self._man.real_ancestry(Path.new(["three", "four"])).as_string(),
+        "/three/four",
+        "Real path '/three/four' should resolve to '/three/four'."
+    )
+    self.assert_eq(
+        self._man.real_ancestry(Path.ROOT).as_string(),
+        "/",
+        "Real path '/' should resolve to '/'."
+    )
+    self.assert_eq(
         self._man.real_ancestry(Path.new(["three", "four", "unknown"])).as_string(),
         "/three/four",
         "Nonexistent path '/three/four/unknown' should resolve to '/three/four'."
     )
-    
+
     self.assert_eq(
         self._man.real_ancestry(Path.new(["two", "file0", "ghost"])).as_string(),
         "/two/file0",
         "Nonexistent path '/two/file0/ghost' should resolve to '/two/file0'."
     )
-    
     self.assert_eq(
         self._man.real_ancestry(Path.new(["nowhere", "random"])).as_string(),
         "/",
         "Nonexistent path '/nowhere/random' should resolve to '/'."
+    )
+
+
+func test_relative_to() -> void:
+    self.assert_eq(self._man.relative_to(Path.ROOT, Path.ROOT).as_string(false), "")
+    self.assert_eq(
+        self._man.relative_to(Path.new(["two", "file0"]), Path.new(["two", "file0"])).as_string(false),
+        ""
+    )
+    
+    self.assert_eq(
+        self._man.relative_to(Path.ROOT, Path.new(["two", "file0"])).as_string(false),
+        "../.."
+    )
+    self.assert_eq(
+        self._man.relative_to(Path.new(["two", "file0"]), Path.ROOT).as_string(false),
+        "two/file0"
+    )
+    
+    self.assert_eq(
+        self._man.relative_to(Path.new(["two", "file0"]), Path.new(["three", "four", "file3"])).as_string(false),
+        "../../../two/file0"
+    )
+    self.assert_eq(
+        self._man.relative_to(Path.new(["three", "four", "file3"]), Path.new(["two", "file0"])).as_string(false),
+        "../../three/four/file3"
+    )
+    self.assert_eq(
+        self._man.relative_to(Path.new(["three", "four", "file3"]), Path.new(["three", "file2"])).as_string(false),
+        "../four/file3"
+    )
+    self.assert_eq(
+        self._man.relative_to(Path.new(["three", "file2"]), Path.new(["three", "four", "file3"])).as_string(false),
+        "../../file2"
     )

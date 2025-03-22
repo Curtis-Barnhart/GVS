@@ -271,8 +271,25 @@ func real_ancestry(p: Path) -> Path:
     return p
 
 
-#func relative_to(dst: Path, src: Path) -> Path:
-    #dst = self.reduce_path(dst)
-    #src = self.reduce_path(src)
-    #if dst == null or src == null:
-        #return null
+## Given two Paths, return a relative path from the first to the second.
+## The two paths need not be simplified,
+## and the returned path will be sipmlified.[br][br]
+##
+## [param dst]: Destination path.[br]
+## [param src]: Source path.[br]
+## [param return]: Relative path from [code]src[/code] to [code]dst[/code].
+func relative_to(dst: Path, src: Path) -> Path:
+    assert(dst != null)
+    assert(src != null)
+    
+    dst = self.reduce_path(dst)
+    src = self.reduce_path(src)
+    if dst == null or src == null:
+        return null
+    
+    var common_base: Path = dst.common_with(src)
+    return Path.new(
+        GStreams.Repeat("..") \
+                .take(src.size() - common_base.size()) \
+                .as_array()
+    ).compose(dst.slice(common_base.size()))
