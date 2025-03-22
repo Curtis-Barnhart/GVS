@@ -14,7 +14,16 @@ const FCreateInput = GVSClassLoader.visual.SimpleInput
 var _file_tree: FileTree
 
 
-func start(needs_context: bool) -> void:    
+func context_build() -> void:
+    var fl := FileList.make_new()
+    fl.name = "FileList"
+    self._viewport.add_to_scene(fl)
+
+
+func start(needs_context: bool) -> void:
+    if needs_context:
+        self.context_build()
+    
     await self.remove_old_files()
     self._viewport.node_from_scene("FileList").queue_free()
     await GVSGlobals.wait(0.5)

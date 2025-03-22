@@ -69,37 +69,6 @@ func start(needs_context: bool) -> void:
             ],
         ]
     )
-    
-    #self._text_display.text = UtilString.make_article(
-        #[
-            #"Relative Paths",
-            #[
-                #"There is actually one other way to write a path.",
-                #"So far, we've described a path as a set of directions",
-                #"going from the very top of the file system",
-                #"down to a particular file or directory.",
-                #"However, you can also give a set of instructions that",
-                #"doesn't start from the top of the file system,",
-                #"but instead starts from another file or directory.",
-                #"Because this path gives you instructions to get somewhere",
-                #"relative to another location,",
-                #"we call it a [color=steel blue]relative path[/color].",
-                #"The other type of path we've covered so far is called an",
-                #"[color=steel blue]absolute path[/color]."
-            #],
-            #[
-                #"Let's start with an example.",
-                #"Suppose that our relative path starts at the location",
-                #"/directory0 (this will be denoted",
-                #"by coloring that directory with a deeper blue).",
-                #"If I tell you to (from /directory0) go to 'subdirectory0'",
-                #"first and then to 'file0' from there,",
-                #"where would you end up?",
-                #"Click on the location at the end of this path",
-                #"continue this lesson.",
-            #],
-        #]
-    #)
 
 
 func change_the_cwd() -> void:
