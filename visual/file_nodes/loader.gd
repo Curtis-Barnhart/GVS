@@ -1,4 +1,5 @@
 extends Object
 
-const BaseNode = preload("res://visual/file_nodes/base_node.gd")
-const TreeNode = preload("res://visual/file_nodes/tree_node.gd")
+const BaseNode = preload("./base_node.gd")
+const TreeNode = preload("./tree_node.gd")
+const TimeColorStack = preload("./time_color_stack.gd")

@@ -2,6 +2,7 @@ extends "res://visual/file_nodes/base_node.gd"
 
 const SelfScene = preload("res://visual/file_nodes/TreeNode.tscn")
 const TNode = GVSClassLoader.visual.file_nodes.TreeNode
+const MathUtils = GVSClassLoader.shared.Math
 
 
 var _sub_width: float = 0
