@@ -160,3 +160,13 @@ func test_as_cwd() -> void:
     assert_eq(Path.new(["one", "two"]).as_cwd("///////").as_string(), "/",
         "Path.as_cwd failed on absolute degenerate path with many slashes from '/one/two'."
     )
+
+
+func test_common_with() -> void:
+    assert_eq(Path.ROOT.common_with(Path.ROOT).as_string(), "/")
+    assert_eq(Path.ROOT.common_with(Path.new(["hello", "world"])).as_string(), "/")
+    assert_eq(Path.new(["hello", "world"]).common_with(Path.ROOT).as_string(), "/")
+    
+    assert_eq(Path.new(["hello", "world"]).common_with(Path.new(["hello", "spam"])).as_string(), "/hello")
+    assert_eq(Path.new(["hello", "world", "..", "world"]).common_with(Path.new(["hello", "spam"])).as_string(), "/hello")
+    assert_eq(Path.new(["hello", "world", ".."]).common_with(Path.new(["hello", "world", ".."])).as_string(), "/hello/world/..")
