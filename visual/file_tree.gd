@@ -16,7 +16,7 @@ const file_texture := preload("res://visual/assets/file.svg")
 const opened_dir_text := preload("res://visual/assets/directory_open.svg")
 
 ## Map from strings of paths to the TreeNode objects
-var _all_nodes: Dictionary = {}
+var _all_nodes: Dictionary[String, TNode] = {}
 ## Origin of the last highlighted path
 var _hl_origin: Path = Path.ROOT
 ## Last highlighted path (so we can unhighlight it when we want to highlight a new one)
@@ -54,6 +54,8 @@ func highlight_path(origin: Path, path: Path) -> void:
             # TODO: This breaks when encoutering . and ..
             # because we don't hold a reference to the fsmanager that can
             # properly reduce complex paths for us
+            # Technically we don't need that though because we're working with
+            # absolute paths???
             node_to_highlight = self._all_nodes[origin.extend(next_hop).as_string()]
             node_to_highlight._path_glow = true
             node_to_highlight.z_index = 1
@@ -69,8 +71,8 @@ func highlight_path(origin: Path, path: Path) -> void:
 ## [param new_p]: The path to the new cwd. Must be in simplest form.[br]
 ## [param old_p]: Path to the former cwd. Must be in simplest form.
 func change_cwd(new_p: Path, old_p: Path) -> void:
-    (self._all_nodes[old_p.as_string()] as TNode).change_icon(dir_text)
-    (self._all_nodes[new_p.as_string()] as TNode).change_icon(cwd_text)
+    self._all_nodes[old_p.as_string()].change_icon(dir_text)
+    self._all_nodes[new_p.as_string()].change_icon(cwd_text)
 
 
 func is_dir_collapsed(p: Path) -> bool:
@@ -150,9 +152,9 @@ func remove_node(p: Path) -> void:
 func _ready() -> void:
     self._all_nodes["/"] = TNode.make_new()
     self.add_child(self._all_nodes["/"] as Node)
-    (self._all_nodes["/"] as TNode).setup("/")
+    self._all_nodes["/"].setup("/")
     self.change_cwd(Path.ROOT, Path.ROOT)
-    (self._all_nodes["/"] as TNode)._icon.pressed.connect(func () -> void: self.file_clicked.emit(Path.ROOT))
+    self._all_nodes["/"]._icon.pressed.connect(func () -> void: self.file_clicked.emit(Path.ROOT))
 
 
 func node_rel_pos_from_path(p: Path) -> Vector2:
