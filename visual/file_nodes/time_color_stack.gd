@@ -69,8 +69,7 @@ func get_current_color() -> Color:
 func _get_next_id() -> int:
     var id: int = self._next_id
     self._next_id += 1
-    if id < 0:
-        assert(false, "TimeColorStack color stack overflow... how bro?")
+    assert(id >= 0, "TimeColorStack color stack overflow... how bro?")
     if self._stack.size() > 16:
         push_warning("TimeColorStack contains %d elements, more than I meant it to hold." % self._stack.size())
 

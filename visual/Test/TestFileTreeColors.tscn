@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://2oleya2hu4"]
+
+[ext_resource type="Script" uid="uid://d24r854dfpv65" path="res://visual/Test/test_file_tree_colors.gd" id="1_uj03m"]
+
+[node name="TestFileTreeColors" type="Node2D"]
+script = ExtResource("1_uj03m")
