@@ -109,7 +109,7 @@ class HighlightServer extends RefCounted:
         for file_str: String in self._get_nodes_to_color(origin, path):
             var node: TNode = self._nodes[file_str]
             node.color_stack.push_flash_color(color, duration)
-            node.force_redraw = max(node.force_redraw, 1)
+            node.force_redraw = max(node.force_redraw, duration)
             # This is what we would do if we wanted to save the id of the
             # highlight, but I'm assuming I'll never want to do that in the future.
             # If I did, I would also have to create a system similar to the one in
@@ -118,19 +118,36 @@ class HighlightServer extends RefCounted:
             # that such a system would actually be used.
             # hl_data._data.push_back([file_str, node.color_stack.push_flash_color(color, duration)])
             node.z_index = 1
-            node.queue_redraw()  # TODO: is this necessary?
+        
+        # TODO: This look dumb? That's cause it is.
+        GVSGlobals.get_tree() \
+                  .create_timer(duration) \
+                  .timeout.connect(func () -> void: self.clear_z_index(origin, path))
+        GVSGlobals.get_tree() \
+                  .create_timer(duration + 0.1) \
+                  .timeout.connect(func () -> void: self.clear_z_index(origin, path))
+    
+    func clear_z_index(
+        origin: Path,
+        path: Path
+    ) -> void:
+        for file_str: String in self._get_nodes_to_color(origin, path):
+            if self._nodes.get(file_str) != null:
+                var node: TNode = self._nodes[file_str]
+                if node.color_stack.is_empty():
+                    node.z_index = 0
 
     func pop_id(id: int) -> void:
-        pass
         var index: int = self._highlights \
                             .map(func (hl: HighlightData) -> int: return hl._id) \
                             .find(id)
         if index == -1:
             push_warning("Attempted to pop nonexistant id %d from HighlightStack." % id)
-        for data_point: HighlightData.Record in self._highlights[index]._data:
-            self._nodes[data_point.path].color_stack.pop_id(data_point.tcolor_id)
+        else:
+            for data_point: HighlightData.Record in self._highlights[index]._data:
+                self._nodes[data_point.path].color_stack.pop_id(data_point.tcolor_id)
             
-        self._highlights.remove_at(index)
+            self._highlights.remove_at(index)
 
 
 static func make_new() -> FileTree:
