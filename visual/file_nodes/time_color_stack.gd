@@ -5,42 +5,38 @@ const MathUtils = GVSClassLoader.shared.Math
 
 class TColor extends RefCounted:
     var _color: Color
-    var _valid: bool = true
+    var _weight: float
     var _id: int
     
-    func _init(color: Color, id: int) -> void:
+    func _init(color: Color, id: int, weight: float = 1.0) -> void:
         self._color = color
+        self._weight = weight
         self._id = id
     
     func get_color() -> Color:
         return self._color
     
+    func get_weight() -> float:
+        return self._weight
+    
     func is_valid() -> bool:
-        return self._valid
+        return true
 
 
-# TODO: time should be a member of TColor, not this
-# I don't think you'll add to this, but if you do CHANGE THIS FIRST
 class TColorFlash extends TColor:
-    var _time: float
-    var _original_a: float
+    var _t0: float
     var _duration: float
     
-    func _init(color: Color, id: int, duration: float) -> void:
-        super._init(color, id)
-        self._time = Time.get_unix_time_from_system()
-        self._original_a = self._color.a
+    func _init(color: Color, id: int, weight: float = 1.0, duration: float = 1.0) -> void:
+        super._init(color, id, weight)
+        self._t0 = Time.get_unix_time_from_system()
         self._duration = duration
     
-    func get_color() -> Color:
-        if self.is_valid():
-            self._color.a = MathUtils.half_log_interp(self._original_a, 0,
-                (Time.get_unix_time_from_system() - self._time) / self._duration
-            )
-        return self._color
+    func get_weight() -> float:
+        return MathUtils.half_log_interp(self._weight, 0, (Time.get_unix_time_from_system() - self._t0) / self._duration)
     
     func is_valid() -> bool:
-        return Time.get_unix_time_from_system() - self._time < self._duration
+        return Time.get_unix_time_from_system() - self._t0 < self._duration
 
 
 var _stack: Array[TColor] = []
@@ -57,13 +53,19 @@ func is_empty() -> bool:
     return self._stack.is_empty()
 
 
-func get_current_color() -> Color:
-    while self._stack.size() > 0:
-        if self._stack[-1].is_valid():
-            return self._stack[-1].get_color()
-        self._stack.pop_back()
+func get_current_color(depth: int = 0) -> Color:
+    # Make sure we only have valid colors on
+    if depth == 0:
+        self._stack.assign(self._stack.filter(func (tc: TColor) -> bool: return tc.is_valid()))
     
-    return self._default
+    if depth == self._stack.size():
+        return self._default
+    
+    var tcolor: TColor = self._stack[-1 - depth]
+    if tcolor.get_weight() < 1:
+        return tcolor.get_color().lerp(self.get_current_color(depth + 1), 1 - tcolor.get_weight())
+    else:
+        return self._stack[-1 - depth].get_color()
 
 
 func _get_next_id() -> int:
