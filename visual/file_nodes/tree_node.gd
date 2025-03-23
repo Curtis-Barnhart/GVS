@@ -2,12 +2,16 @@ extends "res://visual/file_nodes/base_node.gd"
 
 const SelfScene = preload("res://visual/file_nodes/TreeNode.tscn")
 const TNode = GVSClassLoader.visual.file_nodes.TreeNode
+const ColorStack = GVSClassLoader.visual.file_nodes.TimeColorStack
 const MathUtils = GVSClassLoader.shared.Math
 
 
 var _sub_width: float = 0
+## deprecated in favor of using color_stack to set path color
+## @deprecated
 var _path_glow: bool = false
 var _collapsed: bool = false
+var color_stack := ColorStack.new(Color.STEEL_BLUE)
 
 
 static func make_new() -> TNode:
@@ -89,11 +93,7 @@ func arrange_subnodes() -> void:
 func _draw() -> void:
     if is_instance_of(self.get_parent(), TNode):
         var parent: TNode = self.get_parent()
-        var lcolor: Color
-        if self._path_glow:
-            lcolor = Color.CRIMSON
-        else:
-            lcolor = Color.STEEL_BLUE
+        var lcolor: Color = self.color_stack.get_current_color()
         var diff: Vector2 = parent.global_position - self.global_position
         var begin: Vector2 = Vector2(0, -self.icon_size().y / 2)
         var up: Vector2 = Vector2(0, diff.y / 2)

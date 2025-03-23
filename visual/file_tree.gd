@@ -4,6 +4,7 @@ const SelfScene = preload("res://visual/FileTree.tscn")
 const FileTree = GVSClassLoader.visual.FileTree
 const Path = GVSClassLoader.gvm.filesystem.Path
 const TNode = GVSClassLoader.visual.file_nodes.TreeNode
+const TCStack = GVSClassLoader.visual.file_nodes.TimeColorStack
 
 signal file_clicked(path: Path)
 
@@ -17,17 +18,125 @@ const opened_dir_text := preload("res://visual/assets/directory_open.svg")
 
 ## Map from strings of paths to the TreeNode objects
 var _all_nodes: Dictionary[String, TNode] = {}
+var hl_server: HighlightServer
 ## Origin of the last highlighted path
+## @deprecated
 var _hl_origin: Path = Path.ROOT
 ## Last highlighted path (so we can unhighlight it when we want to highlight a new one)
+## @deprecated
 var _hl_path: Path = Path.ROOT
+
+
+class HighlightData extends RefCounted:
+    ## Array[Array[path (as a String), tree_node color id]]
+    class Record:
+        var path: String
+        var tcolor_id: int
+        
+    var _data: Array[Record] = []
+    var _id: int
+    
+    func _init(id: int) -> void:
+        self._id = id
+    
+    func add_data(path: String, tcolor_id: int) -> void:
+        var r := Record.new()
+        r.path = path
+        r.tcolor_id = tcolor_id
+        self._data.push_back(r)
+
+
+class HighlightServer extends RefCounted:
+    var _highlights: Array[HighlightData] = []
+    var _next_id: int = 0
+    var _nodes: Dictionary[String, TNode]
+
+    func _init(nodes: Dictionary[String, TNode]) -> void:
+        self._nodes = nodes
+
+    func _get_next_id() -> int:
+        var id: int = self._next_id
+        self._next_id += 1
+        assert(id >= 0, "HighlightStack highlight stack overflow... how bro?")
+        if self._highlights.size() > 16:
+            push_warning("HighlightStack contains %d elements, more than I meant it to hold." % self._highlights.size())
+
+        return id
+    
+    func _get_nodes_to_color(
+        origin: Path,
+        path: Path
+    ) -> Dictionary[String, Object]:
+        var nodes: Dictionary[String, Object] = {}
+        
+        var dest: Path = origin.compose(path)
+        while origin.as_string() != dest.as_string():
+            var next_hop: String = path.head()
+            var node_to_highlight: TNode
+            if next_hop == "..":
+                nodes.set(origin.as_string().simplify_path(), null)
+            elif next_hop == ".":
+                pass
+            else:
+                nodes.set(origin.extend(next_hop).as_string().simplify_path(), null)
+            origin = origin.extend(next_hop)
+            path = path.tail()
+
+        return nodes
+    
+    func push_color_to_tree_nodes(
+        color: Color,
+        origin: Path,
+        path: Path
+    ) -> int:
+        var id: int = self._get_next_id()
+        var hl_data := HighlightData.new(id)
+        
+        for file_str: String in self._get_nodes_to_color(origin, path).keys():
+            var node: TNode = self._nodes[file_str]
+            hl_data.add_data(file_str, node.color_stack.push_solid_color(color))
+            node.z_index = 1
+            node.queue_redraw()  # TODO: is this necessary?
+        
+        return id
+
+    func push_flash_to_tree_nodes(
+        color: Color,
+        duration: float,
+        origin: Path,
+        path: Path
+    ) -> void:        
+        for file_str: String in self._get_nodes_to_color(origin, path):
+            var node: TNode = self._nodes[file_str]
+            node.color_stack.push_flash_color(color, duration)
+            # This is what we would do if we wanted to save the id of the
+            # highlight, but I'm assuming I'll never want to do that in the future.
+            # If I did, I would also have to create a system similar to the one in
+            # TimeColorStack that cleans up expired colors,
+            # which I'm too lazy to do now especially because I do doubt
+            # that such a system would actually be used.
+            # hl_data._data.push_back([file_str, node.color_stack.push_flash_color(color, duration)])
+            node.z_index = 1
+            node.queue_redraw()  # TODO: is this necessary?
+
+    func pop_id(id: int) -> void:
+        pass
+        var index: int = self._highlights \
+                            .map(func (hl: HighlightData) -> int: return hl._id) \
+                            .find(id)
+        if index == -1:
+            push_warning("Attempted to pop nonexistant id %d from HighlightStack." % id)
+        for data_point: HighlightData.Record in self._highlights[index]._data:
+            self._nodes[data_point.path].color_stack.pop_id(data_point.tcolor_id)
+            
+        self._highlights.remove_at(index)
 
 
 static func make_new() -> FileTree:
     return SelfScene.instantiate()
 
 
-# origin and path must be in simplified form
+## @deprecated
 func highlight_path(origin: Path, path: Path) -> void:
     # TODO: make this better
     for any_node: TNode in self._all_nodes.values():
@@ -155,6 +264,8 @@ func _ready() -> void:
     self._all_nodes["/"].setup("/")
     self.change_cwd(Path.ROOT, Path.ROOT)
     self._all_nodes["/"]._icon.pressed.connect(func () -> void: self.file_clicked.emit(Path.ROOT))
+    
+    self.hl_server = HighlightServer.new(self._all_nodes)
 
 
 func node_rel_pos_from_path(p: Path) -> Vector2:
