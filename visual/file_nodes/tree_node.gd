@@ -72,6 +72,8 @@ func remove_subnode(subnode: TNode) -> void:
     self.arrange_subnodes()
 
 
+## Takes into account any subwidth change in order to redraw self
+## and emit total width changed if necessary
 func _on_subwidth_change(delta: float) -> void:
     var old_total: float = self.total_width()
     self._sub_width += delta
