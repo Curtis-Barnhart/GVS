@@ -46,6 +46,12 @@ class HighlightData extends RefCounted:
         self._data.push_back(r)
 
 
+## TODO: There are many many problems concerning the z axis here.
+# I do not have the time to fix them,
+# and at the moment that's okay because it seems that it works well enough.
+# I don't think users will generally experience the worst parts of it -
+# the worst parts they'll see will be delays in color updates
+# and a lack of blending overlapping paths.
 class HighlightServer extends RefCounted:
     var _highlights: Array[HighlightData] = []
     var _next_id: int = 0
@@ -98,6 +104,7 @@ class HighlightServer extends RefCounted:
             node.z_index = 1
             node.queue_redraw()  # TODO: is this necessary?
         
+        self._highlights.push_back(hl_data)
         return id
 
     func push_flash_to_tree_nodes(
@@ -120,6 +127,8 @@ class HighlightServer extends RefCounted:
             node.z_index = 1
         
         # TODO: This look dumb? That's cause it is.
+        # Unfortunately SceneTree.create_timer is inaccurate to like... tenths of a second??
+        # That means that we gotta just kinda spray and pray timers and hope one hits it.
         GVSGlobals.get_tree() \
                   .create_timer(duration) \
                   .timeout.connect(func () -> void: self.clear_z_index(origin, path))
@@ -132,7 +141,7 @@ class HighlightServer extends RefCounted:
         path: Path
     ) -> void:
         for file_str: String in self._get_nodes_to_color(origin, path):
-            if self._nodes.get(file_str) != null:
+            if self._nodes.has(file_str):
                 var node: TNode = self._nodes[file_str]
                 if node.color_stack.is_empty():
                     node.z_index = 0
@@ -145,8 +154,12 @@ class HighlightServer extends RefCounted:
             push_warning("Attempted to pop nonexistant id %d from HighlightStack." % id)
         else:
             for data_point: HighlightData.Record in self._highlights[index]._data:
-                self._nodes[data_point.path].color_stack.pop_id(data_point.tcolor_id)
-            
+                if self._nodes.has(data_point.path):
+                    self._nodes[data_point.path].color_stack.pop_id(data_point.tcolor_id)
+                    if self._nodes[data_point.path].color_stack.is_empty():
+                        self._nodes[data_point.path].z_index = 0
+                    self._nodes[data_point.path].queue_redraw()
+
             self._highlights.remove_at(index)
 
 
