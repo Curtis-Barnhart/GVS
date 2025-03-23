@@ -109,6 +109,7 @@ class HighlightServer extends RefCounted:
         for file_str: String in self._get_nodes_to_color(origin, path):
             var node: TNode = self._nodes[file_str]
             node.color_stack.push_flash_color(color, duration)
+            node.force_redraw = max(node.force_redraw, 1)
             # This is what we would do if we wanted to save the id of the
             # highlight, but I'm assuming I'll never want to do that in the future.
             # If I did, I would also have to create a system similar to the one in
