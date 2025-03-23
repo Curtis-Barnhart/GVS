@@ -52,6 +52,11 @@ func _init(default_color: Color) -> void:
     self._default = default_color
 
 
+func is_empty() -> bool:
+    self._stack.assign(self._stack.filter(func (tc: TColor) -> bool: return tc.is_valid()))
+    return self._stack.is_empty()
+
+
 func get_current_color() -> Color:
     while self._stack.size() > 0:
         if self._stack[-1].is_valid():
@@ -86,8 +91,8 @@ func push_flash_color(color: Color, duration: float = 1) -> int:
 
 func pop_id(id: int) -> void:
     var index: int = self._stack \
-                         .map(func (tc: TColor) -> int: return tc._id) \
-                         .find(id)
+                        .map(func (tc: TColor) -> int: return tc._id) \
+                        .find(id)
     if index == -1:
         push_warning("Attempted to pop nonexistant id %d from TimeColorStack." % id)
     self._stack.remove_at(index)
