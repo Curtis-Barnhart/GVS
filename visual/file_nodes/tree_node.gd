@@ -13,6 +13,9 @@ var _path_glow: bool = false
 var _collapsed: bool = false
 var color_stack := ColorStack.new(Color.STEEL_BLUE)
 
+## Forces the object to be redrawn for this many seconds
+var force_redraw: float = 0
+
 
 static func make_new() -> TNode:
     return SelfScene.instantiate()
@@ -112,6 +115,9 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
     super._process(delta)
+    if self.force_redraw > 0:
+        self.force_redraw = max(0, self.force_redraw - delta)
+        self.queue_redraw()
 
 
 func condense_subnodes_recur() -> void:
