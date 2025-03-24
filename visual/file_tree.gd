@@ -47,11 +47,11 @@ class HighlightData extends RefCounted:
 
 
 ## TODO: There are many many problems concerning the z axis here.
-# I do not have the time to fix them,
-# and at the moment that's okay because it seems that it works well enough.
-# I don't think users will generally experience the worst parts of it -
-# the worst parts they'll see will be delays in color updates
-# and a lack of blending overlapping paths.
+## I do not have the time to fix them,
+## and at the moment that's okay because it seems that it works well enough.
+## I don't think users will generally experience the worst parts of it -
+## the worst parts they'll see will be delays in color updates
+## and a lack of blending overlapping paths.
 class HighlightServer extends RefCounted:
     var _highlights: Array[HighlightData] = []
     var _next_id: int = 0
@@ -78,7 +78,6 @@ class HighlightServer extends RefCounted:
         var dest: Path = origin.compose(path)
         while origin.as_string() != dest.as_string():
             var next_hop: String = path.head()
-            var node_to_highlight: TNode
             if next_hop == "..":
                 nodes.set(origin.as_string().simplify_path(), null)
             elif next_hop == ".":
@@ -163,6 +162,7 @@ class HighlightServer extends RefCounted:
             self._highlights.remove_at(index)
 
 
+## Constructor for FileTree object.
 static func make_new() -> FileTree:
     return SelfScene.instantiate()
 
@@ -215,6 +215,12 @@ func change_cwd(new_p: Path, old_p: Path) -> void:
     self._all_nodes[new_p.as_string()].change_icon(cwd_text)
 
 
+## Queries if a directory is currently visually collapsed.
+## [code]p[/code] must be in simplest form.
+## Asserts that the directory actually exists.[br][br]
+##
+## [param p]: Path to the directory to query the collapsedness of.[br]
+## [param return]: true if the directory is visually collapsed, otherwise false.
 func is_dir_collapsed(p: Path) -> bool:
     var dir: TNode = self._all_nodes.get(p.as_string())
     assert(dir != null,
@@ -223,6 +229,11 @@ func is_dir_collapsed(p: Path) -> bool:
     return dir._collapsed
 
 
+## Tells a directory is to visually collapse.
+## [code]p[/code] must be in simplest form.
+## Asserts that the directory actually exists.[br][br]
+##
+## [param p]: Path to the directory to collapse.[br]
 func collapse_dir(p: Path) -> void:
     var dir: TNode = self._all_nodes.get(p.as_string())
     assert(dir != null,
@@ -232,6 +243,11 @@ func collapse_dir(p: Path) -> void:
     dir.collapse()
     
     
+## Tells a directory is to visually uncollapse.
+## [code]p[/code] must be in simplest form.
+## Asserts that the directory actually exists.[br][br]
+##
+## [param p]: Path to the directory to uncollapse.[br]
 func uncollapse_dir(p: Path) -> void:
     var dir: TNode = self._all_nodes.get(p.as_string())
     assert(dir != null,
@@ -251,7 +267,7 @@ func uncollapse_dir(p: Path) -> void:
 func create_node(p: Path, texture: Texture2D) -> void:
     var parent: TNode = self._all_nodes.get(p.base().as_string())
     assert(parent != null,
-        "Attempted TNode creation with nonexistent parent"
+        "Attempted TNode creation with nonexistent parent."
     )
     var child := TNode.make_new()
     parent.add_subnode(child, p.last())
@@ -260,16 +276,22 @@ func create_node(p: Path, texture: Texture2D) -> void:
     child._icon.pressed.connect(func () -> void: self.file_clicked.emit(p))
 
 
+## Wrapper for create_node that loads a directory texture.[br][br]
+##
+## [param p]: Path of the directory to create.
 func create_node_dir(p: Path) -> void:
     self.create_node(p, opened_dir_text)
 
 
+## Wrapper for create_node that loads a file texture.[br][br]
+##
+## [param p]: Path of the file to create
 func create_node_file(p: Path) -> void:
     self.create_node(p, file_texture)
 
 
 ## remove_dir removes a directory from the visual graph
-## and ensures all other elements have their position adjusted accordingly.
+## and ensures all other elements have their position adjusted accordingly.[br][br]
 ##
 ## @param p: Path to the directory to remove.
 ##      p must be a valid path in the visual graph,

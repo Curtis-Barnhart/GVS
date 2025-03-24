@@ -271,7 +271,7 @@ func real_ancestry(p: Path) -> Path:
     return p
 
 
-## Given two Paths, return a relative path from the first to the second.
+## Given two Paths, return a relative path from the second to the first.
 ## The two paths need not be simplified,
 ## and the returned path will be sipmlified.[br][br]
 ##
