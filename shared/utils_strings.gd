@@ -68,6 +68,7 @@ static func make_article(text: Array) -> String:
         "\n\n    [/font_size][/font]"
 
 
+## [param text]: Array of Array[String]
 static func make_paragraphs(text: Array) -> String:
     return "[font=res://shared/JetBrainsMonoNerdFontMono-Regular.ttf][font_size=36]" + \
         "\n\n    ".join(text.map(func (sent: Array) -> String: return " ".join(sent))) + \

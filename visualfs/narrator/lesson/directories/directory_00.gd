@@ -20,101 +20,6 @@ func context_build() -> void:
     self._viewport.add_to_scene(fl)
 
 
-func start(needs_context: bool) -> void:
-    if needs_context:
-        self.context_build()
-    
-    await self.remove_old_files()
-    self._viewport.node_from_scene("FileList").queue_free()
-    await GVSGlobals.wait(0.5)
-    
-    # Create file tree object in drag viewport connected to the fs_manager
-    self._file_tree = FileTree.make_new()
-    self._file_tree.name = "FileTree"
-    self._viewport.add_to_scene(self._file_tree)
-    self._fs_man.created_dir.connect(self._file_tree.create_node_dir)
-    self._fs_man.created_file.connect(self._file_tree.create_node_file)
-    self._fs_man.removed_dir.connect(self._file_tree.remove_node)
-    self._fs_man.removed_file.connect(self._file_tree.remove_node)
-    self._next_button.disabled = false
-    self._next_button.pressed.connect(self.section2)
-
-    self._text_display.text = UtilString.make_article(
-        [
-            "Finding Files... the Smart Way",
-            [
-                "Let's introduce a new way of finding files.",
-                "It might seem more complicated at first,",
-                "but it uses a system of organization that",
-                "allows us to find specific files",
-                "even when we are surrounded by a multitude of information.",
-            ],
-            [
-                "This system of organization is similar to finding your way",
-                "using directions given by a map on your phone.",
-                "When you use a map on your phone to get directions",
-                "to, say, Blenders in the Grass,",
-                "your phone doesn't just tell you,",
-                "\"Ah, sure thing, just head to 1046-F Coast Village Road,\"",
-                "and leave the rest up to you!",
-                "Instead, it gives you a series of instructions -",
-                "\"First, turn right onto Cold Springs.",
-                "Next, take a left on Sycamore Canyon...\"",
-                "By only telling you the very next road you need to turn on,",
-                "it makes finding Blenders simple.",
-            ],
-            [
-                "In the same way, this new system of file organization",
-                "enables you to easily find files by only looking for",
-                "the 'next turn' at any given moment.",
-                "By following each next 'direction',",
-                "you don't need to have the file's location memorized,",
-                "and can instead follow instruction that bring you closer and closer",
-                "to its final location."
-            ],
-        ]
-    )
-    await GVSGlobals.wait(0.5)
-    self._fs_man.create_file(Path.new(["file0"]))
-    self._fs_man.create_file(Path.new(["file1"]))
-    self._fs_man.create_file(Path.new(["file2"]))
-
-
-func section2() -> void:
-    self._next_button.pressed.disconnect(self.section2)
-    self._next_button.pressed.connect(self.finish)
-    self._next_button.disabled = true
-    self._file_tree.file_clicked.connect(self.file_clicked)
-    self._text_display.text = UtilString.make_article(
-        [
-            "Finding Files... the Smart Way",
-            [
-                "We will start with a simple example,",
-                "where there is only a single 'turn' to take.",
-                "In this section, you will see a solid blue icon labelled '/'",
-                "that represents your 'starting point'.",
-                "You'll also notice blue lines connecting it to several files.",
-                "You can think of these blue lines as 'roads' - they connect",
-                "the different 'places' in your computer and allow you to",
-                "navigate between them.",
-                "Click on your 'next turn' (in this case, your destination),",
-                "which is a file called 'file2'.",
-                "When you click on it, you'll see the blue line turn red.",
-                "This will be helpful when your 'route' contains multiple turns,",
-                "and will let you see the entire route you've taken so far.",
-                "You can complete this section once you've selected 'file2'."
-            ],
-        ]
-    )
-
-
-func file_clicked(file_path: Path) -> void:
-    if file_path.as_string() == "/file2":
-        self._file_tree.file_clicked.disconnect(self.file_clicked)
-        self._file_tree.highlight_path(Path.ROOT, file_path)
-        self._next_button.disabled = false
-
-
 func remove_old_files() -> void:
     var old_files: Array = self._fs_man.read_files_in_dir(Path.ROOT)
     old_files.reverse()
@@ -124,6 +29,159 @@ func remove_old_files() -> void:
         self._fs_man.remove_file(old_file)
         await GVSGlobals.wait(t)
         t = max(0.95 * t, 1.0/16)
+
+
+func start(needs_context: bool) -> void:
+    if needs_context:
+        self.context_build()
+    
+    await self.remove_old_files()
+    self._viewport.node_from_scene("FileList").queue_free()
+    await GVSGlobals.wait(0.5)
+    
+    self._text_display.text = UtilString.make_article(
+        [
+            "Finding Files... the Smart Way",
+            [
+                "look there's nothing here"
+            ],
+        ]
+    )
+    
+    # TODO: If I could check the resolution of the screen and then add it
+    # just out of reach that'd be great.
+    self._viewport.move_cam_to(Vector2(0, 1500))
+    self._next_button.pressed.connect(self.add_filetree)
+
+
+func add_filetree() -> void:
+    self._text_display.text = UtilString.make_article(
+        [
+            "Finding Files... the Smart Way",
+            [
+                "and now there's a directory"
+            ],
+        ]
+    )
+
+    # Create file tree object in drag viewport connected to the fs_manager
+    self._file_tree = FileTree.make_new()
+    self._file_tree.name = "FileTree"
+    self._viewport.add_to_scene(self._file_tree)
+    self._fs_man.created_dir.connect(self._file_tree.create_node_dir)
+    self._fs_man.created_file.connect(self._file_tree.create_node_file)
+    self._fs_man.removed_dir.connect(self._file_tree.remove_node)
+    self._fs_man.removed_file.connect(self._file_tree.remove_node)
+    self._next_button.disabled = false
+    
+    self._viewport.move_cam_to(Vector2.ZERO)
+    
+    self._next_button.pressed.disconnect(self.add_filetree)
+    self._next_button.pressed.connect(self.add_subdirectories)
+
+
+func add_subdirectories() -> void:
+    self._text_display.text = UtilString.make_article(
+        [
+            "Finding Files... the Smart Way",
+            [
+                "holy crap there's more of them"
+            ],
+        ]
+    )
+    self._fs_man.create_dir(Path.new(["school"]))
+    self._fs_man.create_dir(Path.new(["work"]))
+    
+    self._next_button.pressed.disconnect(self.add_subdirectories)
+    self._next_button.pressed.connect(self.add_files)
+
+
+func add_files() -> void:
+    self._text_display.text = UtilString.make_article(
+        [
+            "Finding Files... the Smart Way",
+            [
+                "and now there's files what"
+            ],
+        ]
+    )
+    self._fs_man.create_file(Path.new(["school", "document0"]))
+    self._fs_man.create_file(Path.new(["school", "document1"]))
+    self._fs_man.create_file(Path.new(["work", "document0"]))
+    self._fs_man.create_file(Path.new(["work", "document1"]))
+
+    self._next_button.pressed.disconnect(self.add_files)
+    self._next_button.pressed.connect(self.click_on_directory)
+
+
+var click_on_directory_highlight_id: int
+func click_on_directory() -> void:
+    self._next_button.disabled = true
+    self._text_display.text = UtilString.make_article(
+        [
+            "Finding Files... the Smart Way",
+            [
+                "you gotta click on the directory"
+            ],
+        ]
+    )
+
+    self._next_button.pressed.disconnect(self.click_on_directory)
+    self._next_button.pressed.connect(self.click_on_file)
+    
+    self._file_tree.file_clicked.connect(self.click_on_directory_user_click)
+
+
+func click_on_directory_user_click(p: Path) -> void:
+    var school := Path.new(["school"])
+    
+    if p.as_string() == school.as_string():
+        self._text_display.text += UtilString.make_paragraphs([["whoah you clicked the directory!"]])
+        self._file_tree.file_clicked.disconnect(self.click_on_directory_user_click)
+        self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
+        self._next_button.disabled = false
+    else:
+        if p.common_with(school).as_string() == "/school":
+            var remaining: Path = self._fs_man.relative_to(p, school)
+            self._file_tree.hl_server.push_flash_to_tree_nodes(Color.GREEN, 1, Path.ROOT, school)
+            self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 1, school, remaining)
+        else:
+            self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 1, Path.ROOT, p)
+
+
+func click_on_file() -> void:
+    self._next_button.disabled = true
+    self._text_display.text = UtilString.make_article(
+        [
+            "Finding Files... the Smart Way",
+            [
+                "now you gotta click on the file"
+            ],
+        ]
+    )
+
+    self._next_button.pressed.disconnect(self.click_on_file)
+    #self._next_button.pressed.connect(self.click_on_file)
+    
+    self._file_tree.file_clicked.connect(self.click_on_file_user_click)
+
+
+func click_on_file_user_click(p: Path) -> void:
+    var school := Path.new(["school"])
+    if p.as_string() == school.as_string():
+        pass
+    elif p.common_with(school).as_string() == school.as_string():
+        var remaining: Path = self._fs_man.relative_to(p, school)
+        if remaining.as_string() == "/document0":
+            self._file_tree.hl_server.pop_id(self.click_on_directory_highlight_id)
+            self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
+            self._file_tree.file_clicked.disconnect(self.click_on_file_user_click)
+            self._next_button.disabled = false
+            self._text_display.text += UtilString.make_paragraphs([["whoah you clicked the file!"]])
+        else:
+            self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 1, school, remaining)
+    else:
+        self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 1, Path.ROOT, p)
 
 
 func finish() -> void:

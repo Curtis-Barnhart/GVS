@@ -3,9 +3,14 @@ extends RefCounted
 const MathUtils = GVSClassLoader.shared.Math
 
 
+## TColor is a class that represents a weighted color on a stack of such colors.
 class TColor extends RefCounted:
+    ## The color this instance represents
     var _color: Color
+    ## The weight of this color. A weight of 1 means fully opaque,
+    ## and a weight of 0 indicates full transparency.
     var _weight: float
+    ## T
     var _id: int
     
     func _init(color: Color, id: int, weight: float = 1.0) -> void:

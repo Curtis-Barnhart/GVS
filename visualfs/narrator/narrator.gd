@@ -20,7 +20,7 @@ func setup(
     self._fs_man = fs_manager
     self._viewport = viewport
     self.load_checkpoint(
-        preload("res://visualfs/narrator/lesson/directories/directory_05.gd").new(),
+        preload("res://visualfs/narrator/lesson/directories/directory_00.gd").new(),
         true
     )
 

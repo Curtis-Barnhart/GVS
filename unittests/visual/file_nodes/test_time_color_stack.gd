@@ -50,45 +50,45 @@ func test_flash() -> void:
     # red, blue
     self._tcs.push_flash_color(Color.BLUE, 4)
     var temp_color: Color = self._tcs.get_current_color()
-    temp_color.a = 1
+    #temp_color.a = 1
     assert_eq(temp_color, Color.BLUE)
     assert_false(self._tcs.is_empty())
     
     # red, blue, green
     self._tcs.push_flash_color(Color.GREEN, 2)
     temp_color = self._tcs.get_current_color()
-    temp_color.a = 1
+    #temp_color.a = 1
     assert_eq(temp_color, Color.GREEN)
     assert_false(self._tcs.is_empty())
     
     await GVSGlobals.wait(3)
     # red, blue
     temp_color = self._tcs.get_current_color()
-    temp_color.a = 1
+    #temp_color.a = 1
     assert_eq(temp_color, Color.BLUE)    
     assert_false(self._tcs.is_empty())
     
     # red, blue, green
     self._tcs.push_flash_color(Color.GREEN, 4)
     temp_color = self._tcs.get_current_color()
-    temp_color.a = 1
+    #temp_color.a = 1
     assert_eq(temp_color, Color.GREEN)
     assert_false(self._tcs.is_empty())
     
     await GVSGlobals.wait(1.5)
     # red, green
     temp_color = self._tcs.get_current_color()
-    temp_color.a = 1
+    #temp_color.a = 1
     assert_eq(temp_color, Color.GREEN)    
     await GVSGlobals.wait(1.5)
     # red, green
     temp_color = self._tcs.get_current_color()
-    temp_color.a = 1
+    #temp_color.a = 1
     assert_eq(temp_color, Color.GREEN)
     assert_false(self._tcs.is_empty())
     await GVSGlobals.wait(2)
     # red
     temp_color = self._tcs.get_current_color()
-    temp_color.a = 1
+    #temp_color.a = 1
     assert_eq(temp_color, Color.RED)
     assert_true(self._tcs.is_empty())
