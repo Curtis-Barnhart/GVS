@@ -109,7 +109,7 @@ func create_file(p: Path) -> bool:
     var contain_dir: Directory = self._get_dir(contain_path)
     if contain_dir == null:
         return false
-    if new_file_name in self.read_all_in_dir(contain_path)       \
+    if new_file_name in self.read_all_in_dir(contain_path) \
                             .map(func (path: Path) -> String: return path.last()):
         return false
    
