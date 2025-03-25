@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://020grdq47v3y" path="res://visual/file_writer.gd" id="1_oqb3e"]
 [ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_8yere"]
-[ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/TextBox.tres" id="4_et1kb"]
-[ext_resource type="Theme" uid="uid://b6yhu8vwprwt7" path="res://shared/BigText.tres" id="6_kdcu1"]
-[ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/Button.tres" id="7_3hnwp"]
+[ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/resources/TextBox.tres" id="4_et1kb"]
+[ext_resource type="Theme" uid="uid://b6yhu8vwprwt7" path="res://shared/resources/BigText.tres" id="6_kdcu1"]
+[ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/resources/Button.tres" id="7_3hnwp"]
 
 [sub_resource type="Theme" id="Theme_qxhyn"]
 default_font = ExtResource("3_8yere")

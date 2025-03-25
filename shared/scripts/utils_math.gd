@@ -1,7 +1,7 @@
 extends Object
 
 const ClassLoader = preload("res://gvs_class_loader.gd")
-const MathUtils = ClassLoader.shared.Math
+const MathUtils = ClassLoader.shared.scripts.Math
 
 
 ## Performs interpolation on a logistic curve

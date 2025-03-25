@@ -1,7 +1,7 @@
 extends "res://visualfs/narrator/lesson/checkpoint.gd"
 
 const Path = GVSClassLoader.gvm.filesystem.Path
-const UtilString = GVSClassLoader.shared.Strings
+const UtilString = GVSClassLoader.shared.scripts.Strings
 const FileList = GVSClassLoader.visualfs.FileList
 const FileTree = GVSClassLoader.visual.FileTree
 
@@ -43,7 +43,7 @@ func start(needs_context: bool) -> void:
     self._right_panel.add_child(self._path_label)
     
     self._path_label.bbcode_enabled = false
-    self._path_label.push_font(preload("res://shared/JetBrainsMonoNerdFontMono-Regular.ttf"))
+    self._path_label.push_font(GVSClassLoader.shared.fonts.Normal)
     
 
 
