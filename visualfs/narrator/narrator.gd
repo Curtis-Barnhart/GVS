@@ -7,6 +7,7 @@ const Narrator = GVSClassLoader.visualfs.narrator.Narrator
 
 var _fs_man: FSManager
 var _viewport: DragViewport
+var _right_panel: PanelContainer
 var _cur_checkpt: Checkpoint
 @onready var _line_edit: LineEdit = $VBoxContainer/LineEdit
 @onready var _next_button: Button = $VBoxContainer/Button
@@ -15,10 +16,12 @@ var _cur_checkpt: Checkpoint
 
 func setup(
     fs_manager: FSManager,
-    viewport: DragViewport
+    viewport: DragViewport,
+    right_panel: PanelContainer
 ) -> void:
     self._fs_man = fs_manager
     self._viewport = viewport
+    self._right_panel = right_panel
     self.load_checkpoint(
         preload("res://visualfs/narrator/lesson/directories/directory_00.gd").new(),
         true
@@ -34,7 +37,8 @@ func load_checkpoint(c: Checkpoint, needs_context: bool = false) -> void:
         self._next_button,
         self._text,
         self._viewport,
-        self._line_edit
+        self._line_edit,
+        self._right_panel
     )
     c.start(needs_context)
     c.completed.connect(self.load_checkpoint)
