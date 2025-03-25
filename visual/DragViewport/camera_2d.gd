@@ -2,7 +2,7 @@
 extends Camera2D
 
 const ClassLoader = preload("res://gvs_class_loader.gd")
-const MathUtils = ClassLoader.shared.Math
+const MathUtils = ClassLoader.shared.scripts.Math
 
 ## starting position before interpolating movement.
 var _start_pos: Vector2 = Vector2.ZERO

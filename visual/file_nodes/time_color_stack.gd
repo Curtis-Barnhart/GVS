@@ -1,6 +1,6 @@
 extends RefCounted
 
-const MathUtils = GVSClassLoader.shared.Math
+const MathUtils = GVSClassLoader.shared.scripts.Math
 
 
 ## TColor is a class that represents a weighted color on a stack of such colors.

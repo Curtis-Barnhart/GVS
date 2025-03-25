@@ -1,7 +1,7 @@
 extends "res://visualfs/narrator/lesson/checkpoint.gd"
 
 const Path = GVSClassLoader.gvm.filesystem.Path
-const UtilString = GVSClassLoader.shared.Strings
+const UtilString = GVSClassLoader.shared.scripts.Strings
 const FileList = GVSClassLoader.visualfs.FileList
 const FileTree = GVSClassLoader.visual.FileTree
 

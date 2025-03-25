@@ -3,7 +3,7 @@ extends Control
 const ClassLoader = preload("res://gvs_class_loader.gd")
 const FSManager = ClassLoader.gvm.filesystem.Manager
 const Shell = ClassLoader.gvm.Shell
-const MathUtils = ClassLoader.shared.Math
+const MathUtils = ClassLoader.shared.scripts.Math
 const Checkpoint = ClassLoader.narrator.lesson.Checkpoint
 
 const up_arrow = preload("res://narrator/assets/up.svg")

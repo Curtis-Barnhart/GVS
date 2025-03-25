@@ -2,7 +2,8 @@ extends Node2D
 
 const BaseNodeScene = preload("res://visual/file_nodes/BaseNode.tscn")
 const BaseNode = GVSClassLoader.visual.file_nodes.BaseNode
-const MathUtil = GVSClassLoader.shared.Math
+const MathUtil = GVSClassLoader.shared.scripts.Math
+const JetBrainsFont = GVSClassLoader.shared.fonts.Normal
 
 signal total_width_changed(width_delta: float)
 
@@ -21,7 +22,6 @@ var _interp_t: float = 0
 @onready var _label: Label = $Label
 ## Sprite to display an icon and receive user clicks
 @onready var _icon: TextureButton = $Icon
-const JetBrainsFont: Font = preload("res://shared/JetBrainsMonoNerdFontMono-Regular.ttf")
 
 
 ## interp_movement tells the FSGDir that it is ready to begin interpolating

@@ -11,7 +11,7 @@ const Rmdir = ClassLoader.gvm.process.premade.Rmdir
 const Ls = ClassLoader.gvm.process.premade.Ls
 const Shell = ClassLoader.gvm.Shell
 const IOQueue = ClassLoader.gvm.util.IOQueue
-const StringsUtil = ClassLoader.shared.Strings
+const StringsUtil = ClassLoader.shared.scripts.Strings
 
 signal cwd_changed(path: Path, old_path: Path)
 signal previewing_path(origin: Path, path: Path)

@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://dq8b8lpiitxh4"]
 
 [ext_resource type="Script" uid="uid://b410jknhe5sok" path="res://visualfs/narrator/narrator.gd" id="1_km8bo"]
-[ext_resource type="Theme" uid="uid://b6yhu8vwprwt7" path="res://shared/BigText.tres" id="2_bhvsl"]
+[ext_resource type="Theme" uid="uid://b6yhu8vwprwt7" path="res://shared/resources/BigText.tres" id="2_bhvsl"]
 [ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Regular.ttf" id="2_ed7qu"]
-[ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/Button.tres" id="3_bsxgj"]
-[ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/TextBox.tres" id="3_j3ksi"]
+[ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/resources/Button.tres" id="3_bsxgj"]
+[ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/resources/TextBox.tres" id="3_j3ksi"]
 
 [node name="Narrator" type="Control"]
 layout_mode = 3

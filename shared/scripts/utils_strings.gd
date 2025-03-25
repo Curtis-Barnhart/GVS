@@ -1,7 +1,7 @@
 extends Object
 
 const ClassLoader = preload("res://gvs_class_loader.gd")
-const StringsUtil = ClassLoader.shared.Strings
+const StringsUtil = ClassLoader.shared.scripts.Strings
 
 
 ## Find the index of the next character satisfying `functor` in a string.
