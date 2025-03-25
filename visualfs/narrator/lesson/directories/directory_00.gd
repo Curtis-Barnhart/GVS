@@ -4,8 +4,6 @@ const Path = GVSClassLoader.gvm.filesystem.Path
 const UtilString = GVSClassLoader.shared.Strings
 const FileList = GVSClassLoader.visualfs.FileList
 const FileTree = GVSClassLoader.visual.FileTree
-const File = GVSClassLoader.visual.file_nodes.BaseNode
-const GPopup = GVSClassLoader.visual.GVSPopup
 
 var _file_tree: FileTree
 
@@ -101,10 +99,10 @@ func add_files() -> void:
             ],
         ]
     )
-    self._fs_man.create_file(Path.new(["school", "document0"]))
-    self._fs_man.create_file(Path.new(["school", "document1"]))
-    self._fs_man.create_file(Path.new(["work", "document0"]))
-    self._fs_man.create_file(Path.new(["work", "document1"]))
+    self._fs_man.create_file(Path.new(["school", "document"]))
+    self._fs_man.create_file(Path.new(["school", "email"]))
+    self._fs_man.create_file(Path.new(["work", "email"]))
+    self._fs_man.create_file(Path.new(["work", "email_2"]))
 
     self._next_button.pressed.disconnect(self.add_files)
     self._next_button.pressed.connect(self.click_on_directory)
@@ -168,7 +166,7 @@ func click_on_file_user_click(p: Path) -> void:
         pass
     elif p.common_with(school).as_string() == school.as_string():
         var remaining: Path = self._fs_man.relative_to(p, school)
-        if remaining.as_string() == "/document0":
+        if remaining.as_string() == "/email":
             self._file_tree.hl_server.pop_id(self.click_on_directory_highlight_id)
             self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
             self._file_tree.file_clicked.disconnect(self.click_on_file_user_click)
@@ -181,9 +179,9 @@ func click_on_file_user_click(p: Path) -> void:
 
 
 func finish() -> void:
-    self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
+    self._file_tree.hl_server.pop_id(self.click_on_directory_highlight_id)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/directories/directory_01.gd").new()
+        preload("res://visualfs/narrator/lesson/directories/exploring_paths.gd").new()
     )
     assert(
         self.get_reference_count() == 1,
