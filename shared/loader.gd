@@ -1,4 +1,5 @@
 extends Object
 
-const Math = preload("res://shared/utils_math.gd")
-const Strings = preload("res://shared/utils_strings.gd")
+const Math = preload("./utils_math.gd")
+const Strings = preload("./utils_strings.gd")
+const Fonts = preload("./fonts/loader.gd")

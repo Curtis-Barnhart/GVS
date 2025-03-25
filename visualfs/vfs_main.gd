@@ -6,15 +6,16 @@ const DragViewport = GVSClassLoader.visual.DragViewport.DragViewport
 const Path = GVSClassLoader.gvm.filesystem.Path
 const Narrator = GVSClassLoader.visualfs.narrator.Narrator
 
-@onready var viewport: DragViewport = $PanelContainer/DragViewport
-@onready var narrator: Narrator = $PanelContainer2/Narrator
-@onready var _p_cont: PanelContainer = $PanelContainer2
+@onready var viewport: DragViewport = $Right/DragViewport
+@onready var narrator: Narrator = $Left/Narrator
+@onready var _p_cont: PanelContainer = $Left
+@onready var _right_panel: PanelContainer = $Right
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
     var fs_man: FSManager = FSManager.new()
-    self.narrator.setup(fs_man, self.viewport)
+    self.narrator.setup(fs_man, self.viewport, self._right_panel)
     
     # Make sure the panel can't be resized to be smaller
     # than the button on that panel
