@@ -1,15 +1,11 @@
 extends "res://visualfs/narrator/lesson/checkpoint.gd"
 
+const Path = GVSClassLoader.gvm.filesystem.Path
 const UtilString = GVSClassLoader.shared.Strings
 const FileList = GVSClassLoader.visualfs.FileList
 const FileTree = GVSClassLoader.visual.FileTree
-const Path = GVSClassLoader.gvm.filesystem.Path
 const File = GVSClassLoader.visual.file_nodes.BaseNode
-const Menu = GVSClassLoader.visual.buttons.CircleMenu
 const GPopup = GVSClassLoader.visual.GVSPopup
-const FileReader = GVSClassLoader.visual.FileReader
-const FileWriter = GVSClassLoader.visual.FileWriter
-const FCreateInput = GVSClassLoader.visual.SimpleInput
 
 var _file_tree: FileTree
 
@@ -191,5 +187,5 @@ func finish() -> void:
     )
     assert(
         self.get_reference_count() == 1,
-        "Not all references to file_05 removed before checkpoint exit."
+        "Not all references to directory_00 removed before checkpoint exit."
     )
