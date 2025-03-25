@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://de6k6vo51os32"]
 
 [ext_resource type="Script" uid="uid://cn3x1o0chndxt" path="res://visual/file_reader.gd" id="1_8tq1f"]
-[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_uikga"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_uikga"]
 [ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/TextBox.tres" id="4_sasgm"]
 
 [sub_resource type="Theme" id="Theme_e6cdw"]
