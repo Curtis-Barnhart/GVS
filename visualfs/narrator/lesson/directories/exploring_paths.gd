@@ -7,6 +7,7 @@ const FileTree = GVSClassLoader.visual.FileTree
 
 var _file_tree: FileTree
 var _path_label := RichTextLabel.new()
+var _highlight_id: int = -1
 
 
 func context_build() -> void:
@@ -35,16 +36,71 @@ func start(needs_context: bool) -> void:
         [
             "Exploring paths!",
             [
-                "look at all the new files!"
+                "look at all the new files! aoriestn aoiresnt oiaesrnt oiaersnt oiaesrntnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
             ],
         ]
     )
     
     self._right_panel.add_child(self._path_label)
-    
     self._path_label.bbcode_enabled = false
-    self._path_label.push_font(GVSClassLoader.shared.fonts.Normal)
+    self._path_label.fit_content = true
+    self._path_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+    self._path_label.size_flags_horizontal = Control.SIZE_FILL
+    self._path_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    self._label_write("/")
+    self._path_label.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
+
+    self._file_tree.file_clicked.connect(self.user_click_object)
+
+
+func user_click_object(p: Path) -> void:
+    self._label_write(p.as_string())
     
+    if self._highlight_id >= 0:
+        self._file_tree.hl_server.pop_id(self._highlight_id)
+    self._highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(
+        Color.DARK_BLUE, Path.ROOT, p
+    )
+
+
+## Erases all previous text in the path label and then
+## writes colored text to the path label.[br][br]
+##
+## [param text]: Text to write to the label.[br]
+## [param color]: Color to write [code]text[/code] in. 0 for dark blue,
+##      1 for red, and 2 for green.
+func _label_write(text: String, color: int = 0) -> void:
+    assert(color >= 0 and color <= 2)
+    var colors: Array[Color] = [
+        Color.DARK_BLUE,
+        Color.RED,
+        Color.GREEN
+    ]
+    
+    self._path_label.text = ""  # also clears tag stack
+    self._path_label.push_font(GVSClassLoader.shared.fonts.Normal)
+    self._path_label.push_font_size(48)
+    self._path_label.push_color(colors[color])
+    self._path_label.add_text(text)
+    self._path_label.pop()
+
+
+## Appends colored text to the path label.[br][br]
+##
+## [param text]: Text to write to the label.[br]
+## [param color]: Color to write [code]text[/code] in. 0 for dark blue,
+##      1 for red, and 2 for green.
+func _label_append(text: String, color: int = 0) -> void:
+    assert(color >= 0 and color <= 2)
+    var colors: Array[Color] = [
+        Color.DARK_BLUE,
+        Color.RED,
+        Color.GREEN
+    ]
+    
+    self._path_label.push_color(colors[color])
+    self._path_label.add_text(text)
+    self._path_label.pop()
 
 
 func finish() -> void:

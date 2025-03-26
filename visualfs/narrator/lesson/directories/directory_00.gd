@@ -155,7 +155,6 @@ func click_on_file() -> void:
     )
 
     self._next_button.pressed.disconnect(self.click_on_file)
-    #self._next_button.pressed.connect(self.click_on_file)
     
     self._file_tree.file_clicked.connect(self.click_on_file_user_click)
 
@@ -169,9 +168,11 @@ func click_on_file_user_click(p: Path) -> void:
         if remaining.as_string() == "/email":
             self._file_tree.hl_server.pop_id(self.click_on_directory_highlight_id)
             self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
-            self._file_tree.file_clicked.disconnect(self.click_on_file_user_click)
             self._next_button.disabled = false
             self._text_display.text += UtilString.make_paragraphs([["whoah you clicked the file!"]])
+
+            self._file_tree.file_clicked.disconnect(self.click_on_file_user_click)
+            self._next_button.pressed.connect(self.finish)            
         else:
             self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 1, school, remaining)
     else:
