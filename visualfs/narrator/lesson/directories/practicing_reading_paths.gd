@@ -11,38 +11,15 @@ var _highlight_id: int = -1
 
 
 func context_build() -> void:
-    var file_tree := FileTree.make_new()
-    file_tree = FileTree.make_new()
-    file_tree.name = "FileTree"
-    self._viewport.add_to_scene(file_tree)
+    var ft := FileTree.make_new()
+    self._file_tree = FileTree.make_new()
+    self._file_tree.name = "FileTree"
+    self._viewport.add_to_scene(self._file_tree)
     
-    self._fs_man.created_dir.connect(file_tree.create_node_dir)
-    self._fs_man.created_file.connect(file_tree.create_node_file)
-    self._fs_man.removed_dir.connect(file_tree.remove_node)
-    self._fs_man.removed_file.connect(file_tree.remove_node)
-    
-    self._fs_man.create_dir(Path.new(["school"]))
-    self._fs_man.create_dir(Path.new(["work"]))
-    self._fs_man.create_file(Path.new(["school", "document"]))
-    self._fs_man.create_file(Path.new(["school", "email"]))
-    self._fs_man.create_file(Path.new(["work", "email"]))
-    self._fs_man.create_file(Path.new(["work", "email_2"]))
-
-
-func start(needs_context: bool) -> void:
-    if needs_context:
-        self.context_build()
-    
-    self._file_tree = self._viewport.node_from_scene("FileTree")
-    
-    self._text_display.text = UtilString.make_article(
-        [
-            "Exploring paths!",
-            [
-                "look at all the new files!"
-            ],
-        ]
-    )
+    self._fs_man.created_dir.connect(self._file_tree.create_node_dir)
+    self._fs_man.created_file.connect(self._file_tree.create_node_file)
+    self._fs_man.removed_dir.connect(self._file_tree.remove_node)
+    self._fs_man.removed_file.connect(self._file_tree.remove_node)
     
     self._path_label = RichTextLabel.new()
     self._right_panel.add_child(self._path_label)
@@ -53,11 +30,25 @@ func start(needs_context: bool) -> void:
     self._path_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     self._label_write("/")
     self._path_label.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
-    self._path_label.name = "PathLabel"
 
-    self._file_tree.file_clicked.connect(self.user_click_object)
+
+func start(needs_context: bool) -> void:
+    if needs_context:
+        self.context_build()
     
-    self._next_button.pressed.connect(self.finish)
+    self._file_tree = self._viewport.node_from_scene("FileTree")
+    self._path_label = self._right_panel.get_node("PathLabel")
+    
+    self._text_display.text = UtilString.make_article(
+        [
+            "Practice reading paths!",
+            [
+                "huh... new files!"
+            ],
+        ]
+    )
+    
+    self._label_write("/")
 
 
 func user_click_object(p: Path) -> void:
@@ -111,12 +102,11 @@ func _label_append(text: String, color: int = 0) -> void:
 
 
 func finish() -> void:
-    if self._highlight_id >= 0:
-        self._file_tree.hl_server.pop_id(self._highlight_id)
-    self.completed.emit(
-        preload("res://visualfs/narrator/lesson/directories/practicing_reading_paths.gd").new()
-    )
+    self._file_tree.highlight_path(Path.ROOT, Path.ROOT)
+    #self.completed.emit(
+        #preload("res://visualfs/narrator/lesson/directories/directory_01.gd").new()
+    #)
     assert(
         self.get_reference_count() == 1,
-        "Not all references to exploring_paths removed before checkpoint exit."
+        "Not all references to practicing_reading_paths removed before checkpoint exit."
     )
