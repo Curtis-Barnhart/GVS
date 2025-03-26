@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjlkpbxmqe5of"]
+
+[ext_resource type="Script" uid="uid://dm0hfcrxadva5" path="res://visualfs/narrator/instructions.gd" id="1_f3dlr"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Regular.ttf" id="1_m60do"]
+
+[node name="Instructions" type="RichTextLabel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("1_m60do")
+theme_override_font_sizes/normal_font_size = 36
+text = "✓ ✕"
+script = ExtResource("1_f3dlr")
