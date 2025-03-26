@@ -41,6 +41,14 @@ func build_context() -> void:
 
 
 ## Function to start a lesson.
+## If the lesson is being jumped to without the lessons before it being run,
+## [code]needs_context[/code] should be passed as [code]true[/code],
+## and the lesson will construct any artifacts
+## from previous lessons it needs to run.[br][br]
+##
+## [param needs_context]: whether or not the lesson
+## needs to construct its own context.
+@warning_ignore("unused_parameter")  # It will be used in subclasses
 func start(needs_context: bool) -> void:
     assert(false, "Checkpoint is an ABC that shouldn't have been instantiated.")
     return

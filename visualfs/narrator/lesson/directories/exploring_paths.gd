@@ -4,6 +4,7 @@ const Path = GVSClassLoader.gvm.filesystem.Path
 const UtilString = GVSClassLoader.shared.scripts.Strings
 const FileList = GVSClassLoader.visualfs.FileList
 const FileTree = GVSClassLoader.visual.FileTree
+const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 
 var _file_tree: FileTree
 var _path_label: RichTextLabel
@@ -27,6 +28,7 @@ func context_build() -> void:
     self._fs_man.create_file(Path.new(["school", "email"]))
     self._fs_man.create_file(Path.new(["work", "email"]))
     self._fs_man.create_file(Path.new(["work", "email_2"]))
+    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT))
 
 
 func start(needs_context: bool) -> void:
