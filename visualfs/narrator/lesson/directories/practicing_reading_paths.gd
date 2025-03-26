@@ -38,6 +38,7 @@ func context_build() -> void:
     
     self._path_label = RichTextLabel.new()
     self._right_panel.add_child(self._path_label)
+    self._path_label.name = "PathLabel"
     self._path_label.bbcode_enabled = false
     self._path_label.fit_content = true
     self._path_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN

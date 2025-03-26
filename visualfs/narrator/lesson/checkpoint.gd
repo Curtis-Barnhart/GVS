@@ -8,7 +8,6 @@ var _fs_man: FSManager
 var _next_button: Button
 var _text_display: RichTextLabel
 var _viewport: DragViewport
-var _line_edit: LineEdit
 var _right_panel: PanelContainer
 
 
@@ -25,14 +24,12 @@ func setup(
     next_button: Button,
     text_label: RichTextLabel,
     viewport: DragViewport,
-    line_edit: LineEdit,
     right_panel: PanelContainer
 ) -> void:
     self._fs_man = fs_manager
     self._next_button = next_button
     self._text_display = text_label
     self._viewport = viewport
-    self._line_edit = line_edit
     self._right_panel = right_panel
 
 
