@@ -13,8 +13,7 @@ var _bad_hl: int = -1
 var _line_edit := LineEdit.new()
 
 var _target_paths: Array[Path] = [
-    Path.new(["school"]),
-    Path.new(["work"])
+    Path.new(["work", "email_2"])
 ]
 var _target_index: int = 0
 
@@ -54,7 +53,7 @@ func start(needs_context: bool) -> void:
         [
             "Practice writing paths!",
             [
-                "write something"
+                "write /work/email"
             ],
         ]
     )
@@ -65,14 +64,59 @@ func start(needs_context: bool) -> void:
     self._line_edit.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
     self._line_edit.add_theme_font_override("font", GVSClassLoader.shared.fonts.Normal)
     self._line_edit.add_theme_font_size_override("font_size", 48)
+    
+    self._line_edit.text_changed.connect(self._on_user_path)
 
 
-func _get_user_path(s: String) -> Path:
-    return null
+func _on_user_path(s: String) -> void:
+    var path: Path
+    if not s.begins_with("/"):
+        path = Path.ROOT
+    else:
+        path = Path.new(s.split("/", false))
+    self._validate_user_path(path)
 
 
-func _highlight_user_path(p: Path) -> void:
-    pass
+func _highlight_user_path(p: Path, target_index: int) -> void:
+    var target: Path = self._target_paths[target_index]
+    var simplified: Path = self._fs_man.reduce_path(p)
+    var correct: Path = simplified.common_with(target)
+    var simplest_correct: Path = p.all_slices().filter(func (p: Path) -> bool:
+        return self._fs_man.reduce_path(p).as_string() == correct.as_string()
+    ).next()
+    var incorrect: Path = self._fs_man.relative_to(p, simplest_correct)
+    
+    if self._good_hl >= 0:
+        self._file_tree.hl_server.pop_id(self._good_hl)
+    if self._bad_hl >= 0:
+        self._file_tree.hl_server.pop_id(self._bad_hl)
+    
+    self._good_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, simplest_correct)
+    self._bad_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.RED, simplest_correct, incorrect)
+
+
+func _validate_user_path(p: Path) -> void:
+    # TODO: Remember that you can't backtrack from a file!!!
+    var target: Path = self._target_paths[self._target_index]
+    var simplified: Path = self._fs_man.reduce_path(p)
+    var ancestor: Path = self._fs_man.real_ancestry(p)
+    var highlight_target: int = self._target_index
+        
+    if simplified == null:
+        print("Path not detected, fallback to ancestor")
+        simplified = self._fs_man.reduce_path(ancestor)
+        print("Path detected (simplified): ", simplified.as_string())
+    else:
+        print("Path detected (simplified): ", simplified.as_string())
+        if simplified.as_string() == target.as_string():
+            print("Path matches expected: ", target.as_string())
+            self._next_button.disabled = false
+            self._target_index += 1
+            print("correct path answer, next question")
+            # TODO: somehow we mark if the user finished all in here
+        print("Path does not match expected: ", target.as_string())
+
+    self._highlight_user_path(ancestor, highlight_target)
 
 
 func finish() -> void:

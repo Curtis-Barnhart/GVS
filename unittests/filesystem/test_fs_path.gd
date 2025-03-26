@@ -170,3 +170,22 @@ func test_common_with() -> void:
     assert_eq(Path.new(["hello", "world"]).common_with(Path.new(["hello", "spam"])).as_string(), "/hello")
     assert_eq(Path.new(["hello", "world", "..", "world"]).common_with(Path.new(["hello", "spam"])).as_string(), "/hello")
     assert_eq(Path.new(["hello", "world", ".."]).common_with(Path.new(["hello", "world", ".."])).as_string(), "/hello/world/..")
+
+
+func test_all_slices() -> void:
+    assert_eq(
+        Path.ROOT \
+            .all_slices() \
+            .map(func (p: Path) -> String: return p.as_string()) \
+            .as_array(),
+        ["/"],
+        "'/' should only have the subslice of the trivial path."
+    )
+    assert_eq(
+        Path.new(["hello", "world"]) \
+            .all_slices() \
+            .map(func (p: Path) -> String: return p.as_string()) \
+            .as_array(),
+        ["/", "/hello", "/hello/world"],
+        "'/' should have subslices '/', '/hello', and '/hello/world'."
+    )
