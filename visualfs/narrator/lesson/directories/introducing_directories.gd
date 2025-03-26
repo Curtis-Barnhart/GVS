@@ -76,6 +76,7 @@ func add_filetree() -> void:
 
 
 func add_subdirectories() -> void:
+    self._next_button.pressed.disconnect(self.add_subdirectories)
     self._text_display.text = UtilString.make_article(
         [
             "Finding Files... the Smart Way",
@@ -84,16 +85,17 @@ func add_subdirectories() -> void:
             ],
         ]
     )
+    
     self._fs_man.create_dir(Path.new(["school"]))
     self._fs_man.create_dir(Path.new(["work"]))
     await GVSGlobals.wait(0.5)
     self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT / 2))
     
-    self._next_button.pressed.disconnect(self.add_subdirectories)
     self._next_button.pressed.connect(self.add_files)
 
 
 func add_files() -> void:
+    self._next_button.pressed.disconnect(self.add_files)
     self._text_display.text = UtilString.make_article(
         [
             "Finding Files... the Smart Way",
@@ -102,6 +104,7 @@ func add_files() -> void:
             ],
         ]
     )
+    
     self._fs_man.create_file(Path.new(["school", "document"]))
     self._fs_man.create_file(Path.new(["school", "email"]))
     self._fs_man.create_file(Path.new(["work", "email"]))
@@ -109,7 +112,6 @@ func add_files() -> void:
     await GVSGlobals.wait(0.5)
     self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT))
 
-    self._next_button.pressed.disconnect(self.add_files)
     self._next_button.pressed.connect(self.click_on_directory)
 
 
@@ -142,7 +144,7 @@ func click_on_directory_user_click(p: Path) -> void:
     else:
         if p.common_with(school).as_string() == "/school":
             var remaining: Path = self._fs_man.relative_to(p, school)
-            self._file_tree.hl_server.push_flash_to_tree_nodes(Color.GREEN, 1, Path.ROOT, school)
+            self._file_tree.hl_server.push_flash_to_tree_nodes(Color.GREEN, 3, Path.ROOT, school)
             self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 1, school, remaining)
         else:
             self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 1, Path.ROOT, p)

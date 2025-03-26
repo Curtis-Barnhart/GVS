@@ -1,6 +1,6 @@
 extends "res://visualfs/narrator/lesson/checkpoint.gd"
 
-const UtilString = GVSClassLoader.shared.Strings
+const UtilString = GVSClassLoader.shared.scripts.Strings
 
 
 func start(_needs_context: bool) -> void:
