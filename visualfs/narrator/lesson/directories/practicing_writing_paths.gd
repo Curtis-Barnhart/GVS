@@ -13,7 +13,7 @@ var _bad_hl: int = -1
 var _line_edit := LineEdit.new()
 
 var _target_paths: Array[Path] = [
-    Path.new(["work", "email_2"])
+    Path.new(["projects", "school", "homework_1"])
 ]
 var _target_index: int = 0
 
@@ -29,13 +29,24 @@ func context_build() -> void:
     self._fs_man.removed_dir.connect(file_tree.remove_node)
     self._fs_man.removed_file.connect(file_tree.remove_node)
     
-    self._fs_man.create_dir(Path.new(["school"]))
-    self._fs_man.create_dir(Path.new(["work"]))
-    self._fs_man.create_file(Path.new(["school", "document"]))
-    self._fs_man.create_file(Path.new(["school", "email"]))
-    self._fs_man.create_file(Path.new(["work", "email"]))
-    self._fs_man.create_file(Path.new(["work", "email_2"]))
-    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT))
+    self._fs_man.create_dir(Path.new(["projects"]))
+    self._fs_man.create_file(Path.new(["document_0"]))
+    self._fs_man.create_file(Path.new(["document_1"]))
+    self._fs_man.create_dir(Path.new(["pictures"]))
+
+    self._fs_man.create_file(Path.new(["projects", "game"]))
+    self._fs_man.create_file(Path.new(["projects", "movie"]))
+    self._fs_man.create_dir(Path.new(["projects", "school"]))
+    self._fs_man.create_dir(Path.new(["pictures", "vacation"]))
+    self._fs_man.create_dir(Path.new(["pictures", "nature"]))
+
+    self._fs_man.create_file(Path.new(["projects", "school", "homework_0"]))
+    self._fs_man.create_file(Path.new(["projects", "school", "homework_1"]))
+    self._fs_man.create_file(Path.new(["pictures", "vacation", "flowers"]))
+    self._fs_man.create_file(Path.new(["pictures", "vacation", "hike_0"]))
+    self._fs_man.create_file(Path.new(["pictures", "vacation", "hike_1"]))
+    self._fs_man.create_dir(Path.new(["pictures", "nature", "butterflies"]))
+    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT * 1.5))
     
     var path_label := RichTextLabel.new()
     self._right_panel.add_child(path_label)
@@ -53,7 +64,7 @@ func start(needs_context: bool) -> void:
         [
             "Practice writing paths!",
             [
-                "write /work/email"
+                "write /projects/school/homework"
             ],
         ]
     )

@@ -11,8 +11,8 @@ var _path_label: RichTextLabel
 var _highlight_id: int = -1
 
 var _target_paths: Array[Path] = [
-    Path.new(["school"]),
-    Path.new(["work"])
+    Path.new(["projects", "school"]),
+    Path.new(["pictures", "vacation", "hike_0"])
 ]
 var _target_index: int = 0
 
@@ -27,15 +27,7 @@ func context_build() -> void:
     self._fs_man.created_file.connect(file_tree.create_node_file)
     self._fs_man.removed_dir.connect(file_tree.remove_node)
     self._fs_man.removed_file.connect(file_tree.remove_node)
-    
-    self._fs_man.create_dir(Path.new(["school"]))
-    self._fs_man.create_dir(Path.new(["work"]))
-    self._fs_man.create_file(Path.new(["school", "document"]))
-    self._fs_man.create_file(Path.new(["school", "email"]))
-    self._fs_man.create_file(Path.new(["work", "email"]))
-    self._fs_man.create_file(Path.new(["work", "email_2"]))
-    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT))
-    
+        
     self._path_label = RichTextLabel.new()
     self._right_panel.add_child(self._path_label)
     self._path_label.name = "PathLabel"
@@ -45,6 +37,31 @@ func context_build() -> void:
     self._path_label.size_flags_horizontal = Control.SIZE_FILL
     self._path_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     self._path_label.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
+
+
+func make_tree() -> void:
+    self._fs_man.create_dir(Path.new(["projects"]))
+    self._fs_man.create_file(Path.new(["document_0"]))
+    self._fs_man.create_file(Path.new(["document_1"]))
+    self._fs_man.create_dir(Path.new(["pictures"]))
+    await GVSGlobals.wait(2)
+    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT * 0.5))
+
+    self._fs_man.create_file(Path.new(["projects", "game"]))
+    self._fs_man.create_file(Path.new(["projects", "movie"]))
+    self._fs_man.create_dir(Path.new(["projects", "school"]))
+    self._fs_man.create_dir(Path.new(["pictures", "vacation"]))
+    self._fs_man.create_dir(Path.new(["pictures", "nature"]))
+    await GVSGlobals.wait(2)
+    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT))
+    
+    self._fs_man.create_file(Path.new(["projects", "school", "homework_0"]))
+    self._fs_man.create_file(Path.new(["projects", "school", "homework_1"]))
+    self._fs_man.create_file(Path.new(["pictures", "vacation", "flowers"]))
+    self._fs_man.create_file(Path.new(["pictures", "vacation", "hike_0"]))
+    self._fs_man.create_file(Path.new(["pictures", "vacation", "hike_1"]))
+    self._fs_man.create_dir(Path.new(["pictures", "nature", "butterflies"]))
+    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT * 1.5))
 
 
 func start(needs_context: bool) -> void:
@@ -64,6 +81,13 @@ func start(needs_context: bool) -> void:
     )
     
     self._label_write("/")
+    
+    self._viewport.move_cam_to(Vector2.ZERO)
+    for any_p: Path in self._fs_man.read_all_in_dir(Path.ROOT):
+        self._fs_man.remove_recursive(any_p)
+    
+    await GVSGlobals.wait(2)
+    self.make_tree()
     
     self._file_tree.file_clicked.connect(self.user_click_object)
 
@@ -94,7 +118,8 @@ func user_click_object(p: Path) -> void:
         self._file_tree.hl_server.push_flash_to_tree_nodes(
             Color.RED, 1, correct, remaining
         )
-        self._label_append(remaining.as_string(not correct.degen()), Color.RED)
+        if not remaining.degen():
+            self._label_append(remaining.as_string(not correct.degen()), Color.RED)
 
     # Enable moving to next section after all targets completed
     if self._target_index == self._target_paths.size():
