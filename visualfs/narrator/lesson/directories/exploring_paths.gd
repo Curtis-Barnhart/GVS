@@ -36,7 +36,7 @@ func start(needs_context: bool) -> void:
         [
             "Exploring paths!",
             [
-                "look at all the new files! aoriestn aoiresnt oiaesrnt oiaersnt oiaesrntnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+                "look at all the new files!"
             ],
         ]
     )
