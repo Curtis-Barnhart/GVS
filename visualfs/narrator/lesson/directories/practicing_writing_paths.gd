@@ -121,9 +121,9 @@ func finish() -> void:
     if self._highlight_id >= 0:
         self._file_tree.hl_server.pop_id(self._highlight_id)
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/directories/practicing_writing_paths.gd").new()
+        preload("res://visualfs/narrator/lesson/completion.gd").new()
     )
     assert(
         self.get_reference_count() == 1,
-        "Not all references to practicing_reading_paths removed before checkpoint exit."
+        "Not all references to practicing_writing_paths removed before checkpoint exit."
     )

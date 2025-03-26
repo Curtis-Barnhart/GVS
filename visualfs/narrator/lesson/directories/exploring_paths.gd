@@ -76,38 +76,15 @@ func user_click_object(p: Path) -> void:
 ## writes colored text to the path label.[br][br]
 ##
 ## [param text]: Text to write to the label.[br]
-## [param color]: Color to write [code]text[/code] in. 0 for dark blue,
-##      1 for red, and 2 for green.
-func _label_write(text: String, color: int = 0) -> void:
-    assert(color >= 0 and color <= 2)
-    var colors: Array[Color] = [
-        Color.WHITE,
-        Color.RED,
-        Color.GREEN
-    ]
-    
+## [param color]: Color to write [code]text[/code] in.
+func _label_write(text: String, color: Color = Color.WHITE) -> void:
     self._path_label.text = ""  # also clears tag stack
     self._path_label.push_font(GVSClassLoader.shared.fonts.Normal)
     self._path_label.push_font_size(48)
-    self._path_label.push_color(colors[color])
-    self._path_label.add_text(text)
+    self._path_label.push_color(Color.WHITE)
+    self._path_label.add_text("Path\n")
     self._path_label.pop()
-
-
-## Appends colored text to the path label.[br][br]
-##
-## [param text]: Text to write to the label.[br]
-## [param color]: Color to write [code]text[/code] in. 0 for dark blue,
-##      1 for red, and 2 for green.
-func _label_append(text: String, color: int = 0) -> void:
-    assert(color >= 0 and color <= 2)
-    var colors: Array[Color] = [
-        Color.DARK_BLUE,
-        Color.RED,
-        Color.GREEN
-    ]
-    
-    self._path_label.push_color(colors[color])
+    self._path_label.push_color(color)
     self._path_label.add_text(text)
     self._path_label.pop()
 
