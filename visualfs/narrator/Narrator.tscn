@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dq8b8lpiitxh4"]
+[gd_scene load_steps=7 format=3 uid="uid://dq8b8lpiitxh4"]
 
 [ext_resource type="Script" uid="uid://b410jknhe5sok" path="res://visualfs/narrator/narrator.gd" id="1_km8bo"]
+[ext_resource type="PackedScene" uid="uid://cjlkpbxmqe5of" path="res://visualfs/narrator/Instructions.tscn" id="2_4x4ax"]
 [ext_resource type="Theme" uid="uid://b6yhu8vwprwt7" path="res://shared/resources/BigText.tres" id="2_bhvsl"]
 [ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Regular.ttf" id="2_ed7qu"]
 [ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/resources/Button.tres" id="3_bsxgj"]
@@ -31,8 +32,9 @@ bbcode_enabled = true
 text = "[font_size=36][center]lorem ipsum[/center][/font_size]"
 fit_content = true
 
-[node name="Instructions" type="RichTextLabel" parent="VBoxContainer"]
+[node name="Instructions" parent="VBoxContainer" instance=ExtResource("2_4x4ax")]
 layout_mode = 2
+fit_content = true
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
 visible = false
