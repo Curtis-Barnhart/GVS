@@ -4,6 +4,7 @@ const Path = GVSClassLoader.gvm.filesystem.Path
 const UtilString = GVSClassLoader.shared.scripts.Strings
 const FileList = GVSClassLoader.visualfs.FileList
 const FileTree = GVSClassLoader.visual.FileTree
+const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 
 var _file_tree: FileTree
 var _path_label: RichTextLabel
@@ -17,15 +18,23 @@ var _target_index: int = 0
 
 
 func context_build() -> void:
-    var ft := FileTree.make_new()
-    self._file_tree = FileTree.make_new()
-    ft.name = "FileTree"
-    self._viewport.add_to_scene(ft)
+    var file_tree := FileTree.make_new()
+    file_tree = FileTree.make_new()
+    file_tree.name = "FileTree"
+    self._viewport.add_to_scene(file_tree)
     
-    self._fs_man.created_dir.connect(ft.create_node_dir)
-    self._fs_man.created_file.connect(ft.create_node_file)
-    self._fs_man.removed_dir.connect(ft.remove_node)
-    self._fs_man.removed_file.connect(ft.remove_node)
+    self._fs_man.created_dir.connect(file_tree.create_node_dir)
+    self._fs_man.created_file.connect(file_tree.create_node_file)
+    self._fs_man.removed_dir.connect(file_tree.remove_node)
+    self._fs_man.removed_file.connect(file_tree.remove_node)
+    
+    self._fs_man.create_dir(Path.new(["school"]))
+    self._fs_man.create_dir(Path.new(["work"]))
+    self._fs_man.create_file(Path.new(["school", "document"]))
+    self._fs_man.create_file(Path.new(["school", "email"]))
+    self._fs_man.create_file(Path.new(["work", "email"]))
+    self._fs_man.create_file(Path.new(["work", "email_2"]))
+    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT))
     
     self._path_label = RichTextLabel.new()
     self._right_panel.add_child(self._path_label)
@@ -84,7 +93,7 @@ func user_click_object(p: Path) -> void:
         self._file_tree.hl_server.push_flash_to_tree_nodes(
             Color.RED, 1, correct, remaining
         )
-        self._label_append(remaining.as_string(correct.as_string() != "/"), Color.RED)
+        self._label_append(remaining.as_string(not correct.degen()), Color.RED)
 
     # Enable moving to next section after all targets completed
     if self._target_index == self._target_paths.size():
