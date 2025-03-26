@@ -51,7 +51,8 @@ class HighlightData extends RefCounted:
 ## and at the moment that's okay because it seems that it works well enough.
 ## I don't think users will generally experience the worst parts of it -
 ## the worst parts they'll see will be delays in color updates
-## and a lack of blending overlapping paths.
+## and a lack of blending overlapping paths.[br][br]
+## TODO: Remove all highlights on destruction?
 class HighlightServer extends RefCounted:
     var _highlights: Array[HighlightData] = []
     var _next_id: int = 0

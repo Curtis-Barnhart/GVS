@@ -104,6 +104,9 @@ func size() -> int:
 ## Assumes Paths are not in simplest form and returns a path
 ## that is not neccessarily in simplest form.[br][br]
 ##
+## For instance, /one/../one and /../one will have nothing in common,
+## even though they point to the same directory.
+##
 ## [param p]: Other path to find the common parent with this one.[br]
 ## [param return]: Deepest common parent path between self and [code]p[/code].
 func common_with(p: Path) -> Path:
@@ -119,3 +122,15 @@ func common_with(p: Path) -> Path:
 
 func slice(begin: int, end: int = 0x7fffffff) -> Path:
     return Path.new(self._segments.slice(begin, end))
+
+
+func all_slices() -> GStreams.StreamType:
+    var last_index: Array[int] = [0]
+    var next_slice := func () -> Path:
+        if last_index[0] > self.size():
+            return null
+        last_index[0] += 1
+        return self.slice(0, last_index[0] - 1)
+    
+    return GStreams.Stream(next_slice) \
+                   .take_while(func (p: Path) -> bool: return p != null)
