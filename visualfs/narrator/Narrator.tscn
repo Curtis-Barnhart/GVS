@@ -31,6 +31,9 @@ bbcode_enabled = true
 text = "[font_size=36][center]lorem ipsum[/center][/font_size]"
 fit_content = true
 
+[node name="Instructions" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
 visible = false
 layout_mode = 2
