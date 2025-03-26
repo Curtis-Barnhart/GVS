@@ -9,6 +9,12 @@ var _file_tree: FileTree
 var _path_label: RichTextLabel
 var _highlight_id: int = -1
 
+var _target_paths: Array[Path] = [
+    Path.new(["school"]),
+    Path.new(["work"])
+]
+var _target_index: int = 0
+
 
 func context_build() -> void:
     var ft := FileTree.make_new()
@@ -28,7 +34,6 @@ func context_build() -> void:
     self._path_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
     self._path_label.size_flags_horizontal = Control.SIZE_FILL
     self._path_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    self._label_write("/")
     self._path_label.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
 
 
@@ -43,22 +48,44 @@ func start(needs_context: bool) -> void:
         [
             "Practice reading paths!",
             [
-                "huh... new files!"
+                "click on... /directory"
             ],
         ]
     )
     
     self._label_write("/")
-
-
-func user_click_object(p: Path) -> void:
-    self._label_write(p.as_string())
     
+    self._file_tree.file_clicked.connect(self.user_click_object)
+
+
+func user_click_object(p: Path) -> void:    
+    # Remove old highlight if applicable
     if self._highlight_id >= 0:
         self._file_tree.hl_server.pop_id(self._highlight_id)
-    self._highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(
-        Color.DARK_BLUE, Path.ROOT, p
-    )
+    
+    # Calculate good part of next highlight
+    var target: Path = self._target_paths[self._target_index]
+    if p.as_string() == target.as_string():
+        self._next_button.disabled = false
+        self._highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(
+            Color.GREEN, Path.ROOT, p
+        )
+        self._label_write(p.as_string(), Color.GREEN)
+        self._target_index += 1
+    else:
+        var correct: Path = p.common_with(target)
+        var remaining: Path = self._fs_man.relative_to(p, correct)
+        self._file_tree.hl_server.push_flash_to_tree_nodes(
+            Color.GREEN, 1.0, Path.ROOT, correct
+        )
+        self._label_write(correct.as_string(), Color.GREEN)
+        self._file_tree.hl_server.push_flash_to_tree_nodes(
+            Color.RED, 1.0, correct, remaining
+        )
+        self._label_append(remaining.as_string(correct.as_string() != "/"), Color.RED)
+
+    if self._target_index == self._target_paths.size():
+        self._file_tree.file_clicked.disconnect(self.user_click_object)
 
 
 ## Erases all previous text in the path label and then
@@ -67,20 +94,14 @@ func user_click_object(p: Path) -> void:
 ## [param text]: Text to write to the label.[br]
 ## [param color]: Color to write [code]text[/code] in. 0 for dark blue,
 ##      1 for red, and 2 for green.
-func _label_write(text: String, color: int = 0) -> void:
-    assert(color >= 0 and color <= 2)
-    var colors: Array[Color] = [
-        Color.WHITE,
-        Color.RED,
-        Color.GREEN
-    ]
-    
+func _label_write(text: String, color: Color = Color.WHITE) -> void:
     self._path_label.text = ""  # also clears tag stack
     self._path_label.push_font(GVSClassLoader.shared.fonts.Normal)
     self._path_label.push_font_size(48)
-    self._path_label.push_color(colors[color])
-    self._path_label.add_text(text)
+    self._path_label.push_color(Color.WHITE)
+    self._path_label.add_text("Path\n")
     self._path_label.pop()
+    self._label_append(text, color)
 
 
 ## Appends colored text to the path label.[br][br]
@@ -88,15 +109,8 @@ func _label_write(text: String, color: int = 0) -> void:
 ## [param text]: Text to write to the label.[br]
 ## [param color]: Color to write [code]text[/code] in. 0 for dark blue,
 ##      1 for red, and 2 for green.
-func _label_append(text: String, color: int = 0) -> void:
-    assert(color >= 0 and color <= 2)
-    var colors: Array[Color] = [
-        Color.DARK_BLUE,
-        Color.RED,
-        Color.GREEN
-    ]
-    
-    self._path_label.push_color(colors[color])
+func _label_append(text: String, color: Color = Color.WHITE) -> void:
+    self._path_label.push_color(color)
     self._path_label.add_text(text)
     self._path_label.pop()
 

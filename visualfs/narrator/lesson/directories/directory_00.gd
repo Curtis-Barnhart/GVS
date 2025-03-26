@@ -4,6 +4,7 @@ const Path = GVSClassLoader.gvm.filesystem.Path
 const UtilString = GVSClassLoader.shared.scripts.Strings
 const FileList = GVSClassLoader.visualfs.FileList
 const FileTree = GVSClassLoader.visual.FileTree
+const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 
 var _file_tree: FileTree
 
@@ -85,6 +86,8 @@ func add_subdirectories() -> void:
     )
     self._fs_man.create_dir(Path.new(["school"]))
     self._fs_man.create_dir(Path.new(["work"]))
+    await GVSGlobals.wait(0.5)
+    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT / 2))
     
     self._next_button.pressed.disconnect(self.add_subdirectories)
     self._next_button.pressed.connect(self.add_files)
@@ -103,6 +106,8 @@ func add_files() -> void:
     self._fs_man.create_file(Path.new(["school", "email"]))
     self._fs_man.create_file(Path.new(["work", "email"]))
     self._fs_man.create_file(Path.new(["work", "email_2"]))
+    await GVSGlobals.wait(0.5)
+    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT))
 
     self._next_button.pressed.disconnect(self.add_files)
     self._next_button.pressed.connect(self.click_on_directory)
