@@ -7,7 +7,10 @@ const FileTree = GVSClassLoader.visual.FileTree
 const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 
 var _file_tree: FileTree
-var _highlight_id: int = -1
+var _target_hl: int = -1
+var _good_hl: int = -1
+var _bad_hl: int = -1
+var _line_edit := LineEdit.new()
 
 var _target_paths: Array[Path] = [
     Path.new(["school"]),
@@ -55,11 +58,31 @@ func start(needs_context: bool) -> void:
             ],
         ]
     )
+    
+    self._right_panel.add_child(self._line_edit)
+    self._line_edit.size_flags_vertical = Control.SIZE_SHRINK_END
+    self._line_edit.size_flags_horizontal = Control.SIZE_FILL
+    self._line_edit.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
+    self._line_edit.add_theme_font_override("font", GVSClassLoader.shared.fonts.Normal)
+    self._line_edit.add_theme_font_size_override("font_size", 48)
+
+
+func _get_user_path(s: String) -> Path:
+    return null
+
+
+func _highlight_user_path(p: Path) -> void:
+    pass
 
 
 func finish() -> void:
-    if self._highlight_id >= 0:
-        self._file_tree.hl_server.pop_id(self._highlight_id)
+    if self._target_hl >= 0:
+        self._file_tree.hl_server.pop_id(self._target_hl)
+    if self._good_hl >= 0:
+        self._file_tree.hl_server.pop_id(self._good_hl)
+    if self._bad_hl >= 0:
+        self._file_tree.hl_server.pop_id(self._bad_hl)
+    
     self.completed.emit(
         preload("res://visualfs/narrator/lesson/completion.gd").new()
     )

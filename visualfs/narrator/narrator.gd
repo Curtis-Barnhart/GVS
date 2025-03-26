@@ -23,7 +23,7 @@ func setup(
     self._viewport = viewport
     self._right_panel = right_panel
     self.load_checkpoint(
-        preload("res://visualfs/narrator/lesson/directories/introducing_directories.gd").new(),
+        preload("res://visualfs/narrator/lesson/directories/practicing_reading_paths.gd").new(),
         true
     )
 
@@ -37,7 +37,6 @@ func load_checkpoint(c: Checkpoint, needs_context: bool = false) -> void:
         self._next_button,
         self._text,
         self._viewport,
-        self._line_edit,
         self._right_panel
     )
     c.start(needs_context)
