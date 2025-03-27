@@ -40,7 +40,7 @@ func start(needs_context: bool) -> void:
         [
             "Finding Files... the Smart Way",
             [
-                "look there's nothing here"
+                "We're going to cover "
             ],
         ]
     )
@@ -91,7 +91,7 @@ func add_subdirectories() -> void:
     self._fs_man.create_dir(Path.new(["school"]))
     self._fs_man.create_dir(Path.new(["work"]))
     await GVSGlobals.wait(0.5)
-    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT / 2))
+    self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT / 2.0))
     
     self._next_button.pressed.connect(self.add_files)
 
