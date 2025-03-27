@@ -11,7 +11,7 @@ var _right_panel: PanelContainer
 var _cur_checkpt: Checkpoint
 @onready var _line_edit: LineEdit = $VBoxContainer/LineEdit
 @onready var _next_button: Button = $VBoxContainer/Button
-@onready var _text: RichTextLabel = $VBoxContainer/RichTextLabel
+@onready var _text: RichTextLabel = $VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/RichTextLabel
 
 
 func setup(
@@ -29,8 +29,8 @@ func setup(
 
 
 func _ready() -> void:
-    ($VBoxContainer/Instructions as GVSClassLoader.visualfs.narrator.Instructions).setup(
-        $VBoxContainer/InstructionHeader as RichTextLabel
+    ($VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/Instructions as GVSClassLoader.visualfs.narrator.Instructions).setup(
+        $VBoxContainer/ScrollContainer/VBoxContainer/InstructionHeader as RichTextLabel
     )
 
 

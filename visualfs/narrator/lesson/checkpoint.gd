@@ -3,8 +3,10 @@ extends RefCounted
 const FSManager = GVSClassLoader.gvm.filesystem.Manager
 const Checkpoint = GVSClassLoader.visualfs.narrator.lesson.Checkpoint
 const DragViewport = GVSClassLoader.visual.DragViewport.DragViewport
+const Instructions = GVSClassLoader.visualfs.narrator.Instructions
 
 var _fs_man: FSManager
+var _inst: Instructions
 var _next_button: Button
 var _text_display: RichTextLabel
 var _viewport: DragViewport

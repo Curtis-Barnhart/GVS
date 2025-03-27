@@ -19,30 +19,58 @@ script = ExtResource("1_km8bo")
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.2
-anchor_right = 0.8
+anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_right = 80
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_ed7qu")
 bbcode_enabled = true
-text = "[font_size=36][center]lorem ipsum[/center][/font_size]"
+text = "[font_size=48][center]Lesson Title[/center][/font_size]
+[font_size=36]    Here is the lesson. Here is a thing to say.
+    Here is a new paragraph. Wow isn't that just so cool!
+    I'm gonna add more text here."
 fit_content = true
 
-[node name="InstructionHeader" type="RichTextLabel" parent="VBoxContainer"]
-visible = false
+[node name="InstructionHeader" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Header"
+theme_override_fonts/normal_font = ExtResource("2_ed7qu")
+theme_override_font_sizes/normal_font_size = 48
+text = "Instructions"
 fit_content = true
 horizontal_alignment = 1
 
-[node name="Instructions" parent="VBoxContainer" instance=ExtResource("2_4x4ax")]
-visible = false
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "instructions go here"
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_right = 80
+
+[node name="Instructions" parent="VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2" instance=ExtResource("2_4x4ax")]
+layout_mode = 2
+text = "instructions go here
+- instruction 1
+	- subinstruction 1
+- instruction 2
+-instruction 3
+	- subinstruction 1
+	- subinstruction 2
+- instruction 4"
 fit_content = true
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
