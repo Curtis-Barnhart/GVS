@@ -5,6 +5,7 @@ const FileTree = GVSClassLoader.visual.FileTree
 const Path = GVSClassLoader.gvm.filesystem.Path
 const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 const TCStack = GVSClassLoader.visual.file_nodes.TimeColorStack
+const MathUtils = GVSClassLoader.shared.scripts.Math
 
 signal file_clicked(path: Path)
 
@@ -273,8 +274,9 @@ class FaderIn extends Node:
     
     func _process(_delta: float) -> void:
         var diff: float = (Time.get_unix_time_from_system() - self._t0) / self._duration
-        self._host.modulate.a = min(diff, 1)
+        self._host.modulate.a = min(MathUtils.unary_log_interp(diff), 1)
         if diff > 1:
+            self._host.modulate.a = 1
             self.queue_free()
 
 
@@ -344,7 +346,7 @@ func remove_node(p: Path) -> void:
 func _ready() -> void:
     self._all_nodes["/"] = TNode.make_new()
     self.add_child(self._all_nodes["/"] as Node)
-    self._all_nodes["/"].setup("/")
+    self._all_nodes["/"].setup("")
     self._all_nodes["/"].z_index = 0
     self.change_cwd(Path.ROOT, Path.ROOT)
     self._all_nodes["/"]._icon.pressed.connect(func () -> void: self.file_clicked.emit(Path.ROOT))

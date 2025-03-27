@@ -75,10 +75,19 @@ func start(needs_context: bool) -> void:
     
     self._text_display.text = UtilString.make_article(
         [
-            "Practice reading paths!",
+            "All about Paths",
             [
-                "click on... /directory"
+                "Hopefully the pattern wasn't too hard to spot.",
+                "The path always starts with '/'.",
+                "After that, the path is made up of each of the names",
+                "of the directories on the way to the destination",
+                "separated by the character '/',",
+                "and ending, of course, with the name of the destination itself.",
             ],
+            [
+                "For a little extra practice, locate and click on the files",
+                "listed in the instructions below."
+            ]
         ]
     )
     
@@ -94,7 +103,7 @@ func start(needs_context: bool) -> void:
     self._inst.render()
     
     await GVSGlobals.wait(2)
-    self.make_tree()
+    await self.make_tree()
 
     self._file_tree.file_clicked.connect(self.user_click_object)
 

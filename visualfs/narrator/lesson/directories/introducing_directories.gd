@@ -98,8 +98,9 @@ func add_subdirectories() -> void:
         [
             "Directories",
             [
-                "Here's an example of a directory named '/' that contains",
-                "two other directories named 'school' and 'work'.",
+                "Here's an example of a directory",
+                "(it doesn't have a name, but we'll come back to that later)",
+                "that contains two other directories named 'school' and 'work'.",
             ],
             [
                 "We represent who contains whom by drawing the items that",
@@ -153,7 +154,7 @@ func click_on_directory() -> void:
     self._inst.visible = true
     self._inst.remove_all()
     self._inst.add_command(Instructions.Command.new(
-        "Locate and click on the 'school' directory contained in the '/' directory"
+        "Locate and click on the 'school' directory contained in the nameless directory"
     ))
     self._inst.render()
 

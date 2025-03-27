@@ -1,11 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://duxuodebilbwf"]
+[gd_scene load_steps=7 format=3 uid="uid://duxuodebilbwf"]
 
 [ext_resource type="Script" uid="uid://c8v500xqrsycd" path="res://narrator/narrator.gd" id="1_ne5f2"]
 [ext_resource type="Texture2D" uid="uid://p2qtk5ccvwp1" path="res://shared/bordered.png" id="2_j8vlk"]
+[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Regular.ttf" id="3_36juf"]
 [ext_resource type="Texture2D" uid="uid://do7vmtvdv60x6" path="res://narrator/assets/continue.svg" id="4_gj3sb"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lns7w"]
 load_path = "res://.godot/imported/down.svg-08c761e4449e0b2e4a25432951408e9a.ctex"
+
+[sub_resource type="Theme" id="Theme_n16bq"]
+default_font = ExtResource("3_36juf")
+default_font_size = 36
 
 [node name="Narrator" type="Control"]
 layout_mode = 3
@@ -51,9 +56,9 @@ icon = SubResource("CompressedTexture2D_lns7w")
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 2
+theme = SubResource("Theme_n16bq")
 bbcode_enabled = true
-text = "[font=res://shared/JetBrainsMonoNerdFontMono-Regular.ttf][font_size=36]
-[center]Instructions[/center]
+text = "[center]Things[/center]
 [ul]
 pwd
 ls
@@ -62,8 +67,7 @@ mkdir
 rmdir
 clear
 exit
-[/ul]
-[/font_size][/font]"
+[/ul]"
 
 [node name="Next" type="Button" parent="VBoxContainer"]
 layout_mode = 2
