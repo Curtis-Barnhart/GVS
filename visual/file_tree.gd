@@ -11,7 +11,7 @@ signal file_clicked(path: Path)
 ## Texture for a normal directory
 const dir_text: Texture2D = preload("res://visual/assets/directory.svg")
 ## Texture for the current working directory
-const cwd_text: Texture2D = preload("res://visual/assets/cwd.svg")
+const cwd_text: Texture2D = preload("res://visual/assets/cwd_open.svg")
 ## Texture for a file
 const file_texture := preload("res://visual/assets/file.svg")
 const opened_dir_text := preload("res://visual/assets/directory_open.svg")

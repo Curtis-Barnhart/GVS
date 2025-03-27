@@ -14,14 +14,14 @@ func _on_texture_button_pressed() -> void:
     self.cmenu = CMenu.make_new()
     
     var s: Sprite2D = Sprite2D.new()
-    s.texture = load("res://visual/assets/directory.svg")
+    s.texture = preload("res://visual/assets/directory_open.svg")
     self.cmenu.add_child(s)
     s = Sprite2D.new()
-    s.texture = load("res://visual/assets/directory.svg")
+    s.texture = preload("res://visual/assets/directory_open.svg")
     self.cmenu.add_child(s)
     self.cmenu.position = self._button.position + self._button.size / 2
     s = Sprite2D.new()
-    s.texture = load("res://visual/assets/directory.svg")
+    s.texture = preload("res://visual/assets/directory_open.svg")
     self.cmenu.add_child(s)
     
     self.cmenu.popup(self)
