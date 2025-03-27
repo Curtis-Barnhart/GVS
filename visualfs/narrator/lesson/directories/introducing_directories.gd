@@ -15,6 +15,7 @@ func context_build() -> void:
     var fl := FileList.make_new()
     fl.name = "FileList"
     self._viewport.add_to_scene(fl)
+    self._inst.visible = false
 
 
 func remove_old_files() -> void:
@@ -31,11 +32,7 @@ func remove_old_files() -> void:
 func start(needs_context: bool) -> void:
     if needs_context:
         self.context_build()
-    
-    await self.remove_old_files()
-    self._viewport.node_from_scene("FileList").queue_free()
-    await GVSGlobals.wait(0.5)
-    
+        
     self._text_display.text = UtilString.make_article(
         [
             "Finding Files... the Smart Way",
@@ -44,6 +41,10 @@ func start(needs_context: bool) -> void:
             ],
         ]
     )
+        
+    await self.remove_old_files()
+    self._viewport.node_from_scene("FileList").queue_free()
+    await GVSGlobals.wait(0.5)
     
     # TODO: If I could check the resolution of the screen and then add it
     # just out of reach that'd be great.
@@ -128,6 +129,13 @@ func click_on_directory() -> void:
             ],
         ]
     )
+    
+    self._inst.visible = true
+    self._inst.remove_all()
+    self._inst.add_command(Instructions.Command.new(
+        "Click on the 'school' directory contained in the '/' directory"
+    ))
+    self._inst.render()
 
     self._next_button.pressed.disconnect(self.click_on_directory)
     self._next_button.pressed.connect(self.click_on_file)
@@ -143,6 +151,9 @@ func click_on_directory_user_click(p: Path) -> void:
         self._file_tree.file_clicked.disconnect(self.click_on_directory_user_click)
         self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
         self._next_button.disabled = false
+        
+        self._inst.get_command(0).set_fulfill(true)
+        self._inst.render()
     else:
         if p.common_with(school).as_string() == "/school":
             var remaining: Path = self._fs_man.relative_to(p, school)
@@ -162,6 +173,11 @@ func click_on_file() -> void:
             ],
         ]
     )
+    
+    self._inst.add_command(Instructions.Command.new(
+        "Click on the 'email' file in the 'school' directory"
+    ))
+    self._inst.render()
 
     self._next_button.pressed.disconnect(self.click_on_file)
     
@@ -181,7 +197,10 @@ func click_on_file_user_click(p: Path) -> void:
             self._text_display.text += UtilString.make_paragraphs([["whoah you clicked the file!"]])
 
             self._file_tree.file_clicked.disconnect(self.click_on_file_user_click)
-            self._next_button.pressed.connect(self.finish)            
+            self._next_button.pressed.connect(self.finish)
+            
+            self._inst.get_command(-1).set_fulfill(true)
+            self._inst.render()
         else:
             self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 1, school, remaining)
     else:
@@ -189,6 +208,9 @@ func click_on_file_user_click(p: Path) -> void:
 
 
 func finish() -> void:
+    self._inst.remove_all()
+    self._inst.render()
+    
     self._file_tree.hl_server.pop_id(self.click_on_directory_highlight_id)
     self.completed.emit(
         preload("res://visualfs/narrator/lesson/directories/exploring_paths.gd").new()

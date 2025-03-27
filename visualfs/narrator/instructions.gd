@@ -35,6 +35,14 @@ class Command:
     func remove_command(index: int) -> void:
         self._subcommands.remove_at(index)
     
+    func remove_command_ref(c: Command) -> void:
+        var index: int = self._subcommands.find(c)
+        if index < 0:
+            for subc: Command in self._subcommands:
+                subc.remove_command_ref(c)
+        else:
+            self._subcommands.remove_at(index)
+    
     func get_command(index: int) -> Command:
         return self._subcommands[index]
 
@@ -44,6 +52,19 @@ func add_command(c: Command, index: int = -1) -> void:
         self._commands.push_back(c)
     else:
         self._commands.insert(index, c)
+
+
+func remove_command(index: int) -> void:
+    self._commands.remove_at(index)
+
+
+func remove_command_ref(c: Command) -> void:
+    for com: Command in self._commands:
+        com.remove_command_ref(c)
+
+
+func remove_all() -> void:
+    self._commands.clear()
 
 
 func get_command(index: int) -> Command:
@@ -73,17 +94,18 @@ func _render_helper(c: Command, depth: int = 0) -> void:
     var prefix: String
     if c.is_fulfilled():
         color = Color.GREEN
-        prefix = "✓ - "
+        prefix = "[✓] "
     else:
         color = Color.RED
-        prefix = "✕ - "
+        prefix = "[✕] "
     
     self._content.push_color(color)
     self._content.add_text(
         "".join(GStreams.Repeat("    ").take(depth).as_array())
-        + prefix + c._text
+        + prefix
     )
     self._content.pop()
+    self._content.add_text(c._text)
     
     if not c._subcommands.is_empty():
         self._content.add_text("\n")

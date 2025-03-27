@@ -63,7 +63,7 @@ static func extract_word(s: String, index: int) -> String:
 ## @param text: data structure with strings to format.
 ## @return: formatted string with BBCode markup.
 static func make_article(text: Array) -> String:
-    return "[font_size=48][center][color=dark_blue]%s[/color][/center][/font_size]\n\n    " % text[0] + \
+    return "[font_size=48][center]%s[/center][/font_size]\n\n    " % text[0] + \
         "\n\n    ".join(text.slice(1).map(func (sent: Array) -> String: return " ".join(sent))) + \
         "\n\n    "
 

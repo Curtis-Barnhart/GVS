@@ -9,6 +9,7 @@ const TNode = GVSClassLoader.visual.file_nodes.TreeNode
 var _file_tree: FileTree
 var _path_label: RichTextLabel
 var _highlight_id: int = -1
+var _paths_clicked: int = 0
 
 
 func context_build() -> void:
@@ -29,6 +30,9 @@ func context_build() -> void:
     self._fs_man.create_file(Path.new(["work", "email"]))
     self._fs_man.create_file(Path.new(["work", "email_2"]))
     self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT))
+    
+    self._inst.remove_all()
+    self._inst.render()
 
 
 func start(needs_context: bool) -> void:
@@ -56,6 +60,11 @@ func start(needs_context: bool) -> void:
     self._label_write("/")
     self._path_label.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
     self._path_label.name = "PathLabel"
+    
+    self._inst.add_command(Instructions.Command.new(
+        "Click on objects to view their paths (0/3)"
+    ))
+    self._inst.render()
 
     self._file_tree.file_clicked.connect(self.user_click_object)
     
@@ -63,6 +72,18 @@ func start(needs_context: bool) -> void:
 
 
 func user_click_object(p: Path) -> void:
+    self._paths_clicked += 1
+    
+    if self._paths_clicked <= 3:
+        if self._paths_clicked == 3:
+            self._next_button.disabled = false
+            self._inst.get_command(0).set_fulfill(true)
+    
+        self._inst.get_command(0).change_text(
+            "Click on objects to view their paths (%d/3)" % min(3, self._paths_clicked)
+        )
+        self._inst.render()
+    
     self._label_write(p.as_string())
     
     if self._highlight_id >= 0:
@@ -92,6 +113,10 @@ func _label_write(text: String, color: Color = Color.WHITE) -> void:
 func finish() -> void:
     if self._highlight_id >= 0:
         self._file_tree.hl_server.pop_id(self._highlight_id)
+        
+    self._inst.remove_all()
+    self._inst.render()
+
     self.completed.emit(
         preload("res://visualfs/narrator/lesson/directories/practicing_reading_paths.gd").new()
     )
