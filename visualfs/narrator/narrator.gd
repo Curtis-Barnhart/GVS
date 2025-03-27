@@ -28,6 +28,12 @@ func setup(
     )
 
 
+func _ready() -> void:
+    ($VBoxContainer/Instructions as GVSClassLoader.visualfs.narrator.Instructions).setup(
+        $VBoxContainer/InstructionHeader as RichTextLabel
+    )
+
+
 func load_checkpoint(c: Checkpoint, needs_context: bool = false) -> void:
     # have to hold a reference so it's not deleted from memory while it waits lol
     self._cur_checkpt = c

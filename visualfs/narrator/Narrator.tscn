@@ -32,8 +32,17 @@ bbcode_enabled = true
 text = "[font_size=36][center]lorem ipsum[/center][/font_size]"
 fit_content = true
 
-[node name="Instructions" parent="VBoxContainer" instance=ExtResource("2_4x4ax")]
+[node name="InstructionHeader" type="RichTextLabel" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
+text = "Header"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="Instructions" parent="VBoxContainer" instance=ExtResource("2_4x4ax")]
+visible = false
+layout_mode = 2
+text = "instructions go here"
 fit_content = true
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
