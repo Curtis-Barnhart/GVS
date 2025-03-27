@@ -23,12 +23,14 @@ signal completed(checkpoint: Checkpoint)
 
 func setup(
     fs_manager: FSManager,
+    instructions: Instructions,
     next_button: Button,
     text_label: RichTextLabel,
     viewport: DragViewport,
     right_panel: PanelContainer
 ) -> void:
     self._fs_man = fs_manager
+    self._inst = instructions
     self._next_button = next_button
     self._text_display = text_label
     self._viewport = viewport

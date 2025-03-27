@@ -4,6 +4,7 @@ const Checkpoint = GVSClassLoader.visualfs.narrator.lesson.Checkpoint
 const FSManager = GVSClassLoader.gvm.filesystem.Manager
 const DragViewport = GVSClassLoader.visual.DragViewport.DragViewport
 const Narrator = GVSClassLoader.visualfs.narrator.Narrator
+const Instructions = GVSClassLoader.visualfs.narrator.Instructions
 
 var _fs_man: FSManager
 var _viewport: DragViewport
@@ -12,6 +13,7 @@ var _cur_checkpt: Checkpoint
 @onready var _line_edit: LineEdit = $VBoxContainer/LineEdit
 @onready var _next_button: Button = $VBoxContainer/Button
 @onready var _text: RichTextLabel = $VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/RichTextLabel
+@onready var _inst: Instructions = $VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/Instructions
 
 
 func setup(
@@ -28,18 +30,13 @@ func setup(
     )
 
 
-func _ready() -> void:
-    ($VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/Instructions as GVSClassLoader.visualfs.narrator.Instructions).setup(
-        $VBoxContainer/ScrollContainer/VBoxContainer/InstructionHeader as RichTextLabel
-    )
-
-
 func load_checkpoint(c: Checkpoint, needs_context: bool = false) -> void:
     # have to hold a reference so it's not deleted from memory while it waits lol
     self._cur_checkpt = c
     self._next_button.disabled = false
     c.setup(
         self._fs_man,
+        self._inst,
         self._next_button,
         self._text,
         self._viewport,
