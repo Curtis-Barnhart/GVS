@@ -92,8 +92,8 @@ func _highlight_user_path(p: Path, target_index: int) -> void:
     var target: Path = self._target_paths[target_index]
     var simplified: Path = self._fs_man.reduce_path(p)
     var correct: Path = simplified.common_with(target)
-    var simplest_correct: Path = p.all_slices().filter(func (p: Path) -> bool:
-        return self._fs_man.reduce_path(p).as_string() == correct.as_string()
+    var simplest_correct: Path = p.all_slices().filter(func (sub: Path) -> bool:
+        return self._fs_man.reduce_path(sub).as_string() == correct.as_string()
     ).next()
     var incorrect: Path = self._fs_man.relative_to(p, simplest_correct)
     
