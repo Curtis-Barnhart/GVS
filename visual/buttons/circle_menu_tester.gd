@@ -11,7 +11,7 @@ var cmenu: CMenu = null
 # I'll just be kicking the can down the road...
 func _on_texture_button_pressed() -> void:
     print("menu clicked")
-    self.cmenu = CMenu.instantiate()
+    self.cmenu = CMenu.make_new()
     
     var s: Sprite2D = Sprite2D.new()
     s.texture = load("res://visual/assets/directory.svg")
