@@ -35,7 +35,7 @@ func start(needs_context: bool) -> void:
         
     self._text_display.text = UtilString.make_article(
         [
-            "What's a Directory?",
+            "Directories",
             [
                 "We're going to learn a new way to organize files now -",
                 "a way that doesn't require memorizing all your file names",
@@ -57,12 +57,15 @@ func start(needs_context: bool) -> void:
     # just out of reach that'd be great.
     self._viewport.move_cam_to(Vector2(0, 1000))
     self._next_button.pressed.connect(self.add_filetree)
+    self._next_button.disabled = false
 
 
 func add_filetree() -> void:
+    self._next_button.disabled = false
+
     self._text_display.text = UtilString.make_article(
         [
-            "What's a Directory?",
+            "Directories",
             [
                 "This is a [color=dark_blue][b]directory[/b][/color].",
                 "Directories are different from files - they don't store data",
@@ -82,7 +85,6 @@ func add_filetree() -> void:
     self._fs_man.created_file.connect(self._file_tree.create_node_file)
     self._fs_man.removed_dir.connect(self._file_tree.remove_node)
     self._fs_man.removed_file.connect(self._file_tree.remove_node)
-    self._next_button.disabled = false
     
     self._viewport.move_cam_to(Vector2.ZERO)
     
@@ -94,7 +96,7 @@ func add_subdirectories() -> void:
     self._next_button.pressed.disconnect(self.add_subdirectories)
     self._text_display.text = UtilString.make_article(
         [
-            "What's a Directory?",
+            "Directories",
             [
                 "Here's an example of a directory named '/' that contains",
                 "two other directories named 'school' and 'work'.",
@@ -120,7 +122,7 @@ func add_files() -> void:
     self._next_button.pressed.disconnect(self.add_files)
     self._text_display.text = UtilString.make_article(
         [
-            "What's a Directory?",
+            "Directories",
             [
                 "To make our file system a little more complicated,",
                 "let's add some files inside each of those new directories we made.",
@@ -177,7 +179,7 @@ func click_on_directory_user_click(p: Path) -> void:
 
 func click_on_directory_correct(p: Path) -> void:
     self._text_display.text = UtilString.make_article([
-        "What's a Directory?",
+        "Directories",
         [
             "Good job! Now we're going to look for a file",
             "inside the directory that we've already selected.",
@@ -188,7 +190,7 @@ func click_on_directory_correct(p: Path) -> void:
     ])
     self._file_tree.file_clicked.disconnect(self.click_on_directory_user_click)
     self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
-    self._next_button.disabled = false
+    self._next_button.disabled = true
     
     self._inst.get_command(0).set_fulfill(true)
     self._inst.add_command(Instructions.Command.new(
@@ -210,7 +212,7 @@ func click_on_file_user_click(p: Path) -> void:
             self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
             self._next_button.disabled = false
             self._text_display.text = UtilString.make_article([
-                "What's a Directory?",
+                "Directories",
                 [
                     "Nice! You've succesfully located the file we're looking for,",
                     "which we're going to call '/school/email'.",
@@ -233,7 +235,6 @@ func click_on_file_user_click(p: Path) -> void:
             ])
 
             self._file_tree.file_clicked.disconnect(self.click_on_file_user_click)
-            self._next_button.pressed.connect(self.finish)
             
             self._inst.get_command(-1).set_fulfill(true)
             self._inst.render()

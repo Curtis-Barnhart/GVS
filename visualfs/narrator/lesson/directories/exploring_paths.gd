@@ -44,9 +44,13 @@ func start(needs_context: bool) -> void:
     
     self._text_display.text = UtilString.make_article(
         [
-            "Exploring paths!",
+            "Paths",
             [
-                "look at all the new files!"
+                "To help you learn about paths,",
+                "this next part is set up so that when you click on any file,",
+                "its path will be displayed in a label at the top of the screen.",
+                "Use this opportunity to see if you can spot the pattern",
+                "of how a path is determined.",
             ],
         ]
     )

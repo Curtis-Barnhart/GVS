@@ -33,7 +33,7 @@ func setup(
 func load_checkpoint(c: Checkpoint, needs_context: bool = false) -> void:
     # have to hold a reference so it's not deleted from memory while it waits lol
     self._cur_checkpt = c
-    self._next_button.disabled = false
+    self._next_button.disabled = true
     c.setup(
         self._fs_man,
         self._inst,

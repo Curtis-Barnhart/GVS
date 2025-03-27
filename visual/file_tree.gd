@@ -258,6 +258,26 @@ func uncollapse_dir(p: Path) -> void:
     dir.uncollapse()
 
 
+## Provides linear interpolated fade in
+class FaderIn extends Node:
+    var _host: CanvasItem
+    var _t0: float
+    var _duration: float
+    
+    static func attach(host: CanvasItem, duration: float) -> void:
+        var fader := FaderIn.new()
+        host.add_child(fader)
+        fader._host = host
+        fader._t0 = Time.get_unix_time_from_system()
+        fader._duration = duration
+    
+    func _process(_delta: float) -> void:
+        var diff: float = (Time.get_unix_time_from_system() - self._t0) / self._duration
+        self._host.modulate.a = min(diff, 1)
+        if diff > 1:
+            self.queue_free()
+
+
 ## create_dir creates a node in the visual graph
 ## and ensures all other elements have their position adjusted accordingly.
 ##
@@ -271,6 +291,15 @@ func create_node(p: Path, texture: Texture2D) -> void:
         "Attempted TNode creation with nonexistent parent."
     )
     var child := TNode.make_new()
+    
+    child.modulate.a = 0
+    FaderIn.attach(child, 2)
+    child.z_index = -1
+    self.get_tree().create_timer(2.0).timeout.connect(
+        func () -> void:
+            child.z_index = 0
+    )
+    
     parent.add_subnode(child, p.last())
     self._all_nodes[p.as_string()] = child
     child.change_icon(texture)
@@ -316,6 +345,7 @@ func _ready() -> void:
     self._all_nodes["/"] = TNode.make_new()
     self.add_child(self._all_nodes["/"] as Node)
     self._all_nodes["/"].setup("/")
+    self._all_nodes["/"].z_index = 0
     self.change_cwd(Path.ROOT, Path.ROOT)
     self._all_nodes["/"]._icon.pressed.connect(func () -> void: self.file_clicked.emit(Path.ROOT))
     
