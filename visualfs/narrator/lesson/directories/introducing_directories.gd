@@ -151,12 +151,12 @@ func click_on_directory() -> void:
     self._inst.visible = true
     self._inst.remove_all()
     self._inst.add_command(Instructions.Command.new(
-        "Click on the 'school' directory contained in the '/' directory"
+        "Locate and click on the 'school' directory contained in the '/' directory"
     ))
     self._inst.render()
 
     self._next_button.pressed.disconnect(self.click_on_directory)
-    self._next_button.pressed.connect(self.click_on_file)
+    self._next_button.pressed.connect(self.finish)
     
     self._file_tree.file_clicked.connect(self.click_on_directory_user_click)
 
@@ -165,21 +165,7 @@ func click_on_directory_user_click(p: Path) -> void:
     var school := Path.new(["school"])
     
     if p.as_string() == school.as_string():
-        self._text_display.text = UtilString.make_article([
-            "What's a Directory?",
-            [
-                "Good job! Now we're going to look for a file",
-                "inside the directory that we've already selected.",
-                "Going into this, notice that you can immediately rule out",
-                "the files contained in the 'work' directory."
-            ]
-        ])
-        self._file_tree.file_clicked.disconnect(self.click_on_directory_user_click)
-        self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
-        self._next_button.disabled = false
-        
-        self._inst.get_command(0).set_fulfill(true)
-        self._inst.render()
+        self.click_on_directory_correct(p)
     else:
         if p.common_with(school).as_string() == "/school":
             var remaining: Path = self._fs_man.relative_to(p, school)
@@ -189,14 +175,26 @@ func click_on_directory_user_click(p: Path) -> void:
             self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 1, Path.ROOT, p)
 
 
-func click_on_file() -> void:
-    self._next_button.disabled = true    
+func click_on_directory_correct(p: Path) -> void:
+    self._text_display.text = UtilString.make_article([
+        "What's a Directory?",
+        [
+            "Good job! Now we're going to look for a file",
+            "inside the directory that we've already selected.",
+            "Notice this: you can immediately rule out",
+            "the files contained in the 'work' directory,",
+            "since they are [i]not[/i] contained in the 'school' directory.",
+        ]
+    ])
+    self._file_tree.file_clicked.disconnect(self.click_on_directory_user_click)
+    self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
+    self._next_button.disabled = false
+    
+    self._inst.get_command(0).set_fulfill(true)
     self._inst.add_command(Instructions.Command.new(
-        "Click on the 'email' file in the 'school' directory"
+        "Locate and click on the 'email' file in the 'school' directory"
     ))
     self._inst.render()
-
-    self._next_button.pressed.disconnect(self.click_on_file)
     
     self._file_tree.file_clicked.connect(self.click_on_file_user_click)
 
@@ -222,10 +220,16 @@ func click_on_file_user_click(p: Path) -> void:
                 [
                     "In fact, we actually [i]do[/i] call this type of name a",
                     "[color=dark_blue][b]path[/b][/color].",
-                    "[color=dark_blue][b]Paths[/b][/color]",
-                    "are the names that we use to distinguish",
+                    "Paths are the names we use to distinguish",
                     "files from one another in this organization system.",
                 ],
+                [
+                    "See how there are actually [i]two[/i] files named 'email'?",
+                    "If we only used names to tell them apart, how would we know",
+                    "which is which?",
+                    "If we refer to them with their paths, '/school/email'",
+                    "and '/work/email', then we'll have no difficulty."
+                ]
             ])
 
             self._file_tree.file_clicked.disconnect(self.click_on_file_user_click)
