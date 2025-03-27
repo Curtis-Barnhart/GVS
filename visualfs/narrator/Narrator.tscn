@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dq8b8lpiitxh4"]
+[gd_scene load_steps=8 format=3 uid="uid://dq8b8lpiitxh4"]
 
 [ext_resource type="Script" uid="uid://b410jknhe5sok" path="res://visualfs/narrator/narrator.gd" id="1_km8bo"]
 [ext_resource type="PackedScene" uid="uid://cjlkpbxmqe5of" path="res://visualfs/narrator/Instructions.tscn" id="2_4x4ax"]
@@ -6,6 +6,10 @@
 [ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Regular.ttf" id="2_ed7qu"]
 [ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/resources/Button.tres" id="3_bsxgj"]
 [ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/resources/TextBox.tres" id="3_j3ksi"]
+
+[sub_resource type="Theme" id="Theme_4x4ax"]
+default_font = ExtResource("2_ed7qu")
+default_font_size = 36
 
 [node name="Narrator" type="Control"]
 layout_mode = 3
@@ -31,8 +35,8 @@ size_flags_vertical = 3
 [node name="Margin" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 80
-theme_override_constants/margin_right = 80
+theme_override_constants/margin_left = 160
+theme_override_constants/margin_right = 160
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/Margin"]
 layout_mode = 2
@@ -41,7 +45,7 @@ size_flags_vertical = 3
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/Margin/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("2_ed7qu")
+theme = SubResource("Theme_4x4ax")
 bbcode_enabled = true
 text = "[font_size=48][center]Lesson Title[/center][/font_size]
 [font_size=36]    Here is the lesson. Here is a thing to say.
