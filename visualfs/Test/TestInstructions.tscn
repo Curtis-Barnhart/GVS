@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://d0j83x8eriy0c"]
+[gd_scene load_steps=3 format=3 uid="uid://d0j83x8eriy0c"]
 
 [ext_resource type="PackedScene" uid="uid://cjlkpbxmqe5of" path="res://visualfs/narrator/Instructions.tscn" id="1_aeb6e"]
 [ext_resource type="Script" uid="uid://bt6c8nvud74oe" path="res://visualfs/Test/test_instructions.gd" id="1_l06fc"]
-[ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Regular.ttf" id="2_8exi1"]
 
-[node name="TestInstructions" type="VBoxContainer"]
+[node name="TestInstructions" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,14 +12,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_l06fc")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("2_8exi1")
-theme_override_font_sizes/normal_font_size = 48
-text = "Instructions"
-fit_content = true
-horizontal_alignment = 1
-
 [node name="Instructions" parent="." instance=ExtResource("1_aeb6e")]
 layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1152.0
+offset_bottom = 648.0
 size_flags_vertical = 3
