@@ -28,17 +28,18 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="Margin" type="MarginContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_right = 80
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/Margin"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 80
-theme_override_constants/margin_right = 80
-
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/ScrollContainer/Margin/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_ed7qu")
 bbcode_enabled = true
@@ -48,12 +49,7 @@ text = "[font_size=48][center]Lesson Title[/center][/font_size]
     I'm gonna add more text here."
 fit_content = true
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 80
-theme_override_constants/margin_right = 80
-
-[node name="Instructions" parent="VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2" instance=ExtResource("2_4x4ax")]
+[node name="Instructions" parent="VBoxContainer/ScrollContainer/Margin/VBoxContainer" instance=ExtResource("2_4x4ax")]
 layout_mode = 2
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer"]

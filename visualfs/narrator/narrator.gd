@@ -12,8 +12,8 @@ var _right_panel: PanelContainer
 var _cur_checkpt: Checkpoint
 @onready var _line_edit: LineEdit = $VBoxContainer/LineEdit
 @onready var _next_button: Button = $VBoxContainer/Button
-@onready var _text: RichTextLabel = $VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/RichTextLabel
-@onready var _inst: Instructions = $VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/Instructions
+@onready var _text: RichTextLabel = $VBoxContainer/ScrollContainer/Margin/VBoxContainer/RichTextLabel
+@onready var _inst: Instructions = $VBoxContainer/ScrollContainer/Margin/VBoxContainer/Instructions
 
 
 func setup(

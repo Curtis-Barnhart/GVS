@@ -47,7 +47,7 @@ func start(needs_context: bool) -> void:
     
     # TODO: If I could check the resolution of the screen and then add it
     # just out of reach that'd be great.
-    self._viewport.move_cam_to(Vector2(0, 1500))
+    self._viewport.move_cam_to(Vector2(0, 1000))
     self._next_button.pressed.connect(self.add_filetree)
 
 
