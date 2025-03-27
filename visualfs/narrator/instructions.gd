@@ -25,15 +25,28 @@ class Command:
     func change_text(text: String) -> void:
         self._text = text
     
-    func add_command(c: Command) -> void:
-        self._subcommands.push_back(c)
+    func add_command(c: Command, index: int = -1) -> void:
+        if index == -1:
+            self._subcommands.push_back(c)
+        else:
+            self._subcommands.insert(index, c)
     
     func remove_command(index: int) -> void:
         self._subcommands.remove_at(index)
+    
+    func get_command(index: int) -> Command:
+        return self._subcommands[index]
 
 
 func setup(header: RichTextLabel) -> void:
     self._header = header
+
+
+func add_command(c: Command, index: int = -1) -> void:
+    if index == -1:
+        self._commands.push_back(c)
+    else:
+        self._commands.insert(index, c)
 
 
 func get_command(index: int) -> Command:
@@ -86,6 +99,7 @@ func _render_helper(c: Command, depth: int = 0) -> void:
     self.pop()
     
     if not c._subcommands.is_empty():
+        self.add_text("\n")
         for com: Command in c._subcommands.slice(0, -1):
             self._render_helper(com, depth + 1)
             self.add_text("\n")
