@@ -22,6 +22,7 @@ func context_build() -> void:
     var file_tree := FileTree.make_new()
     file_tree = FileTree.make_new()
     file_tree.name = "FileTree"
+    file_tree.cwd_text = preload("res://visual/assets/directory_open.svg")
     self._viewport.add_to_scene(file_tree)
     
     self._fs_man.created_dir.connect(file_tree.create_node_dir)

@@ -14,6 +14,7 @@ var _paths_clicked: int = 0
 
 func context_build() -> void:
     var file_tree := FileTree.make_new()
+    file_tree.cwd_text = preload("res://visual/assets/directory_open.svg")
     file_tree = FileTree.make_new()
     file_tree.name = "FileTree"
     self._viewport.add_to_scene(file_tree)

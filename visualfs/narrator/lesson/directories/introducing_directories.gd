@@ -64,7 +64,7 @@ func add_filetree() -> void:
         [
             "What's a Directory?",
             [
-                "This is a directory.",
+                "This is a [color=dark_blue][b]directory[/b][/color].",
                 "Directories are different from files - they don't store data",
                 "that we want to save on our computer.",
                 "Instead, they contain files,",
@@ -75,6 +75,7 @@ func add_filetree() -> void:
 
     # Create file tree object in drag viewport connected to the fs_manager
     self._file_tree = FileTree.make_new()
+    self._file_tree.cwd_text = preload("res://visual/assets/directory_open.svg")
     self._file_tree.name = "FileTree"
     self._viewport.add_to_scene(self._file_tree)
     self._fs_man.created_dir.connect(self._file_tree.create_node_dir)
@@ -95,16 +96,15 @@ func add_subdirectories() -> void:
         [
             "What's a Directory?",
             [
-                "Here's an example of a directory that contains",
+                "Here's an example of a directory named '/' that contains",
                 "two other directories named 'school' and 'work'.",
-                "For now, ignore the fact that our original directory is",
-                "a different color than the two new ones -",
-                "this will come into play later.",
             ],
             [
                 "We represent who contains whom by drawing the items that",
-                "[i]are contained[/i] underneath the objects that [i]contain[/i] them",
-            ]
+                "[i]are contained[/i] underneath the objects that [i]contain[/i] them.",
+                "We also draw lines going down from directories to the objects",
+                "they contain to help make them easier to find.",
+            ],
         ]
     )
     
@@ -122,7 +122,14 @@ func add_files() -> void:
         [
             "What's a Directory?",
             [
-                "and now there's files what"
+                "To make our file system a little more complicated,",
+                "let's add some files inside each of those new directories we made.",
+            ],
+            [
+                "Now we will finally see [i]why[/i] it is advantageous",
+                "to organize file systems this way.",
+                "In this next part, you'll learn how to search for a file",
+                "through a step-by-step process.",
             ],
         ]
     )
@@ -140,14 +147,6 @@ func add_files() -> void:
 var click_on_directory_highlight_id: int
 func click_on_directory() -> void:
     self._next_button.disabled = true
-    self._text_display.text = UtilString.make_article(
-        [
-            "What's a Directory?",
-            [
-                "you gotta click on the directory"
-            ],
-        ]
-    )
     
     self._inst.visible = true
     self._inst.remove_all()
@@ -166,7 +165,15 @@ func click_on_directory_user_click(p: Path) -> void:
     var school := Path.new(["school"])
     
     if p.as_string() == school.as_string():
-        self._text_display.text += UtilString.make_paragraphs([["whoah you clicked the directory!"]])
+        self._text_display.text = UtilString.make_article([
+            "What's a Directory?",
+            [
+                "Good job! Now we're going to look for a file",
+                "inside the directory that we've already selected.",
+                "Going into this, notice that you can immediately rule out",
+                "the files contained in the 'work' directory."
+            ]
+        ])
         self._file_tree.file_clicked.disconnect(self.click_on_directory_user_click)
         self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
         self._next_button.disabled = false
@@ -183,16 +190,7 @@ func click_on_directory_user_click(p: Path) -> void:
 
 
 func click_on_file() -> void:
-    self._next_button.disabled = true
-    self._text_display.text = UtilString.make_article(
-        [
-            "Finding Files... the Smart Way",
-            [
-                "now you gotta click on the file"
-            ],
-        ]
-    )
-    
+    self._next_button.disabled = true    
     self._inst.add_command(Instructions.Command.new(
         "Click on the 'email' file in the 'school' directory"
     ))
@@ -213,7 +211,22 @@ func click_on_file_user_click(p: Path) -> void:
             self._file_tree.hl_server.pop_id(self.click_on_directory_highlight_id)
             self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
             self._next_button.disabled = false
-            self._text_display.text += UtilString.make_paragraphs([["whoah you clicked the file!"]])
+            self._text_display.text = UtilString.make_article([
+                "What's a Directory?",
+                [
+                    "Nice! You've succesfully located the file we're looking for,",
+                    "which we're going to call '/school/email'.",
+                    "You'll notice this name is a description of the path",
+                    "that you took to find it.",
+                ],
+                [
+                    "In fact, we actually [i]do[/i] call this type of name a",
+                    "[color=dark_blue][b]path[/b][/color].",
+                    "[color=dark_blue][b]Paths[/b][/color]",
+                    "are the names that we use to distinguish",
+                    "files from one another in this organization system.",
+                ],
+            ])
 
             self._file_tree.file_clicked.disconnect(self.click_on_file_user_click)
             self._next_button.pressed.connect(self.finish)
