@@ -12,7 +12,8 @@ var _highlight_id: int = -1
 
 var _target_paths: Array[Path] = [
     Path.new(["projects", "school"]),
-    Path.new(["pictures", "vacation", "hike_0"])
+    Path.new(["pictures", "vacation", "hike_0"]),
+    Path.new(["document_0"])
 ]
 var _target_index: int = 0
 
@@ -86,9 +87,14 @@ func start(needs_context: bool) -> void:
     for any_p: Path in self._fs_man.read_all_in_dir(Path.ROOT):
         self._fs_man.remove_recursive(any_p)
     
+    self._inst.add_command(Instructions.Command.new(
+        "click on %s" % self._target_paths[self._target_index].as_string()
+    ))
+    self._inst.render()
+    
     await GVSGlobals.wait(2)
     self.make_tree()
-    
+
     self._file_tree.file_clicked.connect(self.user_click_object)
 
 
@@ -101,12 +107,7 @@ func user_click_object(p: Path) -> void:
     # Calculate good and bad parts of next highlight
     var target: Path = self._target_paths[self._target_index]
     if p.as_string() == target.as_string():
-        self._next_button.disabled = false
-        self._highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(
-            Color.GREEN, Path.ROOT, p
-        )
-        self._label_write(p.as_string(), Color.GREEN)
-        self._target_index += 1
+        self.user_click_object_correct(p)
     else:
         var correct: Path = p.common_with(target)
         var remaining: Path = self._fs_man.relative_to(p, correct)
@@ -121,10 +122,28 @@ func user_click_object(p: Path) -> void:
         if not remaining.degen():
             self._label_append(remaining.as_string(not correct.degen()), Color.RED)
 
-    # Enable moving to next section after all targets completed
+
+func user_click_object_correct(p: Path) -> void:
+    self._next_button.disabled = false
+    self._highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(
+        Color.GREEN, Path.ROOT, p
+    )
+    self._label_write(p.as_string(), Color.GREEN)
+    self._target_index += 1
+    
+    # Enable moving to next section after all targets completed or
+    # set next target if not all done
     if self._target_index == self._target_paths.size():
         self._file_tree.file_clicked.disconnect(self.user_click_object)
         self._next_button.pressed.connect(self.finish)
+        self._inst.get_command(-1).set_fulfill(true)
+        self._inst.render()
+    else:
+        self._inst.get_command(-1).set_fulfill(true)
+        self._inst.add_command(Instructions.Command.new(
+            "click on %s" % self._target_paths[self._target_index].as_string()
+        ))
+        self._inst.render()
 
 
 ## Erases all previous text in the path label and then
@@ -155,6 +174,10 @@ func _label_append(text: String, color: Color = Color.WHITE) -> void:
 func finish() -> void:
     if self._highlight_id >= 0:
         self._file_tree.hl_server.pop_id(self._highlight_id)
+    
+    self._inst.remove_all()
+    self._inst.render()
+    
     self.completed.emit(
         preload("res://visualfs/narrator/lesson/directories/practicing_writing_paths.gd").new()
     )

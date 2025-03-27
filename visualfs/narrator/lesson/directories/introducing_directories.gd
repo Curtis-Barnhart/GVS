@@ -35,10 +35,17 @@ func start(needs_context: bool) -> void:
         
     self._text_display.text = UtilString.make_article(
         [
-            "Finding Files... the Smart Way",
+            "What's a Directory?",
             [
-                "We're going to cover "
+                "We're going to learn a new way to organize files now -",
+                "a way that doesn't require memorizing all your file names",
+                "in order to find anything."
             ],
+            [
+                "To do this, we're going to need to introduce a new type of",
+                "object in our filesystem: the",
+                "[color=dark_blue][b]directory[/b][/color].",
+            ]
         ]
     )
         
@@ -55,9 +62,13 @@ func start(needs_context: bool) -> void:
 func add_filetree() -> void:
     self._text_display.text = UtilString.make_article(
         [
-            "Finding Files... the Smart Way",
+            "What's a Directory?",
             [
-                "and now there's a directory"
+                "This is a directory.",
+                "Directories are different from files - they don't store data",
+                "that we want to save on our computer.",
+                "Instead, they contain files,",
+                "or even other directories!",
             ],
         ]
     )
@@ -82,10 +93,18 @@ func add_subdirectories() -> void:
     self._next_button.pressed.disconnect(self.add_subdirectories)
     self._text_display.text = UtilString.make_article(
         [
-            "Finding Files... the Smart Way",
+            "What's a Directory?",
             [
-                "holy crap there's more of them"
+                "Here's an example of a directory that contains",
+                "two other directories named 'school' and 'work'.",
+                "For now, ignore the fact that our original directory is",
+                "a different color than the two new ones -",
+                "this will come into play later.",
             ],
+            [
+                "We represent who contains whom by drawing the items that",
+                "[i]are contained[/i] underneath the objects that [i]contain[/i] them",
+            ]
         ]
     )
     
@@ -101,7 +120,7 @@ func add_files() -> void:
     self._next_button.pressed.disconnect(self.add_files)
     self._text_display.text = UtilString.make_article(
         [
-            "Finding Files... the Smart Way",
+            "What's a Directory?",
             [
                 "and now there's files what"
             ],
@@ -123,7 +142,7 @@ func click_on_directory() -> void:
     self._next_button.disabled = true
     self._text_display.text = UtilString.make_article(
         [
-            "Finding Files... the Smart Way",
+            "What's a Directory?",
             [
                 "you gotta click on the directory"
             ],
