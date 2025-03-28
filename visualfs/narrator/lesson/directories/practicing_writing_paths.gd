@@ -93,6 +93,8 @@ func start(needs_context: bool) -> void:
     self._target_hl = self._file_tree.hl_server.push_color_to_tree_nodes(
         Color.DARK_BLUE, Path.ROOT, self._target_paths[self._target_index]
     )
+    
+    self._next_button.pressed.connect(self.finish)
 
 
 func _on_user_path(s: String) -> void:
@@ -284,6 +286,8 @@ func finish() -> void:
         self._file_tree.hl_server.pop_id(self._good_hl)
     if self._bad_hl >= 0:
         self._file_tree.hl_server.pop_id(self._bad_hl)
+    
+    self._inst.remove_all()
     
     self.completed.emit(
         preload("res://visualfs/narrator/lesson/completion.gd").new()
