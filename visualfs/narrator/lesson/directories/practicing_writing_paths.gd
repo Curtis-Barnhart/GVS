@@ -188,7 +188,6 @@ func _suberrors_analyze(user_path: Path, user_str: String) -> void:
     if (
         ancestor.common_with(target_p).as_string() != ancestor.as_string()
     ):
-        var target: String = target_p.as_string()
         var departs: Path = ancestor.all_slices() \
                                     .reverse() \
                                     .take_while(func (p: Path) -> bool: 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dq8b8lpiitxh4"]
+[gd_scene load_steps=9 format=3 uid="uid://dq8b8lpiitxh4"]
 
 [ext_resource type="Script" uid="uid://b410jknhe5sok" path="res://visualfs/narrator/narrator.gd" id="1_km8bo"]
 [ext_resource type="PackedScene" uid="uid://cjlkpbxmqe5of" path="res://visualfs/narrator/Instructions.tscn" id="2_4x4ax"]
@@ -6,7 +6,6 @@
 [ext_resource type="FontFile" uid="uid://cgett34sxgpkt" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Regular.ttf" id="2_ed7qu"]
 [ext_resource type="FontFile" uid="uid://dml0t7lb484dq" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Italic.ttf" id="3_00113"]
 [ext_resource type="StyleBox" uid="uid://dgvirxrhf8fhu" path="res://shared/resources/Button.tres" id="3_bsxgj"]
-[ext_resource type="StyleBox" uid="uid://mph532oekmg" path="res://shared/resources/TextBox.tres" id="3_j3ksi"]
 [ext_resource type="FontFile" uid="uid://bydut5s712s80" path="res://shared/fonts/JetBrainsMonoNerdFontMono-Bold.ttf" id="4_36jv3"]
 
 [sub_resource type="Theme" id="Theme_4x4ax"]
@@ -59,13 +58,6 @@ fit_content = true
 
 [node name="Instructions" parent="VBoxContainer/ScrollContainer/Margin/VBoxContainer" instance=ExtResource("2_4x4ax")]
 layout_mode = 2
-
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ed7qu")
-theme_override_font_sizes/font_size = 36
-theme_override_styles/normal = ExtResource("3_j3ksi")
 
 [node name="Button" type="Button" parent="VBoxContainer"]
 layout_mode = 2

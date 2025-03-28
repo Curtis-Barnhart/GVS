@@ -10,7 +10,6 @@ var _fs_man: FSManager
 var _viewport: DragViewport
 var _right_panel: PanelContainer
 var _cur_checkpt: Checkpoint
-@onready var _line_edit: LineEdit = $VBoxContainer/LineEdit
 @onready var _next_button: Button = $VBoxContainer/Button
 @onready var _text: RichTextLabel = $VBoxContainer/ScrollContainer/Margin/VBoxContainer/RichTextLabel
 @onready var _inst: Instructions = $VBoxContainer/ScrollContainer/Margin/VBoxContainer/Instructions
@@ -25,7 +24,7 @@ func setup(
     self._viewport = viewport
     self._right_panel = right_panel
     self.load_checkpoint(
-        preload("res://visualfs/narrator/lesson/directories/practicing_writing_paths.gd").new(),
+        preload("res://visualfs/narrator/lesson/directories/introducing_directories.gd").new(),
         true
     )
 
