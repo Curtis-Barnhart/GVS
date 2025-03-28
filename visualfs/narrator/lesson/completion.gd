@@ -4,6 +4,7 @@ const UtilString = GVSClassLoader.shared.scripts.Strings
 
 
 func start(_needs_context: bool) -> void:
+    self._inst.visible = false
     self._text_display.text = UtilString.make_article(
         [
             "That's it.",
