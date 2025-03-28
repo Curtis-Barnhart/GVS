@@ -187,7 +187,14 @@ func click_on_directory_correct(p: Path) -> void:
             "Notice this: you can immediately rule out",
             "the files contained in the 'work' directory,",
             "since they are [i]not[/i] contained in the 'school' directory.",
-        ]
+        ],
+        [
+            "This is the main advantage of using this system of organization -",
+            "if files are contained in groups and you only want to look for files",
+            "within a certain group,",
+            "you don't need to check files anywhere else,",
+            "which greatly simplifies your search.",
+        ],
     ])
     self._file_tree.file_clicked.disconnect(self.click_on_directory_user_click)
     self.click_on_directory_highlight_id = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, p)
