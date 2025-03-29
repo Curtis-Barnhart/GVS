@@ -1,3 +1,6 @@
 [submodule "addons/Godot-Streams"]
 	path = addons/Godot-Streams
 	url = https://github.com/Curtis-Barnhart/Godot-Streams.git
+[submodule "submodules/gut"]
+	path = submodules/gut
+	url = https://github.com/bitwes/Gut.git
