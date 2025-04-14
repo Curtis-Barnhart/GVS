@@ -131,6 +131,6 @@ func all_slices() -> GStreams.StreamType:
             return null
         last_index[0] += 1
         return self.slice(0, last_index[0] - 1)
-    
+
     return GStreams.Stream(next_slice) \
                    .take_while(func (p: Path) -> bool: return p != null)
