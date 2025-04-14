@@ -78,10 +78,10 @@ func _get_file(p: Path) -> File:
 func create_dir(p: Path) -> bool:
     var contain_path: Path = p.base()
     var new_dir_name: String = p.last()
-    
+
     if new_dir_name == "":
         return false
-    
+
     # Only create the new directory if the claimed parent is a real directory
     # and that parent does not already contain a directory with the same name.
     var contain_dir: Directory = self._get_dir(contain_path)
@@ -90,7 +90,7 @@ func create_dir(p: Path) -> bool:
     if new_dir_name in self.read_all_in_dir(contain_path)       \
                            .map(func (path: Path) -> String: return path.last()):
         return false
-   
+
     p = contain_dir.get_path().extend(new_dir_name)
     contain_dir.subdirs.push_back(Directory.new(new_dir_name, contain_dir))
     self.created_dir.emit(p)
@@ -100,10 +100,10 @@ func create_dir(p: Path) -> bool:
 func create_file(p: Path) -> bool:
     var contain_path: Path = p.base()
     var new_file_name: String = p.last()
-    
+
     if new_file_name == "":
         return false
-    
+
     # Only create the new file if the claimed parent is a real directory
     # and that parent does not already contain anything with the same name.
     var contain_dir: Directory = self._get_dir(contain_path)
@@ -112,7 +112,7 @@ func create_file(p: Path) -> bool:
     if new_file_name in self.read_all_in_dir(contain_path) \
                             .map(func (path: Path) -> String: return path.last()):
         return false
-   
+
     p = contain_dir.get_path().extend(new_file_name)
     contain_dir.files.push_back(File.new(new_file_name, contain_dir))
     self.created_file.emit(p)
@@ -151,7 +151,7 @@ func remove_dir(p: Path) -> bool:
         or not dir.is_empty()
     ):
         return false
-    
+
     p = self.reduce_path(p)
     var parent: Directory = dir.parent
     # TODO: I'm sure there's a method to remove it directly?
@@ -169,10 +169,10 @@ func remove_recursive(p: Path) -> bool:
     var dir: Directory = self._get_dir(p)
     if (dir == self._root or dir == null):
         return false
-    
+
     for sub: Path in self.read_files_in_dir(p):
         self.remove_file(sub)
-    
+
     for sub: Path in self.read_dirs_in_dir(p).slice(0, -2):
         self.remove_recursive(sub)
 
@@ -184,7 +184,7 @@ func remove_file(p: Path) -> bool:
     var file: File = self._get_file(p)
     if file == null:
         return false
-    
+
     var parent: Directory = file._parent
     var i: int = parent.files.find(file)
     parent.files.remove_at(i)
@@ -200,7 +200,7 @@ func read_dirs_in_dir(p: Path) -> Array:
     var dir: Directory = self._get_dir(p)
     if dir == null:
         return []
-    
+
     return dir.subdirs.map(
         func (sd: Directory) -> Path:
             return sd.get_path()
@@ -218,7 +218,7 @@ func read_files_in_dir(p: Path) -> Array:
     var dir: Directory = self._get_dir(p)
     if dir == null:
         return []
-    
+
     return dir.files.map(func (f: File) -> Path: return f.get_path())
 
 
@@ -244,7 +244,7 @@ func reduce_path(p: Path) -> Path:
     if loc_file != null:
         return loc_file.get_path()
     return null
-    
+
 
 ## Better contains that tells you what type of thing a path points to is.
 ##
@@ -281,12 +281,12 @@ func real_ancestry(p: Path) -> Path:
 func relative_to(dst: Path, src: Path) -> Path:
     assert(dst != null)
     assert(src != null)
-    
+
     dst = self.reduce_path(dst)
     src = self.reduce_path(src)
     if dst == null or src == null:
         return null
-    
+
     var common_base: Path = dst.common_with(src)
     return Path.new(
         GStreams.Repeat("..") \
