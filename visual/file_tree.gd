@@ -10,7 +10,7 @@ const MathUtils = GVSClassLoader.shared.scripts.Math
 signal file_clicked(path: Path)
 
 ## Texture for a normal directory
-const dir_text: Texture2D = preload("res://visual/assets/directory.svg")
+const dir_text: Texture2D = preload("res://visual/assets/directory_open.svg")
 ## Texture for the current working directory
 var cwd_text: Texture2D = preload("res://visual/assets/cwd_open.svg")
 ## Texture for a file
