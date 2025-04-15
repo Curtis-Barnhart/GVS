@@ -290,7 +290,7 @@ func finish() -> void:
     self._inst.remove_all()
     
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/completion.gd").new()
+        preload("res://visualfs/narrator/lesson/relative_paths/introducing_rel_paths.gd").new()
     )
     assert(
         self.get_reference_count() == 1,
