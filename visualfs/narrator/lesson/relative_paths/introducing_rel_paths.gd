@@ -230,6 +230,7 @@ func finish() -> void:
     if self._active_hl >= 0:
         self._file_tree.hl_server.pop_id(self._active_hl)
         self._active_hl = -1
+    self._write_path_label(" ")
 
     self._inst.remove_all()
     self._inst.render()
