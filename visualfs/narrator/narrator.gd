@@ -24,7 +24,7 @@ func setup(
     self._viewport = viewport
     self._right_panel = right_panel
     self.load_checkpoint(
-        preload("res://visualfs/narrator/lesson/directories/introducing_directories.gd").new(),
+        preload("res://visualfs/narrator/lesson/relative_paths/introducing_rel_paths.gd").new(),
         true
     )
 

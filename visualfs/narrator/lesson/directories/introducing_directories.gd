@@ -32,7 +32,7 @@ func remove_old_files() -> void:
 func start(needs_context: bool) -> void:
     if needs_context:
         self.context_build()
-        
+    
     self._text_display.text = UtilString.make_article(
         [
             "Directories",
