@@ -48,7 +48,7 @@ func context_build() -> void:
     self._path_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     self._path_label.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
     self._path_label.name = "PathLabel"
-    self._label_write(".")
+    self._label_write(" ")
 
     self._file_tree.cwd_text = preload("res://visual/assets/cwd_open.svg")
 
@@ -123,7 +123,12 @@ func start(needs_context: bool) -> void:
     await GVSGlobals.wait(2)
 
     self._inst.visible = true
-    self._inst.add_command(Instructions.Command.new("click"))
+    self._inst.add_command(Instructions.Command.new(
+        "click on %s relative to %s" % [
+            (self._target_paths[self._target_index][1] as Path).as_string(false),
+            (self._target_paths[self._target_index][0] as Path).as_string()
+        ]
+    ))
     self._inst.render()
 
     self._next_button.disabled = false
@@ -146,7 +151,6 @@ func user_click_object(p: Path) -> void:
     else:
         var correct: Path = p_relative.common_with(target)
         var remaining: Path = self._fs_man.relative_to(p, origin.compose(correct))
-        print("correct: %s, remaining: %s" % [correct.as_string(false), remaining.as_string(false)])
         # TODO: I don't know if making the green hold longer is a silly choice
         self._file_tree.hl_server.push_flash_to_tree_nodes(
             Color.GREEN, 3, origin, correct
@@ -157,6 +161,8 @@ func user_click_object(p: Path) -> void:
         )
         if not remaining.degen():
             self._label_append(remaining.as_string(not correct.degen()), Color.RED)
+        elif correct.degen():
+            self._label_append(" ")
 
 
 func user_click_object_correct(p: Path) -> void:
