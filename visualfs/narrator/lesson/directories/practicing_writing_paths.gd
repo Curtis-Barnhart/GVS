@@ -27,12 +27,12 @@ func context_build() -> void:
     file_tree.name = "FileTree"
     file_tree.cwd_text = preload("res://visual/assets/directory_open.svg")
     self._viewport.add_to_scene(file_tree)
-    
+
     self._fs_man.created_dir.connect(file_tree.create_node_dir)
     self._fs_man.created_file.connect(file_tree.create_node_file)
     self._fs_man.removed_dir.connect(file_tree.remove_node)
     self._fs_man.removed_file.connect(file_tree.remove_node)
-    
+
     self._fs_man.create_dir(Path.new(["projects"]))
     self._fs_man.create_file(Path.new(["document_0"]))
     self._fs_man.create_file(Path.new(["document_1"]))
@@ -51,11 +51,11 @@ func context_build() -> void:
     self._fs_man.create_file(Path.new(["pictures", "vacation", "hike_1"]))
     self._fs_man.create_dir(Path.new(["pictures", "nature", "butterflies"]))
     self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT * 1.5))
-    
+
     var path_label := RichTextLabel.new()
     self._right_panel.add_child(path_label)
     path_label.name = "PathLabel"
-    
+
     self._inst.remove_all()
     self._inst.render()
 
@@ -63,10 +63,10 @@ func context_build() -> void:
 func start(needs_context: bool) -> void:
     if needs_context:
         self.context_build()
-    
+
     self._file_tree = self._viewport.node_from_scene("FileTree")
     self._right_panel.get_node("PathLabel").queue_free()
-    
+
     self._text_display.text = UtilString.make_article(
         [
             "Practice writing paths!",
@@ -76,7 +76,7 @@ func start(needs_context: bool) -> void:
             ],
         ]
     )
-    
+
     self._right_panel.add_child(self._line_edit)
     self._line_edit.size_flags_vertical = Control.SIZE_SHRINK_END
     self._line_edit.size_flags_horizontal = Control.SIZE_FILL
@@ -84,16 +84,16 @@ func start(needs_context: bool) -> void:
     self._line_edit.add_theme_font_override("font", GVSClassLoader.shared.fonts.Normal)
     self._line_edit.add_theme_font_size_override("font_size", 48)
     self._line_edit.text_changed.connect(self._on_user_path)
-    
+
     self._inst.add_command(Instructions.Command.new(
         "Write the path to the first highlighted location"
     ))
     self._inst.render()
-    
+
     self._target_hl = self._file_tree.hl_server.push_color_to_tree_nodes(
         Color.DARK_BLUE, Path.ROOT, self._target_paths[self._target_index]
     )
-    
+
     self._next_button.pressed.connect(self.finish)
 
 
@@ -103,7 +103,7 @@ func _on_user_path(s: String) -> void:
         path = Path.ROOT
     else:
         path = Path.new(s.split("/", false))
-    
+
     self._suberrors_analyze(path, s)
     self._validate_user_path(path)
 
@@ -137,7 +137,7 @@ func _suberrors_analyze(user_path: Path, user_str: String) -> void:
         self._inst.remove_command_ref(self._errs["no_slash"])
         self._errs["no_slash"] = null
         self._inst.render()
-    
+
     # See if the user thinks a directory contains something it doesn't
     if (
         more_bad
@@ -161,7 +161,7 @@ func _suberrors_analyze(user_path: Path, user_str: String) -> void:
         self._inst.remove_command_ref(self._errs["dir_contains"])
         self._errs["dir_contains"] = null
         self._inst.render()
-    
+
     # See if a user thinks a file contains something (it can't)
     if (
         is_bad
@@ -185,7 +185,7 @@ func _suberrors_analyze(user_path: Path, user_str: String) -> void:
         self._inst.remove_command_ref(self._errs["file_contains"])
         self._errs["file_contains"] = null
         self._inst.render()
-        
+
     # See if the user has written a valid path that diverges from where they ought to go
     if (
         ancestor.common_with(target_p).as_string() != ancestor.as_string()
@@ -229,7 +229,7 @@ func _validate_user_path(p: Path) -> void:
     var simplified: Path = self._fs_man.reduce_path(p)
     var ancestor: Path = self._fs_man.real_ancestry(p)
     var highlight_target: int = self._target_index
-        
+
     if simplified == null:
         simplified = self._fs_man.reduce_path(ancestor)
     else:
@@ -248,12 +248,12 @@ func _highlight_user_path(p: Path, target_index: int) -> void:
         return self._fs_man.reduce_path(sub).as_string() == correct
     ).next()
     var incorrect: Path = p.slice(simplest_correct.size())
-    
+
     if self._good_hl >= 0:
         self._file_tree.hl_server.pop_id(self._good_hl)
     if self._bad_hl >= 0:
         self._file_tree.hl_server.pop_id(self._bad_hl)
-    
+
     self._good_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, simplest_correct)
     self._bad_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.RED, simplest_correct, incorrect)
 
@@ -262,7 +262,7 @@ func _user_answered_correctly() -> void:
     self._target_index += 1
     self._inst.get_command(-1).set_fulfill(true)
     self._file_tree.hl_server.pop_id(self._target_hl)
-    
+
     if self._target_index == self._target_paths.size():
         self._next_button.disabled = false
         self._line_edit.text_changed.disconnect(self._on_user_path)
@@ -285,9 +285,9 @@ func finish() -> void:
         self._file_tree.hl_server.pop_id(self._good_hl)
     if self._bad_hl >= 0:
         self._file_tree.hl_server.pop_id(self._bad_hl)
-    
+
     self._inst.remove_all()
-    
+
     self.completed.emit(
         preload("res://visualfs/narrator/lesson/relative_paths/introducing_rel_paths.gd").new()
     )
