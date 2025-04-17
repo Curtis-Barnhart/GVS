@@ -13,10 +13,8 @@ var _path_label: RichTextLabel
 var _target_paths: Array = [
     [Path.new(["projects", "school"]), Path.new(["..", "game"])],
     [Path.new(["projects", "school"]), Path.new(["homework_0"])],
-    [Path.new(["projects", "school"]), Path.new(["..", "..", "pictures", "vacation"])],
     [Path.new(["pictures", "nature"]), Path.new(["..", ".."])],
     [Path.new(["pictures", "nature"]), Path.new(["..", "vacation", "flowers"])],
-    [Path.new(["pictures", "nature"]), Path.new(["..", "..", "document_1"])],
     [Path.new(["pictures"]), Path.new(["."])],
     [Path.new(["pictures"]), Path.new([".", ".", "."])],
     [Path.new(["pictures"]), Path.new(["..", "pictures", "..", "document_1"])],
@@ -144,12 +142,13 @@ func user_click_object(p: Path) -> void:
     # Calculate good and bad parts of next highlight
     var origin: Path = self._target_paths[self._target_index][0]
     var target: Path = self._target_paths[self._target_index][1]
-    var p_relative: Path = self._fs_man.relative_to(p, origin)
+    var p_rel: Path = self._fs_man.relative_to(p, origin)
 
-    if p_relative.as_string() == self._fs_man.relative_to(self._fs_man.reduce_path(origin.compose(target)), origin).as_string():
+    # we reduce the target for targets like "././."
+    if p_rel.as_string() == self._fs_man.relative_to(self._fs_man.reduce_path(origin.compose(target)), origin).as_string():
         self.user_click_object_correct(p)
     else:
-        var correct: Path = p_relative.common_with(target)
+        var correct: Path = p_rel.common_with(target)
         var remaining: Path = self._fs_man.relative_to(p, origin.compose(correct))
         # TODO: I don't know if making the green hold longer is a silly choice
         self._file_tree.hl_server.push_flash_to_tree_nodes(
@@ -162,14 +161,17 @@ func user_click_object(p: Path) -> void:
         if not remaining.degen():
             self._label_append(remaining.as_string(not correct.degen()), Color.RED)
         elif correct.degen():
-            self._label_append(" ")
+            self._label_append(".", Color.GREEN)
 
 
 func user_click_object_correct(p: Path) -> void:
     self._next_button.disabled = false
     var old_origin: Path = self._target_paths[self._target_index][0]
     var p_relative: Path = self._fs_man.relative_to(p, old_origin)
-    self._label_write(p_relative.as_string(false), Color.GREEN)
+    if p_relative.degen():
+        self._label_write(".", Color.GREEN)
+    else:
+        self._label_write(p_relative.as_string(false), Color.GREEN)
     self._target_index += 1
     self._active_hl = self._file_tree.hl_server.push_color_to_tree_nodes(
         Color.GREEN, old_origin, p_relative
