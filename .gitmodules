@@ -4,3 +4,4 @@
 [submodule "submodules/gut"]
 	path = submodules/gut
 	url = https://github.com/bitwes/Gut.git
+	branch = godot_4_4
