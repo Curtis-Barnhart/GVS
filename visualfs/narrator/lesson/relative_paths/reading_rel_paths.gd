@@ -236,8 +236,10 @@ func finish() -> void:
     self._inst.remove_all()
     self._inst.render()
 
+    self._path_label.queue_free()
+
     self.completed.emit(
-        preload("res://visualfs/narrator/lesson/completion.gd").new()
+        preload("res://visualfs/narrator/lesson/relative_paths/writing_rel_paths.gd").new()
     )
     assert(
         self.get_reference_count() == 1,
