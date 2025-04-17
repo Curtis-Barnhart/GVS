@@ -225,7 +225,6 @@ func _suberrors_remove_all() -> void:
 
 
 func _validate_user_path(p: Path) -> void:
-    # TODO: Remember that you can't backtrack from a file!!!
     var target: Path = self._target_paths[self._target_index]
     var simplified: Path = self._fs_man.reduce_path(p)
     var ancestor: Path = self._fs_man.real_ancestry(p)
