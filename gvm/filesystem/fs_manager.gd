@@ -309,7 +309,10 @@ func relative_to(dst: Path, src: Path) -> Path:
 ##      The third path is the remaining part of [code]p2[/code].
 func path_branches_abs(acyclic: Path, p2: Path, skip: int = 0) -> Array[Path]:
     assert(self.contains_path(acyclic))
-    assert(self.contains_path(p2))
+    assert(
+        self.contains_path(p2),
+        "filesystem does not contain %s" % p2.as_string()
+    )
     
     var acyclic_stops: Dictionary[String, int] = {}
     
@@ -318,15 +321,17 @@ func path_branches_abs(acyclic: Path, p2: Path, skip: int = 0) -> Array[Path]:
             self.reduce_path(p_ar[1] as Path).as_string(), p_ar[0]
         )
     
-    var branch: Path = Path.ROOT
+    var branch: Path = null
+    var longest_match: int = -1
     for p: Path in p2.all_slices():
         var r: String = self.reduce_path(p).as_string()
         if (
             acyclic_stops.has(r)
-            and acyclic_stops[r] >= acyclic_stops[self.reduce_path(branch).as_string()]
+            and acyclic_stops[r] >= longest_match
             and skip < 1
         ):
             branch = p
+            longest_match = acyclic_stops[r]
         skip -= 1
 
     return [
