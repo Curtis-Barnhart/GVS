@@ -117,118 +117,106 @@ func _on_user_path(s: String) -> void:
     else:
         path = Path.new(s.split("/", false))
 
-    #self._suberrors_analyze(path, s)
+    self._suberrors_analyze(s.split("/"))
     self._validate_user_path(path)
 
 
 var _errs: Dictionary[String, Instructions.Command] = {
-    "slash": null,
-    "dir_contains": null,
+    "begins_with_slash": null,
+    "bad_dir_contains": null,
     "file_contains": null,
     "wrong_way": null,
 }
-func _suberrors_analyze(user_path: Path, user_str: String) -> void:
-    var ancestor: Path = self._fs_man.real_ancestry(user_path)
-    var target_p: Path = self._target_paths[self._target_index]
-    var is_bad: bool = not self._fs_man.contains_path(user_path)
-    var first_bad: Path = null
-    var more_bad: bool = false
-    if is_bad:
-        var file_building: GStreams.StreamType = user_path.all_slices().filter(
-            func (p: Path) -> bool: return not self._fs_man.contains_path(p)
-        )
-        first_bad = file_building.next()
-        more_bad = file_building.size() > 0
+func _suberrors_analyze(path: PackedStringArray) -> void:
+    var target_o: Path = self._target_paths[self._target_index][0]
+    var target_p: Path = self._target_paths[self._target_index][1]
 
-    # See if the user started their path without a leading slash
-    if user_str != "" and not user_str.begins_with("/"):
-        if self._errs["no_slash"] == null:
-            self._errs["no_slash"] = Com.new("Your path does not begin with a '/'")
-            self._inst.get_command(-1).add_command(self._errs["no_slash"])
+    ######################################
+    # Check if the user led with a slash #
+    ######################################
+    if (path.size() > 1) and path[0] == "":
+        if self._errs["begins_with_slash"] == null:
+            self._errs["begins_with_slash"] = Com.new("Your path begins with '/'")
+            self._suberrors_remove_all()
+            self._inst.get_command(-1).add_command(self._errs["begins_with_slash"])
             self._inst.render()
-    elif self._errs["no_slash"] != null:
-        self._inst.remove_command_ref(self._errs["no_slash"])
-        self._errs["no_slash"] = null
-        self._inst.render()
+            return
+    elif self._errs["begins_with_slash"] != null:
+        self._inst.remove_command_ref(self._errs["begins_with_slash"])
+        self._errs["begins_with_slash"] = null
 
-    # See if the user thinks a directory contains something it doesn't
-    if (
-        more_bad
-        and not self._fs_man.contains_file(ancestor)
-    ):
-        if self._errs["dir_contains"] == null:
-            self._errs["dir_contains"] = Com.new(
-                "'%s' is a valid path, but '%s' is not a valid location contained in that directory" % [
-                    first_bad.base().as_string(), first_bad.last()
+    var subpath: Path = self._target_paths[self._target_index][0]
+    var one_bad_name: bool = false
+    # variables for testing if the user is on track
+    var sane_path: Path = subpath
+    for i: int in GStreams.IRange(0, path.size(), 1):
+        ##############################################
+        # Check if the user treats a file like a dir #
+        ##############################################
+        if self._fs_man.contains_file(subpath):
+            var err_str: String = "'%s' is a file, and cannot contain other paths, but your path continues with '%s'" % [
+                subpath.slice(target_o.size()).as_string(), path.get(i)
+            ]
+            if self._errs["file_contains"] == null:
+                self._errs["file_contains"] = Com.new(err_str)
+                self._inst.get_command(-1).add_command(self._errs["file_contains"])
+            else:
+                self._errs["file_contains"].change_text(err_str)
+            sane_path = subpath
+            break
+        elif self._errs["file_contains"] != null:
+            self._inst.remove_command_ref(self._errs["file_contains"])
+            self._errs["file_contains"] = null
+
+        if path.get(i) == "":
+            continue
+
+        subpath = subpath.extend(path.get(i))
+        ########################################################
+        # See if the user has typed a path that does not exist #
+        ########################################################
+        if not self._fs_man.contains_path(subpath):
+            if one_bad_name:
+                # one iteration ago the user typed a bad name and now they treat it as a directory
+                var err_str: String = "Your path is valid through '%s', but this path does not contain any subdirectory '%s'" % [
+                    subpath.slice(target_o.size(), -2).as_string(), path.get(i - 1)
                 ]
-            )
-            self._inst.get_command(-1).add_command(self._errs["dir_contains"])
+                if self._errs["file_contains"] == null:
+                    self._errs["file_contains"] = Com.new(err_str)
+                else:
+                    self._errs["file_contains"].change_text(err_str)
+                sane_path = subpath.slice(0, -2)
+                break
+            else:
+                # the user has typed a bad name of some sort (they might not be finished)
+                sane_path = subpath.base()
+                one_bad_name = true
         else:
-            self._errs["dir_contains"].change_text(
-                "'%s' is a valid path, but '%s' is not a valid location contained in that directory" % [
-                    first_bad.base().as_string(), first_bad.last()
-                ]
-            )
-        self._inst.render()
-    elif self._errs["dir_contains"] != null:
-        self._inst.remove_command_ref(self._errs["dir_contains"])
-        self._errs["dir_contains"] = null
-        self._inst.render()
+            sane_path = subpath
 
-    # See if a user thinks a file contains something (it can't)
-    if (
-        is_bad
-        and self._fs_man.contains_file(ancestor)
-    ):
-        if self._errs["file_contains"] == null:
-            self._errs["file_contains"] = Com.new(
-                "'%s' is a file, and cannot contain another object '%s'" % [
-                    first_bad.base().as_string(), first_bad.last()
-                ]
-            )
-            self._inst.get_command(-1).add_command(self._errs["file_contains"])
-        else:
-            self._errs["file_contains"].change_text(
-                "'%s' is a file, and cannot contain another object '%s'" % [
-                    first_bad.base().as_string(), first_bad.last()
-                ]
-            )
-        self._inst.render()
-    elif self._errs["file_contains"] != null:
-        self._inst.remove_command_ref(self._errs["file_contains"])
-        self._errs["file_contains"] = null
-        self._inst.render()
-
-    # See if the user has written a valid path that diverges from where they ought to go
-    if (
-        ancestor.common_with(target_p).as_string() != ancestor.as_string()
-    ):
-        var departs: Path = ancestor.all_slices() \
-                                    .reverse() \
-                                    .take_while(func (p: Path) -> bool: 
-                                        var r := self._fs_man.reduce_path(p)
-                                        return r.common_with(target_p).as_string() != r.as_string()) \
-                                    .reverse() \
-                                    .next()
+    ########################################
+    # See if the user has gotten off track #
+    ########################################
+    var splits: Array[Path] = []
+    splits.assign(self._fs_man.path_branches_abs(
+        target_o.compose(target_p), sane_path, target_o.size()
+    ))
+    if splits[2].degen():
+        if self._errs["wrong_way"] != null:
+            self._inst.remove_command_ref(self._errs["wrong_way"])
+            self._errs["wrong_way"] = null
+    else:
+        var com_str: String = "good up to '%s', but goes off the rails at '%s'" % [
+            splits[0].slice(target_o.size()).as_string(false),
+            splits[2].slice(0, 1).as_string(false)
+        ]
         if self._errs["wrong_way"] == null:
-            self._errs["wrong_way"] = Com.new(
-                "'%s' is part of the path to your target, but '%s' starts heading in the wrong direction" % [
-                    departs.base().as_string(), departs.last()
-                ]
-            )
+            self._errs["wrong_way"] = Com.new(com_str)
             self._inst.get_command(-1).add_command(self._errs["wrong_way"])
-            self._inst.render()
         else:
-            self._errs["wrong_way"].change_text(
-                "'%s' is part of the path to your target, but '%s' starts heading in the wrong direction" % [
-                    departs.base().as_string(), departs.last()
-                ]
-            )
-            self._inst.render()
-    elif self._errs["wrong_way"] != null:
-        self._inst.remove_command_ref(self._errs["wrong_way"])
-        self._errs["wrong_way"] = null
-        self._inst.render()
+            self._errs["wrong_way"].change_text(com_str)
+
+    self._inst.render()
 
 
 ## Removes all suberrors from the most recent instruction
@@ -244,9 +232,12 @@ func _validate_user_path(p: Path) -> void:
     var highlight_target: int = self._target_index
     var p_abs_ancestor: Path
 
-    if p == null:
-        p_abs_ancestor = Path.ROOT
-    else:
+    if self._good_hl >= 0:
+        self._file_tree.hl_server.pop_id(self._good_hl)
+    if self._bad_hl >= 0:
+        self._file_tree.hl_server.pop_id(self._bad_hl)
+
+    if p != null:
         var t_origin: Path = self._target_paths[self._target_index][0]
         var t_path: Path = self._target_paths[self._target_index][1]
         var p_abs: Path = t_origin.compose(p)
@@ -260,7 +251,7 @@ func _validate_user_path(p: Path) -> void:
                 self._suberrors_remove_all()
                 self._user_answered_correctly()
 
-    self._highlight_user_path(p_abs_ancestor, highlight_target)
+        self._highlight_user_path(p_abs_ancestor, highlight_target)
 
 
 ## [param p]: absolute path made of the target origin plus the user's input.[br]
@@ -276,11 +267,6 @@ func _highlight_user_path(p: Path, target_index: int) -> void:
 
     var correct: Path = branching[0].slice(origin.size())
     var incorrect: Path = branching[2]
-
-    if self._good_hl >= 0:
-        self._file_tree.hl_server.pop_id(self._good_hl)
-    if self._bad_hl >= 0:
-        self._file_tree.hl_server.pop_id(self._bad_hl)
 
     self._good_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, origin, correct)
     self._bad_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.RED, origin.compose(correct), incorrect)
@@ -338,5 +324,5 @@ func finish() -> void:
     )
     assert(
         self.get_reference_count() == 1,
-        "Not all references to practicing_writing_paths removed before checkpoint exit."
+        "Not all references to writing_relative_paths removed before checkpoint exit."
     )
