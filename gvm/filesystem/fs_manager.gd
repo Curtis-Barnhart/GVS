@@ -293,3 +293,46 @@ func relative_to(dst: Path, src: Path) -> Path:
                 .take(src.size() - common_base.size()) \
                 .as_array()
     ).compose(dst.slice(common_base.size()))
+
+
+## Takes two paths and returns information about where they begin
+## to diverge from one another and where they go on from there.[br]
+## Both paths must exist in the file system.
+## The first path must be acyclic (accesses no parent directories).[br][br]
+##
+## [param acyclic]: Acyclic path (contains no "..")[br]
+## [param p2]: A path to compare against [code]acyclic[/code][br]
+## [param return]: An array of three paths.
+##      The first path is the longest subpath of [code]p2[/code] that points
+##      to a location which is an ancestor of [code]acyclic[/code].
+##      The second path is that ancestor of [code]acyclic[/code].
+##      The third path is the remaining part of [code]p2[/code].
+func path_branches_abs(acyclic: Path, p2: Path) -> Array[Path]:
+    assert(self.contains_path(acyclic))
+    assert(self.contains_path(p2))
+    assert(self.reduce_path(acyclic).size() == acyclic.size())
+    
+    var acyclic_stops: Dictionary[String, Object] = {}
+    
+    for path: Path in acyclic.all_slices():
+        acyclic_stops.set(path.as_string(), null)
+    
+    var branch: Path = \
+        p2.all_slices() \
+          .foldl(
+              func (acc: Path, p: Path) -> Path:
+                  var r: Path = self.reduce_path(p)
+                  if (
+                      acyclic_stops.has(r.as_string())
+                      and r.size() >= self.reduce_path(acc).size()
+                  ):
+                      return p
+                  return acc,
+              Path.ROOT
+          )
+
+    return [
+        branch,
+        acyclic.slice(self.reduce_path(branch).size()),
+        p2.slice(branch.size())
+    ]

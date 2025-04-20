@@ -552,3 +552,56 @@ func test_relative_to() -> void:
         self._man.relative_to(Path.new(["three", "file2"]), Path.new(["three", "four", "file3"])).as_string(false),
         "../../file2"
     )
+
+
+func test_path_branches_abs() -> void:
+    self.assert_eq(
+        self._man.path_branches_abs(Path.ROOT, Path.ROOT) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/", "/", "/"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.new(["two"]), Path.new(["two"])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/two", "/", "/"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.new(["two"]), Path.new(["three"])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/", "/two", "/three"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.ROOT, Path.new(["."])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/.", "/", "/"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.ROOT, Path.new([".", "."])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/./.", "/", "/"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.ROOT, Path.new(["two", ".."])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/two/..", "/", "/"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.ROOT, Path.new(["two", "..", "three"])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/two/..", "/", "/three"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.ROOT, Path.new(["two", "..", "two", "..", "three"])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/two/../two/..", "/", "/three"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.new(["three"]), Path.new(["two", "..", "three", "..", "two"])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/two/../three", "/", "/../two"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.new(["three", "four"]), Path.new(["three", "four", ".."])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/three/four", "/", "/.."]
+    )
