@@ -84,22 +84,25 @@ func start(needs_context: bool) -> void:
     self._line_edit.text_changed.connect(self._on_user_path)
 
     self._inst.add_command(Instructions.Command.new(
-        "Write the path to the first highlighted location from the cwd {}"
+        "Write the highlighted relative path beginning from the current working directory %s (%d/%d)" % [
+            (self._target_paths[self._target_index][0] as Path).as_string(),
+            self._target_index + 1,
+            self._target_paths.size()
+        ]
     ))
     self._inst.render()
 
     var first_cwd: Path = self._target_paths[self._target_index][0]
-    self._target_hl = self._file_tree.hl_server.push_color_to_tree_nodes(
-        Color.DARK_BLUE,
-        first_cwd,
-        self._target_paths[self._target_index][1] as Path
-    )
-    
     self._file_tree.cwd_text = preload("res://visual/assets/cwd_open.svg")
     await GVSGlobals.wait(1)
     self._file_tree.change_cwd(first_cwd, Path.ROOT)
     self._viewport.move_cam_to(
         self._file_tree.node_rel_pos_from_path(first_cwd)
+    )
+    self._target_hl = self._file_tree.hl_server.push_color_to_tree_nodes(
+        Color.DARK_BLUE,
+        first_cwd,
+        self._target_paths[self._target_index][1] as Path
     )
     await GVSGlobals.wait(2)
 
@@ -228,6 +231,7 @@ func _suberrors_analyze(user_path: Path, user_str: String) -> void:
         self._inst.render()
 
 
+## Removes all suberrors from the most recent instruction
 func _suberrors_remove_all() -> void:
     for err: String in self._errs.keys():
         self._inst.remove_command_ref(self._errs[err])
@@ -264,7 +268,7 @@ func _validate_user_path(p: Path) -> void:
 func _highlight_user_path(p: Path, target_index: int) -> void:
     var origin: Path = self._target_paths[target_index][0]
     var target: Path = self._target_paths[target_index][1]
-    
+
     var branching: Array[Path] = []
     branching.assign(self._fs_man.path_branches_abs(
         origin.compose(target), p, origin.size()
@@ -296,7 +300,11 @@ func _user_answered_correctly() -> void:
     else:
         var new_origin: Path = self._target_paths[self._target_index][0]
         self._inst.add_command(Instructions.Command.new(
-            "write the path that is highlighted"
+            "Write the highlighted relative path beginning from the current working directory %s (%d/%d)" % [
+                (self._target_paths[self._target_index][0] as Path).as_string(),
+                self._target_index + 1,
+                self._target_paths.size()
+            ]
         ))
         self._inst.render()
         self._target_hl = self._file_tree.hl_server.push_color_to_tree_nodes(
