@@ -1,7 +1,10 @@
 extends VBoxContainer
 
+## Array of commands
 var _commands: Array[Command]
+## Title printed above instructions
 @onready var _header: RichTextLabel = $Header
+## RichTextLabel where instructions will be printed
 @onready var _content: RichTextLabel = $Content
 
 
@@ -10,13 +13,23 @@ class Command:
     var _subcommands: Array[Command] = []
     var _fulfilled: bool = false
     
+    ## Returns whether or not this command has been completed or not.
+    ## If a command has no subcommands, it is considered completed
+    ## if it has been marked fulfilled through [code]set_fulfill[/code],
+    ## and if it has subcommands it is considered fulfilled
+    ## if all of its subcommands are fulfilled.[br][br]
+    ##
+    ## [param return]: true if the command was fulfilled, false otherwise.
     func is_fulfilled() -> bool:
         if self._subcommands.is_empty():
             return self._fulfilled
-        return GStreams.Stream(self._subcommands) \
-                       .map(func (c: Command) -> bool: return c.is_fulfilled()) \
-                       .all()
+        return self._subcommands.all(
+            func (c: Command) -> bool: return c.is_fulfilled()
+        )
     
+    ## Constructor for Command.[br][br]
+    ##
+    ## [param text]: text describing the instruction to be given.
     func _init(text: String) -> void:
         self._text = text
     
@@ -79,9 +92,9 @@ func render() -> void:
             self._content.add_text("\n")
         self._render_helper(self._commands[-1])
         
-        if GStreams.Stream(self._commands) \
-                   .map(func (c: Command) -> bool: return c.is_fulfilled()) \
-                   .all():
+        if self._commands.all(
+            func (c: Command) -> bool: return c.is_fulfilled()
+        ):
             self._header.add_theme_color_override("default_color", Color.GREEN)
         else:
             self._header.add_theme_color_override("default_color", Color.RED)

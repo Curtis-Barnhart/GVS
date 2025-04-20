@@ -29,7 +29,7 @@ func context_build() -> void:
     var file_tree := FileTree.make_new()
     file_tree = FileTree.make_new()
     file_tree.name = "FileTree"
-    file_tree.cwd_text = preload("res://visual/assets/cwd_open.svg")
+    file_tree.cwd_text = preload("res://visual/assets/directory_open.svg")
     self._viewport.add_to_scene(file_tree)
 
     self._fs_man.created_dir.connect(file_tree.create_node_dir)
@@ -55,11 +55,12 @@ func context_build() -> void:
     self._fs_man.create_file(Path.new(["pictures", "vacation", "hike_1"]))
     self._fs_man.create_dir(Path.new(["pictures", "nature", "butterflies"]))
     self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT * 1.5))
+    await GVSGlobals.wait(2)
 
 
 func start(needs_context: bool) -> void:
     if needs_context:
-        self.context_build()
+        await self.context_build()
 
     self._file_tree = self._viewport.node_from_scene("FileTree")
 
@@ -86,11 +87,21 @@ func start(needs_context: bool) -> void:
     ))
     self._inst.render()
 
+    var first_cwd: Path = self._target_paths[self._target_index][0]
     self._target_hl = self._file_tree.hl_server.push_color_to_tree_nodes(
         Color.DARK_BLUE,
-        self._target_paths[self._target_index][0] as Path,
+        first_cwd,
         self._target_paths[self._target_index][1] as Path
     )
+    
+    self._file_tree.cwd_text = preload("res://visual/assets/cwd_open.svg")
+    await GVSGlobals.wait(1)
+    self._file_tree.change_cwd(first_cwd, Path.ROOT)
+    self._viewport.move_cam_to(
+        self._file_tree.node_rel_pos_from_path(first_cwd)
+    )
+    await GVSGlobals.wait(2)
+
 
     self._next_button.pressed.connect(self.finish)
 
@@ -222,6 +233,7 @@ func _suberrors_remove_all() -> void:
     self._inst.render()
 
 
+## [param p]: null iff user started path with /
 func _validate_user_path(p: Path) -> void:
     # the _target_index member changes if _user_answered_correctly triggered
     var highlight_target: int = self._target_index
@@ -243,57 +255,68 @@ func _validate_user_path(p: Path) -> void:
                 self._suberrors_remove_all()
                 self._user_answered_correctly()
 
-    #self._highlight_user_path(p_abs_ancestor, highlight_target)
+    self._highlight_user_path(p_abs_ancestor, highlight_target)
 
 
-#func _find_most_correct(user_p: Path, target_p: Path, origin: Path) -> Path:
-#    var segments: GStreams.StreamType = user_p.all_slices() \
-#                                              .reverse() \
-#                                              .take_while()
-#    return null
-
-
+## [param p]: absolute path made of the target origin plus the user's input.[br]
+## [param target_index]: target_index to use to figure out current target
 func _highlight_user_path(p: Path, target_index: int) -> void:
-    var target: Path = self._target_paths[target_index]
-    var simplified: Path = self._fs_man.reduce_path(p)
-    var correct: String = simplified.common_with(target).as_string()
-    var simplest_correct: Path = p.all_slices().reverse().filter(func (sub: Path) -> bool:
-        return self._fs_man.reduce_path(sub).as_string() == correct
-    ).next()
-    var incorrect: Path = p.slice(simplest_correct.size())
+    var origin: Path = self._target_paths[target_index][0]
+    var target: Path = self._target_paths[target_index][1]
+    
+    var branching: Array[Path] = []
+    branching.assign(self._fs_man.path_branches_abs(
+        origin.compose(target), p, origin.size()
+    ))
+
+    var correct: Path = branching[0].slice(origin.size())
+    var incorrect: Path = branching[2]
 
     if self._good_hl >= 0:
         self._file_tree.hl_server.pop_id(self._good_hl)
     if self._bad_hl >= 0:
         self._file_tree.hl_server.pop_id(self._bad_hl)
 
-    self._good_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, Path.ROOT, simplest_correct)
-    self._bad_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.RED, simplest_correct, incorrect)
+    self._good_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.GREEN, origin, correct)
+    self._bad_hl = self._file_tree.hl_server.push_color_to_tree_nodes(Color.RED, origin.compose(correct), incorrect)
 
 
 func _user_answered_correctly() -> void:
+    var old_origin: Path = self._target_paths[self._target_index][0]
     self._target_index += 1
     self._inst.get_command(-1).set_fulfill(true)
     self._file_tree.hl_server.pop_id(self._target_hl)
+    self._target_hl = -1
 
     if self._target_index == self._target_paths.size():
         self._next_button.disabled = false
         self._line_edit.text_changed.disconnect(self._on_user_path)
-        # TODO: print out good job message
+        self._inst.render()
     else:
+        var new_origin: Path = self._target_paths[self._target_index][0]
         self._inst.add_command(Instructions.Command.new(
-            "Write the path to the %s highlighted location" % ["", "second", "third"][self._target_index]
+            "write the path that is highlighted"
         ))
-#        self._target_hl = self._file_tree.hl_server.push_color_to_tree_nodes(
-#            Color.DARK_BLUE, Path.ROOT, self._target_paths[self._target_index]
-#        )
+        self._inst.render()
+        self._target_hl = self._file_tree.hl_server.push_color_to_tree_nodes(
+            Color.BLUE, new_origin, self._target_paths[self._target_index][1] as Path
+        )
+
+        if new_origin.as_string() != old_origin.as_string():
+            await GVSGlobals.wait(1)
+            self._file_tree.change_cwd(new_origin, old_origin)
+            self._viewport.move_cam_to(
+                self._file_tree.node_rel_pos_from_path(new_origin)
+            )
+            await GVSGlobals.wait(2)
+
+
 
     self._inst.render()
 
 
 func finish() -> void:
-    if self._target_hl >= 0:
-        self._file_tree.hl_server.pop_id(self._target_hl)
+    assert(self._target_hl < 0)
     if self._good_hl >= 0:
         self._file_tree.hl_server.pop_id(self._good_hl)
     if self._bad_hl >= 0:
