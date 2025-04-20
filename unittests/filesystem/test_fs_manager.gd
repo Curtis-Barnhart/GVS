@@ -605,3 +605,18 @@ func test_path_branches_abs() -> void:
                  .map(func (p: Path) -> String: return p.as_string()),
         ["/three/four", "/", "/.."]
     )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.new(["three", "four", ".."]), Path.new(["three", "four", ".."])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/three/four/..", "/", "/"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.new(["three", "four", "..", "four"]), Path.new(["three", "four", "..", "file1"])) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/three/four", "/", "/../file1"]
+    )
+    self.assert_eq(
+        self._man.path_branches_abs(Path.new(["three", "four", "..", "file1"]), Path.new(["three", "four", "..", "file2"]), 2) \
+                 .map(func (p: Path) -> String: return p.as_string()),
+        ["/three/four/..", "/file1", "/file2"]
+    )

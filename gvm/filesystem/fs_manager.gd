@@ -307,7 +307,7 @@ func relative_to(dst: Path, src: Path) -> Path:
 ##      to a location which is an ancestor of [code]acyclic[/code].
 ##      The second path is that ancestor of [code]acyclic[/code].
 ##      The third path is the remaining part of [code]p2[/code].
-func path_branches_abs(acyclic: Path, p2: Path) -> Array[Path]:
+func path_branches_abs(acyclic: Path, p2: Path, skip: int = 0) -> Array[Path]:
     assert(self.contains_path(acyclic))
     assert(self.contains_path(p2))
     
@@ -318,22 +318,19 @@ func path_branches_abs(acyclic: Path, p2: Path) -> Array[Path]:
             self.reduce_path(p_ar[1] as Path).as_string(), p_ar[0]
         )
     
-    var branch: Path = \
-        p2.all_slices() \
-          .foldl(
-              func (acc: Path, p: Path) -> Path:
-                  var r: String = self.reduce_path(p).as_string()
-                  if (
-                      acyclic_stops.has(r)
-                      and acyclic_stops[r] >= acyclic_stops[self.reduce_path(acc).as_string()]
-                  ):
-                      return p
-                  return acc,
-              Path.ROOT
-          )
+    var branch: Path = Path.ROOT
+    for p: Path in p2.all_slices():
+        var r: String = self.reduce_path(p).as_string()
+        if (
+            acyclic_stops.has(r)
+            and acyclic_stops[r] >= acyclic_stops[self.reduce_path(branch).as_string()]
+            and skip < 1
+        ):
+            branch = p
+        skip -= 1
 
     return [
         branch,
-        acyclic.slice(self.reduce_path(branch).size()),
+        acyclic.slice(acyclic_stops[self.reduce_path(branch).as_string()]),
         p2.slice(branch.size())
     ]
