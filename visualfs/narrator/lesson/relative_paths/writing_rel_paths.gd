@@ -80,6 +80,7 @@ func start(needs_context: bool) -> void:
     self._line_edit.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
     self._line_edit.add_theme_font_override("font", GVSClassLoader.shared.fonts.Normal)
     self._line_edit.add_theme_font_size_override("font_size", 48)
+    self._line_edit.set_placeholder("Type path here")
     self._line_edit.text_changed.connect(self._on_user_path)
 
     self._inst.add_command(Instructions.Command.new(
