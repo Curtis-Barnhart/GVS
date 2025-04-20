@@ -310,21 +310,22 @@ func relative_to(dst: Path, src: Path) -> Path:
 func path_branches_abs(acyclic: Path, p2: Path) -> Array[Path]:
     assert(self.contains_path(acyclic))
     assert(self.contains_path(p2))
-    assert(self.reduce_path(acyclic).size() == acyclic.size())
     
-    var acyclic_stops: Dictionary[String, Object] = {}
+    var acyclic_stops: Dictionary[String, int] = {}
     
-    for path: Path in acyclic.all_slices():
-        acyclic_stops.set(path.as_string(), null)
+    for p_ar: Array in acyclic.all_slices().enumerate():
+        acyclic_stops.set(
+            self.reduce_path(p_ar[1] as Path).as_string(), p_ar[0]
+        )
     
     var branch: Path = \
         p2.all_slices() \
           .foldl(
               func (acc: Path, p: Path) -> Path:
-                  var r: Path = self.reduce_path(p)
+                  var r: String = self.reduce_path(p).as_string()
                   if (
-                      acyclic_stops.has(r.as_string())
-                      and r.size() >= self.reduce_path(acc).size()
+                      acyclic_stops.has(r)
+                      and acyclic_stops[r] >= acyclic_stops[self.reduce_path(acc).as_string()]
                   ):
                       return p
                   return acc,
