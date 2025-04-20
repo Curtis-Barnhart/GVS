@@ -12,7 +12,7 @@ class Command:
     var _text: String
     var _subcommands: Array[Command] = []
     var _fulfilled: bool = false
-    
+
     ## Returns whether or not this command has been completed or not.
     ## If a command has no subcommands, it is considered completed
     ## if it has been marked fulfilled through [code]set_fulfill[/code],
@@ -26,28 +26,28 @@ class Command:
         return self._subcommands.all(
             func (c: Command) -> bool: return c.is_fulfilled()
         )
-    
+
     ## Constructor for Command.[br][br]
     ##
     ## [param text]: text describing the instruction to be given.
     func _init(text: String) -> void:
         self._text = text
-    
+
     func set_fulfill(b: bool) -> void:
         self._fulfilled = b
-    
+
     func change_text(text: String) -> void:
         self._text = text
-    
+
     func add_command(c: Command, index: int = -1) -> void:
         if index == -1:
             self._subcommands.push_back(c)
         else:
             self._subcommands.insert(index, c)
-    
+
     func remove_command(index: int) -> void:
         self._subcommands.remove_at(index)
-    
+
     func remove_command_ref(c: Command) -> void:
         var index: int = self._subcommands.find(c)
         if index < 0:
@@ -55,7 +55,7 @@ class Command:
                 subc.remove_command_ref(c)
         else:
             self._subcommands.remove_at(index)
-    
+
     func get_command(index: int) -> Command:
         return self._subcommands[index]
 
@@ -91,7 +91,7 @@ func render() -> void:
             self._render_helper(com)
             self._content.add_text("\n")
         self._render_helper(self._commands[-1])
-        
+
         if self._commands.all(
             func (c: Command) -> bool: return c.is_fulfilled()
         ):
@@ -111,7 +111,7 @@ func _render_helper(c: Command, depth: int = 0) -> void:
     else:
         color = Color.RED
         prefix = "[✕] "
-    
+
     self._content.push_color(color)
     self._content.add_text(
         "".join(GStreams.Repeat("    ").take(depth).as_array())
@@ -119,7 +119,7 @@ func _render_helper(c: Command, depth: int = 0) -> void:
     )
     self._content.pop()
     self._content.add_text(c._text)
-    
+
     if not c._subcommands.is_empty():
         self._content.add_text("\n")
         for com: Command in c._subcommands.slice(0, -1):
