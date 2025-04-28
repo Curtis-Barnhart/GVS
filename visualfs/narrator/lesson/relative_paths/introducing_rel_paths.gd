@@ -42,6 +42,8 @@ func start(needs_context: bool) -> void:
     if needs_context:
         self.context_build()
 
+    self._file_tree = self._viewport.node_from_scene("FileTree")
+
     self._inst.remove_all()
     self._inst.render()
 
@@ -49,8 +51,21 @@ func start(needs_context: bool) -> void:
         [
             "Relative Paths",
             [
-                "Explain how relative paths work here"
-            ]
+                "But paths can be long,",
+                "and since we often group them in the same directories",
+                "it can seem redundant to always be typing out the beginning",
+                "parts of these paths.",
+                "Look at the files on the right -",
+                "it seems repetetive to type",
+                "'/school/homework/' for each file if",
+                "we want to reference all three of them",
+            ],
+            [
+
+                "We [i]can[/i] shortcut writing out the full path,",
+                "but to do that we have to understand something called",
+                "the [b][color=dark_blue]current working directory[/color][/b].",
+            ],
         ]
     )
 
@@ -66,7 +81,7 @@ func start(needs_context: bool) -> void:
     self._path_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     self._path_label.add_theme_stylebox_override("normal", GVSClassLoader.shared.resources.TextBox)
     self._path_label.name = "PathLabel"
-    self._write_path_label(".")
+    self._write_path_label(" ")
 
     self._fs_man.create_dir(Path.new(["school"]))
     await GVSGlobals.wait(0.5)
@@ -83,16 +98,40 @@ func start(needs_context: bool) -> void:
     self._viewport.move_cam_to(Vector2(0, TNode.HEIGHT * 1.5))
     await GVSGlobals.wait(1)
 
-
     self._next_button.pressed.connect(self._set_cwd)
     self._next_button.disabled = false
 
 
 func _set_cwd() -> void:
+    var p := Path.new(["school", "homework"])
     self._file_tree.cwd_text = preload("res://visual/assets/cwd_open.svg")
-    self._file_tree.change_cwd(Path.new(["school", "homework"]), Path.ROOT)
+    self._file_tree.change_cwd(p, Path.ROOT)
+    self._viewport.move_cam_to(self._file_tree.node_rel_pos_from_path(p))
     self._next_button.pressed.disconnect(self._set_cwd)
     self._next_button.pressed.connect(self.show_relative_path)
+
+    self._text_display.text = UtilString.make_article(
+        [
+            "The Current Working Directory",
+            [
+                "The [b][color=dark_blue]current working directory[/color][/b]",
+                "(or [b][color=dark_blue]cwd[/color][/b] for short)",
+                "is simply a location we can agree to use",
+                "as a common reference point for other files.",
+            ],
+            [
+                "The '/school/homework' directory has turned a dark blue",
+                "to signal that it is the cwd.",
+                "Now when we write out paths,",
+                "instead of writing them as directions to a file",
+                "from the root directory,",
+                "we can write them as directions starting from '/school/homework'.",
+                "Since our directions are now [i]relative[/i] to the location of",
+                "'/school/homework', we call this a",
+                "[b][color=dark_blue]relative path[/color][/b].",
+            ],
+        ]
+    )
 
 
 func show_relative_path() -> void:
@@ -100,8 +139,20 @@ func show_relative_path() -> void:
         [
             "Relative Paths",
             [
-                "clicking on children"
-            ]
+                "Unlike the paths we've worked with so far,",
+                "relative paths [i]must not[/i] begin with a '/' -",
+                "this is in fact how we tell the difference between",
+                "normal paths (usually called",
+                "[b][color=dark_blue]absolute paths[/color][/b])",
+                "and relative paths.",
+            ],
+            [
+                "Relative paths are directions to a file or directory",
+                "written with the cwd as the start of the path.",
+                "To get a feel for how this works,",
+                "click on some of the files to the right",
+                "to see what their paths are relative to the cwd.",
+            ],
         ]
     )
     self._next_button.disabled = false
@@ -130,10 +181,10 @@ func _display_children(p: Path) -> void:
         self._write_path_label(p.last())
     else:
         self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 2.0, h_path, self._fs_man.relative_to(p, h_path))
-        if p.as_string() == "/school/homework":
-            self._write_path_label(".")
-        else:
-            self._write_path_label(" ")
+#        if p.as_string() == "/school/homework":
+#            self._write_path_label(".")
+#        else:
+        self._write_path_label(" ")
 
 
 func show_relative_path_parents() -> void:
@@ -145,8 +196,14 @@ func show_relative_path_parents() -> void:
         [
             "Relative Paths",
             [
-                "look you can go backwards"
-            ]
+                "But what if you want to reference a directory",
+                "that is a parent of the cwd?",
+                "There are a few special names we can use in paths just for this -",
+                "if you add the '..' directory to the end of a path,",
+                "it refers to the parent directory of the path.",
+                "You can also add the '.' directory to the end of a path,",
+                "which will refer to the same directory as the original path.",
+            ],
         ]
     )
     self._next_button.disabled = false
@@ -175,7 +232,10 @@ func _display_parents(p: Path) -> void:
         self._write_path_label(self._fs_man.relative_to(p, h_path).as_string(false))
     else:
         self._file_tree.hl_server.push_flash_to_tree_nodes(Color.RED, 2.0, h_path, self._fs_man.relative_to(p, h_path))
-        self._write_path_label(" ")
+        if p.as_string() == h_path.as_string():
+            self._write_path_label(".")
+        else:
+            self._write_path_label(" ")
 
 
 func show_relative_path_all() -> void:
@@ -187,8 +247,10 @@ func show_relative_path_all() -> void:
         [
             "Relative Paths",
             [
-                "look you can even go back down after you go up"
-            ]
+                "You can combine the ability to reference parent directories",
+                "with what you already know about paths to write",
+                "more complex paths that move both up and down the file tree.",
+            ],
         ]
     )
 
